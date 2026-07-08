@@ -1,1 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dorthe's Integration Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --plum-950:#1E0A38;
+    --plum-900:#260C46;
+    --plum-800:#341257;
+    --violet-600:#6B2FA0;
+    --violet-500:#7F3EBE;
+    --blush-200:#F6D9EC;
+    --gold-300:#E8CE94;
+    --gold-400:#D9B364;
+    --gold-500:#C79A4B;
+    --cream:#FFF9F5;
+    --blush-text:#EBD9F0;
+    --line:rgba(255,255,255,0.16);
+    --shadow:rgba(15,5,30,0.55);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'EB Garamond', serif;
+    background:
+      radial-gradient(circle at 85% 0%, rgba(232,206,148,0.10), transparent 45%),
+      linear-gradient(165deg, var(--plum-950) 0%, var(--plum-800) 32%, var(--violet-600) 62%, var(--plum-900) 100%);
+    background-attachment:fixed;
+    color:var(--cream);
+    min-height:100vh;
+    padding:0 0 60px 0;
+  }
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  /* ---------- HERO ---------- */
+  .hero{
+    text-align:center;
+    padding:56px 24px 40px;
+    position:relative;
+    overflow:hidden;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(246,217,236,0.16), transparent 55%),
+      radial-gradient(ellipse at 80% 85%, rgba(232,206,148,0.10), transparent 50%);
+  }
+  .sparkle{
+    position:absolute;
+    color:var(--gold-300);
+    opacity:0.7;
+    font-size:14px;
+    animation: twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:0.15; transform:scale(0.8);}
+    50%{opacity:0.85; transform:scale(1.1);}
+  }
+  .eyebrow{
+    font-family:'Mrs Saint Delafield', cursive;
+    font-size:28px;
+    color:var(--gold-300);
+    margin:0 0 6px;
+    letter-spacing:0.5px;
+  }
+  .hero h1{
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    font-size:clamp(28px,5vw,44px);
+    letter-spacing:2px;
+    margin:0;
+    color:#fff;
+    text-shadow:0 4px 24px var(--shadow);
+    line-height:1.25;
+  }
+  .hero .for{
+    font-family:'Cinzel', serif;
+    font-size:13px;
+    letter-spacing:4px;
+    color:var(--gold-300);
+    text-transform:uppercase;
+    margin-top:14px;
+  }
+  .lotus-divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin:22px auto 0;
+    max-width:340px;
+  }
+  .lotus-divider .line{
+    flex:1;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold-300), transparent);
+  }
+  .lotus-divider svg{ width:22px; height:22px; opacity:0.85; }
+  .hero p.sub{
+    max-width:480px;
+    margin:22px auto 0;
+    font-size:18px;
+    line-height:1.6;
+    color:var(--blush-text);
+    font-style:italic;
+  }
 
+  /* ---------- SECTION SHELL ---------- */
+  section.card{
+    background:rgba(20,6,40,0.55);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:32px 28px;
+    margin:0 0 28px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 12px 40px var(--shadow);
+  }
+  section.card h2{
+    font-family:'Cinzel', serif;
+    font-size:20px;
+    letter-spacing:1.5px;
+    color:var(--gold-300);
+    margin:0 0 6px;
+    text-transform:uppercase;
+    text-align:center;
+  }
+  section.card p.lead{
+    text-align:center;
+    color:var(--blush-text);
+    font-style:italic;
+    margin:0 0 24px;
+    font-size:16px;
+  }
+
+  /* ---------- INSTRUCTIONS ---------- */
+  .instructions ol{
+    margin:0;
+    padding:0 0 0 22px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .instructions li{
+    font-size:16px;
+    line-height:1.55;
+    color:var(--cream);
+    padding-left:6px;
+  }
+  .instructions li strong{ color:var(--gold-300); }
+  .instructions .note{
+    margin-top:20px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-size:14px;
+    font-style:italic;
+    color:var(--blush-text);
+    text-align:center;
+  }
+
+  /* ---------- CARD PULL ---------- */
+  .pull-area{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+  }
+  .flip-scene{
+    width:260px;
+    height:400px;
+    perspective:1600px;
+  }
+  .flip-card{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform 0.9s cubic-bezier(.22,.68,0,1.01);
+  }
+  .flip-card.flipped{ transform:rotateY(180deg); }
+  .face{
+    position:absolute;
+    inset:0;
+    backface-visibility:hidden;
+    border-radius:14px;
+    border:1.5px solid var(--gold-400);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    padding:18px;
+    text-align:center;
+  }
+  .face.back{
+    background:
+      radial-gradient(circle at 50% 30%, rgba(232,206,148,0.14), transparent 60%),
+      linear-gradient(160deg, var(--plum-800), var(--plum-950));
+  }
+  .face.back svg{ width:64px; height:64px; opacity:0.8; }
+  .face.back .hint{
+    font-family:'Cinzel', serif;
+    font-size:11px;
+    letter-spacing:3px;
+    color:var(--gold-300);
+    margin-top:14px;
+    text-transform:uppercase;
+  }
+  .face.front{
+    background:linear-gradient(165deg, #FBEAF6, var(--blush-200) 40%, #C9A6E8 100%);
+    transform:rotateY(180deg);
+    color:var(--plum-950);
+    justify-content:flex-start;
+    padding-top:22px;
+    overflow-y:auto;
+  }
+  .face.front .card-name{
+    font-family:'Cinzel', serif;
+    font-size:17px;
+    letter-spacing:0.5px;
+    margin:0 0 10px;
+    color:var(--plum-900);
+  }
+  .face.front .block{
+    width:100%;
+    text-align:left;
+    margin-bottom:10px;
+  }
+  .face.front .block .tag{
+    font-family:'Cinzel', serif;
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--violet-600);
+    margin-bottom:3px;
+  }
+  .face.front .block .txt{
+    font-size:13.5px;
+    line-height:1.45;
+  }
+  .face.front .block.affirmation .txt{ font-style:italic; }
+  button.draw-btn, button.pdf-btn{
+    font-family:'Cinzel', serif;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    font-size:13px;
+    background:linear-gradient(120deg, var(--gold-400), var(--gold-500));
+    color:var(--plum-950);
+    border:none;
+    padding:14px 30px;
+    border-radius:30px;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,0.35);
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  button.draw-btn:hover, button.pdf-btn:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,0.4); }
+  .drawn-note{
+    font-size:13px;
+    color:var(--blush-text);
+    font-style:italic;
+    opacity:0.85;
+    text-align:center;
+    max-width:360px;
+  }
+
+  /* ---------- CHECKLIST ---------- */
+  ul.checklist{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  ul.checklist li{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:rgba(255,255,255,0.05);
+    cursor:pointer;
+    transition:background 0.2s ease, border-color 0.2s ease;
+  }
+  ul.checklist li:hover{ background:rgba(255,255,255,0.09); }
+  ul.checklist li.done{
+    background:rgba(217,179,100,0.14);
+    border-color:var(--gold-400);
+  }
+  .checkbox{
+    width:22px;
+    height:22px;
+    min-width:22px;
+    border-radius:6px;
+    border:1.5px solid var(--gold-400);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top:2px;
+  }
+  .checkbox svg{ width:14px; height:14px; opacity:0; transition:opacity 0.15s ease; }
+  li.done .checkbox{ background:var(--gold-400); }
+  li.done .checkbox svg{ opacity:1; }
+  li .txt{
+    font-size:16px;
+    line-height:1.45;
+    color:var(--cream);
+  }
+  li.done .txt{ opacity:0.75; text-decoration:line-through; text-decoration-color:var(--gold-300); }
+
+  /* ---------- REMINDERS ---------- */
+  ul.reminders{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  ul.reminders li{
+    font-size:16.5px;
+    line-height:1.5;
+    padding-left:26px;
+    position:relative;
+    font-style:italic;
+    color:var(--blush-text);
+  }
+  ul.reminders li::before{
+    content:"\2726";
+    position:absolute;
+    left:0;
+    color:var(--gold-300);
+    font-style:normal;
+  }
+
+  /* ---------- REFLECTION ---------- */
+  .reflect-q{ margin-bottom:20px; }
+  .reflect-q:last-child{ margin-bottom:0; }
+  .reflect-q label{
+    display:block;
+    font-size:15.5px;
+    color:var(--gold-300);
+    margin-bottom:8px;
+    font-style:italic;
+  }
+  .reflect-q textarea{
+    width:100%;
+    min-height:64px;
+    resize:vertical;
+    background:rgba(255,255,255,0.07);
+    border:1px solid var(--line);
+    border-radius:10px;
+    color:var(--cream);
+    font-family:'EB Garamond', serif;
+    font-size:15.5px;
+    padding:12px 14px;
+    line-height:1.5;
+  }
+  .reflect-q textarea:focus{ outline:none; border-color:var(--gold-400); }
+
+  /* ---------- SAVE SECTION ---------- */
+  .save-area{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .save-confirm{
+    font-size:13px;
+    color:var(--gold-300);
+    opacity:0;
+    transition:opacity 0.3s ease;
+    font-style:italic;
+    text-align:center;
+  }
+  .save-confirm.show{ opacity:0.9; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center;
+    padding:26px 24px 0;
+  }
+  footer .sig{
+    font-family:'Mrs Saint Delafield', cursive;
+    font-size:32px;
+    color:var(--gold-300);
+  }
+  footer .tag{
+    font-size:13px;
+    color:var(--blush-text);
+    opacity:0.75;
+    margin-top:2px;
+    letter-spacing:1px;
+  }
+  footer .legal{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-size:12.5px;
+    color:var(--blush-text);
+    opacity:0.75;
+    letter-spacing:0.3px;
+  }
+  footer .legal a{
+    color:var(--gold-300);
+    text-decoration:none;
+    opacity:0.9;
+  }
+  footer .legal a:hover{ text-decoration:underline; }
+  footer .legal .sep{ margin:0 8px; opacity:0.5; }
+
+  @media (max-width:480px){
+    .hero{ padding:44px 18px 30px; }
+    section.card{ padding:26px 18px; }
+    .flip-scene{ width:230px; height:380px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="sparkle" style="top:20px; left:8%;">&#10022;</div>
+  <div class="sparkle" style="top:60px; right:10%; animation-delay:1.2s;">&#10023;</div>
+  <div class="sparkle" style="bottom:10px; left:20%; animation-delay:2s;">&#10022;</div>
+  <p class="eyebrow">You're stepping into</p>
+  <h1>Your Integration<br>Companion</h1>
+  <p class="for">A Daily Practice For Dorthe</p>
+  <div class="lotus-divider">
+    <div class="line"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#E8CE94" stroke-width="1.2"><path d="M12 21c-4-2-6-6-6-10 3 0 5 2 6 5 1-3 3-5 6-5 0 4-2 8-6 10z"/><path d="M12 11c-1-3-1-6 0-9 1 3 1 6 0 9z"/></svg>
+    <div class="line"></div>
+  </div>
+  <p class="sub">You've done the healing. This is the space where you practice living it, one small, inspired action at a time.</p>
+</div>
+
+<div class="wrap">
+
+  <section class="card instructions">
+    <h2>How To Use This</h2>
+    <p class="lead">A simple daily rhythm</p>
+    <ol>
+      <li><strong>Pull a card</strong> each morning, or any time you'd like guidance. You can pull again as many times as you like, use this as your daily card pull, or as a mini reading for yourself whenever you need one.</li>
+      <li><strong>Check off your daily practice</strong> as you move through the day. It's less about doing all five, and more about noticing where you already are.</li>
+      <li><strong>Answer the weekly reflection questions</strong> on paper in a journal, or right here in the boxes below.</li>
+      <li><strong>Before you close this page, save your entry.</strong> Tap the gold button at the bottom to download today's card, checklist, and reflection as a PDF, and keep it somewhere safe as your own healing journal.</li>
+    </ol>
+    <p class="note">Nothing on this page saves automatically. Once you leave or refresh, it resets, so download your entry first if you want to keep it.</p>
+  </section>
+
+  <section class="card" id="pull-section">
+    <h2>Card Guidance</h2>
+    <p class="lead">A tarot card drawn for where you are on your journey</p>
+    <div class="pull-area">
+      <div class="flip-scene">
+        <div class="flip-card" id="flipCard">
+          <div class="face back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#E8CE94" stroke-width="1"><path d="M12 21c-4-2-6-6-6-10 3 0 5 2 6 5 1-3 3-5 6-5 0 4-2 8-6 10z"/><path d="M12 11c-1-3-1-6 0-9 1 3 1 6 0 9z"/></svg>
+            <div class="hint">Tap To Reveal</div>
+          </div>
+          <div class="face front">
+            <div class="card-name" id="cardName"></div>
+            <div class="block">
+              <div class="tag">The Card</div>
+              <div class="txt" id="cardDesc"></div>
+            </div>
+            <div class="block affirmation">
+              <div class="tag">Affirmation</div>
+              <div class="txt" id="cardAffirmation"></div>
+            </div>
+            <div class="block">
+              <div class="tag">Today's Action</div>
+              <div class="txt" id="cardAction"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="draw-btn" id="drawBtn">Draw A Card</button>
+      <p class="drawn-note" id="drawnNote" style="display:none;">Use this daily, or whenever you want a reading for yourself. Tap Pull Again anytime for new guidance.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Daily Practice</h2>
+    <p class="lead">Small, inspired actions, not a leap</p>
+    <ul class="checklist" id="checklist"></ul>
+  </section>
+
+  <section class="card">
+    <h2>Your Reminders</h2>
+    <p class="lead">Return here whenever old fear gets loud</p>
+    <ul class="reminders">
+      <li>I deserve relationships that feel safe and reciprocal.</li>
+      <li>My resistance to connection is old, not true.</li>
+      <li>Small inspired actions are enough. I don't need a grand gesture.</li>
+      <li>Support is allowed to show up for me.</li>
+      <li>I have done the work. This phase is about living it.</li>
+      <li>The path may be dark before I take the first step, but I am meant to walk it.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Weekly Reflection</h2>
+    <p class="lead">Sit with these once a week, Sunday evening works beautifully</p>
+    <div class="reflect-q">
+      <label>What is one small, inspired action I can take this week to connect with other people?</label>
+      <textarea data-key="q1" placeholder="Let it be honest, not perfect..."></textarea>
+    </div>
+    <div class="reflect-q">
+      <label>Where do I feel resistance or fear coming up around being social or visible?</label>
+      <textarea data-key="q2" placeholder="Name it without judging it..."></textarea>
+    </div>
+    <div class="reflect-q">
+      <label>What's one baby step, not a leap, that would still feel exciting?</label>
+      <textarea data-key="q3" placeholder="Smaller than you think it needs to be..."></textarea>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Save Your Entry</h2>
+    <p class="lead">Turn today's card, checklist, and reflection into a keepsake</p>
+    <div class="save-area">
+      <button class="pdf-btn" id="pdfBtn">Save Today's Entry As PDF</button>
+      <p class="save-confirm" id="saveConfirm">Downloaded &#10022; keep it safe in your healing journal</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="sig">Luana Spirits</div>
+  <div class="tag">SPIRITUAL LOVE HEALING ACADEMY</div>
+  <div class="legal">
+    Luana Spirits Consulting
+    <span class="sep">&middot;</span>
+    <a href="mailto:luana@luanaspirits.com">luana@luanaspirits.com</a>
+    <span class="sep">&middot;</span>
+    <a href="https://docs.google.com/document/d/12oUQEXXesDmVw_XEZH-GEc8NVbtFYyLYf3359hvxyFE/edit?usp=sharing" target="_blank" rel="noopener">Privacy Policy</a>
+    <span class="sep">&middot;</span>
+    <a href="https://docs.google.com/document/d/1i395On2ZByesCyRaIDocu1aIguhVxuHBQ1l_nPfVReQ/edit?usp=sharing" target="_blank" rel="noopener">Terms &amp; Conditions</a>
+    <span class="sep">&middot;</span>
+    2026
+  </div>
+</footer>
+
+<script>
+(function(){
+  function pad(n){ return String(n).padStart(2,'0'); }
+  const now = new Date();
+  const todayKey = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  const todayLabel = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  const cards = [
+    {id:'fool',name:'The Fool',desc:"New beginnings, a leap into the unknown, trusting the path before you can see it.",affirmation:"I am allowed to begin again, even without knowing exactly how it unfolds.",action:"Take one step today toward something new without needing the full plan first."},
+    {id:'magician',name:'The Magician',desc:"You already have everything you need to create what you're calling in.",affirmation:"My healing has given me every tool I need for this next chapter.",action:"Use one skill or strength you already have to move something forward today."},
+    {id:'highpriestess',name:'The High Priestess',desc:"Quiet intuition, inner knowing, trusting what you sense before it's proven.",affirmation:"I trust the quiet knowing inside me, even when I can't explain it yet.",action:"Pause before a decision today and ask your intuition what it already knows."},
+    {id:'empress',name:'The Empress',desc:"Nurturing abundance, creativity, and a soft kind of power.",affirmation:"I am allowed to receive as generously as I give.",action:"Do one small thing today purely because it nourishes you."},
+    {id:'emperor',name:'The Emperor',desc:"Structure, stability, building something solid and sustainable.",affirmation:"I can build a steady life for myself, one grounded choice at a time.",action:"Create one small structure today, a plan, a boundary, a routine, that supports you."},
+    {id:'hierophant',name:'The Hierophant',desc:"Tradition, guidance, learning from wisdom that's been tested by time.",affirmation:"I am open to guidance, whether it comes from a mentor, a book, or my own experience.",action:"Seek out one piece of wisdom today, ask, read, or reflect on something that's guided you before."},
+    {id:'lovers',name:'The Lovers',desc:"Alignment, connection, a choice made from the heart.",affirmation:"I am ready for connection that feels aligned, mutual, and easy.",action:"Notice one choice today that would bring you closer to the kind of love or friendship you want."},
+    {id:'chariot',name:'The Chariot',desc:"Forward motion, willpower, staying the course even through resistance.",affirmation:"I have the willpower to keep moving forward, even in small steps.",action:"Choose one thing today that you've been avoiding out of fear, and move through it gently."},
+    {id:'strength',name:'Strength',desc:"Quiet courage, gentleness that is stronger than force.",affirmation:"My softness is not weakness. It has carried me through everything so far.",action:"Meet one moment of fear today with gentleness instead of pushing through it forcefully."},
+    {id:'hermit',name:'The Hermit',desc:"A season of reflection and solitude, now completing.",affirmation:"My season of going inward gave me everything I needed. I'm ready to step back out.",action:"Spend a few minutes today honoring how far your inner work has brought you."},
+    {id:'wheel',name:'Wheel of Fortune',desc:"Cycles turning, timing shifting in your favor.",affirmation:"The timing of my life is shifting, and it's shifting in my favor.",action:"Stay open today to something unexpected. It may be a sign the cycle is turning."},
+    {id:'justice',name:'Justice',desc:"Fairness, cause and effect, clarity around what's true.",affirmation:"I can see clearly now what is fair, healthy, and true for me.",action:"Get honest with yourself today about one situation that needs clear-eyed truth, not old stories."},
+    {id:'hangedman',name:'The Hanged Man',desc:"A pause, a shift in perspective, surrender instead of force.",affirmation:"I don't have to force this. I can let it unfold in its own time.",action:"Let go of pushing on one thing today. Simply observe it from a different angle."},
+    {id:'death',name:'Death',desc:"An ending that makes room for something new to begin.",affirmation:"What has ended in me needed to end. I welcome what's beginning.",action:"Consciously release one old habit, belief, or attachment today, even symbolically."},
+    {id:'temperance',name:'Temperance',desc:"Balance, blending, finding the middle path.",affirmation:"I can hold healing and living at the same time. I don't have to choose.",action:"Find balance today between resting and taking action. Let neither dominate."},
+    {id:'devil',name:'The Devil',desc:"Old patterns, attachments, or fears that still have a grip.",affirmation:"I can name the old pattern without letting it define what happens next.",action:"Notice one old fear or pattern that shows up today, and choose differently, even slightly."},
+    {id:'tower',name:'The Tower',desc:"Sudden change that clears the way for something truer.",affirmation:"Even unexpected change is making room for something more aligned.",action:"If something shifts unexpectedly today, meet it with curiosity instead of panic."},
+    {id:'star',name:'The Star',desc:"Hope restored, healing after hardship, quiet faith in what's ahead.",affirmation:"I have every reason to hope. My healing has prepared me for what's coming.",action:"Write down one thing you're hopeful about today, even a small one."},
+    {id:'moon',name:'The Moon',desc:"Uncertainty, the unseen, trusting yourself even without full clarity.",affirmation:"I don't need to see the whole path to trust I'm on the right one.",action:"If something feels unclear today, give yourself permission to not have the answer yet."},
+    {id:'sun',name:'The Sun',desc:"Joy, vitality, things coming into the light.",affirmation:"I am allowed to feel joyful and light, even while still integrating my healing.",action:"Do one thing today purely because it brings you joy."},
+    {id:'judgement',name:'Judgement',desc:"A reckoning, an awakening, stepping fully into who you've become.",affirmation:"I am ready to be seen as who I've become, not who I used to be.",action:"Let yourself be seen in one small way today, a conversation, a photo, a share."},
+    {id:'world',name:'The World',desc:"Completion, wholeness, a cycle closing in fulfillment.",affirmation:"This chapter of healing is complete. I carry it with me into what's next.",action:"Take a moment today to acknowledge a chapter of your healing that has truly closed."},
+
+    {id:'acewands',name:'Ace of Wands',desc:"A spark of new inspiration or energy ready to be acted on.",affirmation:"I have fresh energy for this next chapter, and I trust it.",action:"Act on one spark of inspiration today, even a small one."},
+    {id:'twowands',name:'Two of Wands',desc:"Planning ahead, weighing your options before taking the next step.",affirmation:"I can take my time to plan without losing momentum.",action:"Spend a few minutes today mapping out what you want your next month to look like."},
+    {id:'threewands',name:'Three of Wands',desc:"Expansion, looking outward, waiting for what you've set in motion.",affirmation:"What I've set in motion is on its way. I can watch for it with excitement.",action:"Look outward today. Notice one opportunity or connection on the horizon."},
+    {id:'fourwands',name:'Four of Wands',desc:"Celebration, homecoming, a moment of stability worth honoring.",affirmation:"I'm allowed to celebrate how far I've come, even mid-journey.",action:"Celebrate one small win from this week, out loud, to someone or to yourself."},
+    {id:'fivewands',name:'Five of Wands',desc:"Minor friction or competition that's actually helping you sharpen what you want.",affirmation:"Friction doesn't mean I'm off track. It's helping me clarify what I actually want.",action:"If tension comes up today, ask what it's showing you about your real needs."},
+    {id:'sixwands',name:'Six of Wands',desc:"Recognition, a well-earned win, being seen for your progress.",affirmation:"I'm allowed to be recognized and celebrated for the progress I've made.",action:"Let someone acknowledge you today. Don't deflect the compliment."},
+    {id:'sevenwands',name:'Seven of Wands',desc:"Holding your ground, standing by what you've healed into.",affirmation:"I can hold my boundaries even if someone questions the growth I've done.",action:"Stand firm in one boundary today, even gently."},
+    {id:'eightwands',name:'Eight of Wands',desc:"Fast movement, things accelerating after a period of waiting.",affirmation:"Things are moving quickly now. I don't have to force any of it.",action:"Stay responsive today. Something may move faster than expected, and that's okay."},
+    {id:'ninewands',name:'Nine of Wands',desc:"Resilience, almost there, drawing on strength built from past challenges.",affirmation:"Everything I've survived has made me resilient enough for what's ahead.",action:"When you feel tired today, remind yourself how far your resilience has already carried you."},
+    {id:'tenwands',name:'Ten of Wands',desc:"Carrying a heavy load, a sign it may be time to set something down.",affirmation:"I don't have to carry everything alone anymore.",action:"Identify one thing you're carrying that isn't yours to hold, and set it down today."},
+    {id:'pagewands',name:'Page of Wands',desc:"Curiosity, a beginner's excitement, exploring something new.",affirmation:"I can approach this new phase like a curious beginner, not an expert.",action:"Explore one new idea or activity today with playful curiosity."},
+    {id:'knightwands',name:'Knight of Wands',desc:"Bold action, momentum, moving forward with confidence.",affirmation:"I can move forward boldly, even while I'm still integrating.",action:"Take one bold, confident action today, even a small one."},
+    {id:'queenwands',name:'Queen of Wands',desc:"Warmth, magnetism, confidence that draws people in naturally.",affirmation:"My warmth and confidence are magnetic. I don't need to try so hard.",action:"Let your natural warmth lead one interaction today."},
+    {id:'kingwands',name:'King of Wands',desc:"Visionary leadership, leading your own life with confidence and purpose.",affirmation:"I am the leader of my own next chapter.",action:"Make one decision today from a place of leadership rather than waiting for permission."},
+
+    {id:'acecups',name:'Ace of Cups',desc:"A new emotional beginning, an open heart ready to receive.",affirmation:"My heart is open and ready to receive what's coming.",action:"Do one thing today that opens your heart, even slightly."},
+    {id:'twocups',name:'Two of Cups',desc:"Mutual connection, a bond built on balance and reciprocity.",affirmation:"I deserve connection that flows both ways.",action:"Reach out to one person today and notice how the connection feels, balanced or one-sided."},
+    {id:'threecups',name:'Three of Cups',desc:"Friendship, celebration, community showing up around you.",affirmation:"My community and friendships are growing exactly as they're meant to.",action:"Connect with a friend or community today, even with a short message."},
+    {id:'fourcups',name:'Four of Cups',desc:"Contemplation, possibly missing an opportunity because you're turned inward.",affirmation:"I can stay reflective without missing what's being offered to me.",action:"Look up today. Notice one opportunity or invitation you might normally overlook."},
+    {id:'fivecups',name:'Five of Cups',desc:"Grief over what didn't work out, while missing what's still available.",affirmation:"I can honor what I've lost while still seeing what remains.",action:"Acknowledge one loss today, then gently notice one thing that's still good in your life."},
+    {id:'sixcups',name:'Six of Cups',desc:"Nostalgia, sweetness, reconnecting with simpler joys.",affirmation:"I can enjoy simple, sweet moments without needing them to mean something bigger.",action:"Do one small nostalgic or joyful thing today, just because."},
+    {id:'sevencups',name:'Seven of Cups',desc:"Many options, a need for discernment about what's real.",affirmation:"I can take my time choosing what's real for me, instead of chasing every option.",action:"If you're facing a choice today, narrow it down to what actually feels aligned."},
+    {id:'eightcups',name:'Eight of Cups',desc:"Walking away from something that no longer fits, even if it once did.",affirmation:"I'm allowed to walk away from what no longer fits, even without a perfect reason.",action:"Notice one thing today that no longer fits who you're becoming."},
+    {id:'ninecups',name:'Nine of Cups',desc:"Contentment, emotional fulfillment, wishes coming true.",affirmation:"I am allowed to feel content, even mid-journey.",action:"Notice one thing today that already feels fulfilling, and let yourself enjoy it fully."},
+    {id:'tencups',name:'Ten of Cups',desc:"Deep emotional fulfillment, harmony, the kind of love and connection you're building toward.",affirmation:"The harmony I'm building toward is real and it's coming.",action:"Picture the emotional fulfillment you're working toward today, and let it motivate one small action."},
+    {id:'pagecups',name:'Page of Cups',desc:"Emotional openness, gentle new feelings, creative inspiration.",affirmation:"I can let new feelings in gently, without needing to define them right away.",action:"Stay open today to a new feeling or idea without rushing to label it."},
+    {id:'knightcups',name:'Knight of Cups',desc:"Romance, following the heart, an offer made with sincerity.",affirmation:"I can follow my heart and still stay grounded.",action:"Let your heart lead one small decision today."},
+    {id:'queencups',name:'Queen of Cups',desc:"Emotional depth, compassion, intuitive care for yourself and others.",affirmation:"My emotional depth is a gift, not too much.",action:"Offer yourself the same compassion today that you'd offer a close friend."},
+    {id:'kingcups',name:'King of Cups',desc:"Emotional mastery, staying calm and centered even with big feelings.",affirmation:"I can feel deeply and still stay steady.",action:"If a big feeling comes up today, breathe through it rather than reacting immediately."},
+
+    {id:'aceswords',name:'Ace of Swords',desc:"Mental clarity, a breakthrough in how you see a situation.",affirmation:"I have the clarity I need to see this situation truthfully.",action:"Write down one clear truth today about a situation you've been overthinking."},
+    {id:'twoswords',name:'Two of Swords',desc:"Indecision, avoiding a choice by staying in the middle.",affirmation:"I can make a decision even without total certainty.",action:"Make one small decision today that you've been avoiding."},
+    {id:'threeswords',name:'Three of Swords',desc:"Heartbreak, a painful truth that still needs to be felt.",affirmation:"I can feel this pain fully and still trust I'll be okay.",action:"Let yourself feel one difficult emotion today instead of pushing it away."},
+    {id:'fourswords',name:'Four of Swords',desc:"Rest, recovery, stepping back to recharge.",affirmation:"Rest is part of my integration, not a delay of it.",action:"Give yourself permission to rest today, without guilt."},
+    {id:'fiveswords',name:'Five of Swords',desc:"Conflict with no real winner, knowing when to walk away.",affirmation:"I don't need to win every disagreement to be at peace.",action:"Let go of one small conflict today rather than needing to be right."},
+    {id:'sixswords',name:'Six of Swords',desc:"Moving away from a difficult chapter toward calmer waters.",affirmation:"I am moving toward calmer waters, even if the transition feels slow.",action:"Take one step today that moves you toward more peace, even a small one."},
+    {id:'sevenswords',name:'Seven of Swords',desc:"Strategy, discernment about what to share and with whom.",affirmation:"I can be discerning about who earns access to my heart.",action:"Notice today who you feel safe being open with, and who you don't."},
+    {id:'eightswords',name:'Eight of Swords',desc:"Feeling trapped by thoughts that aren't as fixed as they seem.",affirmation:"The limits I feel are old beliefs, not the truth of my situation.",action:"Challenge one limiting thought today by asking, is this actually true?"},
+    {id:'nineswords',name:'Nine of Swords',desc:"Anxiety, overthinking, especially at night.",affirmation:"My anxious thoughts are not predictions. I can set them down.",action:"If worry creeps in today, write it down and set it aside instead of replaying it."},
+    {id:'tenswords',name:'Ten of Swords',desc:"A painful ending that has run its full course.",affirmation:"This ending was completion, not failure. I can rise from here.",action:"Acknowledge one thing that has truly ended, and let yourself begin from here."},
+    {id:'pageswords',name:'Page of Swords',desc:"Curiosity, new ideas, a willingness to ask questions.",affirmation:"I'm allowed to ask questions and stay curious about my own healing.",action:"Ask yourself one honest question today about what you really want."},
+    {id:'knightswords',name:'Knight of Swords',desc:"Fast, direct action driven by clear intention.",affirmation:"I can move quickly and directly when I trust my clarity.",action:"Take one direct, clear action today instead of overthinking it."},
+    {id:'queenswords',name:'Queen of Swords',desc:"Clear-eyed independence, honesty, seeing situations without illusion.",affirmation:"I can be honest with myself without being harsh with myself.",action:"Speak one honest truth today, kindly but clearly."},
+    {id:'kingswords',name:'King of Swords',desc:"Clear thinking, fairness, leading with truth and logic.",affirmation:"I can think clearly about my next steps, without letting fear cloud my judgment.",action:"Make one decision today based on clarity rather than fear."},
+
+    {id:'acepentacles',name:'Ace of Pentacles',desc:"A new opportunity in the physical world, work, health, or stability.",affirmation:"A new opportunity is available to me, and I'm ready to receive it.",action:"Take one practical step today toward a goal in your work, health, or daily life."},
+    {id:'twopentacles',name:'Two of Pentacles',desc:"Balancing multiple priorities without losing your footing.",affirmation:"I can balance healing and daily life without dropping either one.",action:"Notice one area today where you're juggling too much, and simplify it slightly."},
+    {id:'threepentacles',name:'Three of Pentacles',desc:"Collaboration, building something with the support of others.",affirmation:"I don't have to build this next chapter completely alone.",action:"Ask for or accept help with one task today."},
+    {id:'fourpentacles',name:'Four of Pentacles',desc:"Holding on tightly, sometimes out of fear of losing stability.",affirmation:"I can loosen my grip a little and still feel secure.",action:"Notice one thing you're gripping out of fear today, and soften around it."},
+    {id:'fivepentacles',name:'Five of Pentacles',desc:"A difficult season, feeling left out in the cold.",affirmation:"Even in hard seasons, support is closer than it feels.",action:"If you're struggling today, let one person know instead of carrying it alone."},
+    {id:'sixpentacles',name:'Six of Pentacles',desc:"Give and take, generosity flowing in both directions.",affirmation:"I can give and receive in equal measure.",action:"Offer help to someone today, and also let yourself accept help if it's offered."},
+    {id:'sevenpentacles',name:'Seven of Pentacles',desc:"Patience, evaluating progress before deciding the next step.",affirmation:"My growth is happening even when I can't see it fully yet.",action:"Take stock today of one area of growth you might be underestimating."},
+    {id:'eightpentacles',name:'Eight of Pentacles',desc:"Focused effort, refining a skill through steady practice.",affirmation:"Consistent small effort is building something real.",action:"Spend focused time today on one skill or practice that matters to you."},
+    {id:'ninepentacles',name:'Nine of Pentacles',desc:"Self-sufficiency, enjoying the fruits of your own labor.",affirmation:"I can enjoy what I've built for myself, without needing anyone else to validate it.",action:"Treat yourself to something today that celebrates your own progress."},
+    {id:'tenpentacles',name:'Ten of Pentacles',desc:"Long-term stability, legacy, the kind of life you're building toward.",affirmation:"I'm building toward a life, and maybe a love, that will truly last.",action:"Do one thing today that supports the long-term life you're building."},
+    {id:'pagepentacles',name:'Page of Pentacles',desc:"A student's mindset, learning something new with practical intention.",affirmation:"I'm allowed to be a beginner again in this next phase.",action:"Learn or practice one small practical skill today."},
+    {id:'knightpentacles',name:'Knight of Pentacles',desc:"Steady, reliable progress, slow and consistent rather than flashy.",affirmation:"Slow, steady progress still counts as real progress.",action:"Take one small, consistent step today rather than waiting for a big one."},
+    {id:'queenpentacles',name:'Queen of Pentacles',desc:"Nurturing yourself practically, comfort, groundedness in the body.",affirmation:"I can nurture myself in practical ways, not just emotional ones.",action:"Do one grounding, practical thing for your body or space today."},
+    {id:'kingpentacles',name:'King of Pentacles',desc:"Abundance, security, mastery over the material and practical parts of life.",affirmation:"I am capable of building lasting abundance and security for myself.",action:"Take one action today that moves you toward the stability you're building."}
+  ];
+
+  const checklistItems = [
+    { id:'action', text:"I took one small, inspired action toward connection today." },
+    { id:'notice', text:"I noticed old resistance or fear without judging myself for it." },
+    { id:'baby', text:"I chose a baby step instead of waiting for a big leap." },
+    { id:'reminder', text:"I said one of my reminders out loud or in my mind." },
+    { id:'open', text:"I stayed open to unexpected signs or invitations today." }
+  ];
+
+  const reflectionQuestions = [
+    { key:'q1', label:"What is one small, inspired action I can take this week to connect with other people?" },
+    { key:'q2', label:"Where do I feel resistance or fear coming up around being social or visible?" },
+    { key:'q3', label:"What's one baby step, not a leap, that would still feel exciting?" }
+  ];
+
+  let currentCard = null;
+  const checklistState = {};
+
+  const flipCard = document.getElementById('flipCard');
+  const drawBtn = document.getElementById('drawBtn');
+  const drawnNote = document.getElementById('drawnNote');
+  const cardNameEl = document.getElementById('cardName');
+  const cardDescEl = document.getElementById('cardDesc');
+  const cardAffirmationEl = document.getElementById('cardAffirmation');
+  const cardActionEl = document.getElementById('cardAction');
+  const checklistEl = document.getElementById('checklist');
+  const pdfBtn = document.getElementById('pdfBtn');
+  const saveConfirm = document.getElementById('saveConfirm');
+
+  function renderCard(card){
+    cardNameEl.textContent = card.name;
+    cardDescEl.textContent = card.desc;
+    cardAffirmationEl.textContent = card.affirmation;
+    cardActionEl.textContent = card.action;
+  }
+
+  function pickRandomCard(){
+    return cards[Math.floor(Math.random() * cards.length)];
+  }
+
+  drawBtn.addEventListener('click', () => {
+    flipCard.classList.remove('flipped');
+    const card = pickRandomCard();
+    currentCard = card;
+    // brief delay so the flip-back-to-front feels intentional on redraws
+    setTimeout(() => {
+      renderCard(card);
+      flipCard.classList.add('flipped');
+    }, flipCard.classList.contains('flipped') ? 0 : 20);
+    drawBtn.textContent = "Pull Again";
+    drawnNote.style.display = 'block';
+  });
+
+  function renderChecklist(){
+    checklistEl.innerHTML = '';
+    checklistItems.forEach(item => {
+      const li = document.createElement('li');
+      const isDone = !!checklistState[item.id];
+      if (isDone) li.classList.add('done');
+      li.innerHTML = `
+        <div class="checkbox">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#1E0A38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+        </div>
+        <div class="txt">${item.text}</div>
+      `;
+      li.addEventListener('click', () => {
+        checklistState[item.id] = !checklistState[item.id];
+        renderChecklist();
+      });
+      checklistEl.appendChild(li);
+    });
+  }
+  renderChecklist();
+
+  function addWrapped(doc, text, x, y, maxWidth, lineHeight){
+    const lines = doc.splitTextToSize(text, maxWidth);
+    doc.text(lines, x, y);
+    return y + (lines.length * lineHeight);
+  }
+
+  pdfBtn.addEventListener('click', () => {
+    try{
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'pt', format:'a4' });
+      const margin = 54;
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const maxWidth = doc.internal.pageSize.getWidth() - margin*2;
+      let y = margin;
+
+      function checkPageBreak(needed){
+        if (y + needed > pageHeight - margin){
+          doc.addPage();
+          y = margin;
+        }
+      }
+
+      doc.setFont('times','bold'); doc.setFontSize(20);
+      doc.text('Integration Journal', margin, y); y += 22;
+      doc.setFont('times','italic'); doc.setFontSize(12);
+      doc.text(todayLabel, margin, y); y += 30;
+
+      doc.setFont('times','bold'); doc.setFontSize(14);
+      doc.text("Today's Card", margin, y); y += 20;
+      doc.setFont('times','normal'); doc.setFontSize(11);
+      if (currentCard){
+        doc.setFont('times','bold');
+        doc.text(currentCard.name, margin, y); y += 16;
+        doc.setFont('times','italic');
+        y = addWrapped(doc, currentCard.desc, margin, y, maxWidth, 14); y += 6;
+        doc.setFont('times','normal');
+        y = addWrapped(doc, 'Affirmation: ' + currentCard.affirmation, margin, y, maxWidth, 14); y += 6;
+        y = addWrapped(doc, "Today's Action: " + currentCard.action, margin, y, maxWidth, 14); y += 20;
+      } else {
+        doc.setFont('times','italic');
+        doc.text('No card drawn today.', margin, y); y += 24;
+      }
+
+      checkPageBreak(60);
+      doc.setFont('times','bold'); doc.setFontSize(14);
+      doc.text('Daily Practice', margin, y); y += 20;
+      doc.setFont('times','normal'); doc.setFontSize(11);
+      checklistItems.forEach(item => {
+        checkPageBreak(20);
+        const mark = checklistState[item.id] ? '[x]' : '[ ]';
+        y = addWrapped(doc, mark + '  ' + item.text, margin, y, maxWidth, 14); y += 4;
+      });
+      y += 16;
+
+      checkPageBreak(60);
+      doc.setFont('times','bold'); doc.setFontSize(14);
+      doc.text('Weekly Reflection', margin, y); y += 20;
+      doc.setFont('times','normal'); doc.setFontSize(11);
+      reflectionQuestions.forEach(q => {
+        checkPageBreak(50);
+        const ta = document.querySelector(`textarea[data-key="${q.key}"]`);
+        const val = (ta && ta.value.trim()) ? ta.value.trim() : '(not answered)';
+        doc.setFont('times','bold');
+        y = addWrapped(doc, q.label, margin, y, maxWidth, 14); y += 4;
+        doc.setFont('times','normal');
+        y = addWrapped(doc, val, margin, y, maxWidth, 14); y += 16;
+      });
+
+      checkPageBreak(30);
+      doc.setFont('times','italic'); doc.setFontSize(10);
+      doc.text('Luana Spirits \u2014 Spiritual Love Healing Academy', margin, pageHeight - 36);
+
+      doc.save(`integration-journal-${todayKey}.pdf`);
+
+      saveConfirm.classList.add('show');
+      setTimeout(() => saveConfirm.classList.remove('show'), 3000);
+    }catch(e){
+      console.error('Could not generate PDF', e);
+      alert("Something went wrong saving your PDF. Please try again, or take a screenshot for now.");
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
