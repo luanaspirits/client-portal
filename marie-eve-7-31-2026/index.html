@@ -1,1 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Marie-Eve's Children Connection Dashboard, a personal space to stay rooted in your bond with Elsie, Albert, and Otto.">
+<title>Your Bond With Elsie, Albert & Otto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #2a1640; --card: rgba(255,255,255,0.07); --text: #f5eefb; --muted: #c2aed8; --muted-2: #9880b8;
+    --gold: #c9a548; --gold-soft: #e8d5a0; --violet: #a988e8; --periwinkle: #8ca8e8; --root: #c4544a;
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.26);
+  }
+  body {
+    background: radial-gradient(ellipse at 15% 0%, #4a2c6e60 0%, transparent 55%),
+                radial-gradient(ellipse at 88% 10%, #8ca8e830 0%, transparent 48%),
+                radial-gradient(ellipse at 50% 105%, #c9a54830 0%, transparent 55%), var(--bg);
+    color: var(--text); font-family: 'Jost', sans-serif; font-weight: 300; min-height: 100vh; position: relative;
+  }
+  #sparkles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .spark { position: absolute; border-radius: 50%; background: radial-gradient(circle, #fff, var(--violet) 70%, transparent 100%); animation: twinkle 4.5s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100%{opacity:.15;transform:scale(.7);} 50%{opacity:.8;transform:scale(1.25);} }
+  #app { position: relative; z-index: 2; max-width: 660px; margin: 0 auto; padding: 0 20px 60px; }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--text); margin-bottom: 12px; }
+  h1 { font-weight: 700; font-size: 27px; line-height: 1.3; }
+  h2 { font-weight: 600; font-size: 21px; }
+  h3 { font-weight: 600; font-size: 16px; }
+  p { line-height: 1.75; color: var(--muted); font-size: 14.5px; margin-bottom: 14px; }
+  em.hl { font-style: italic; color: var(--gold-soft); }
+  .tagline { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold-soft); font-size: 16.5px; text-align: center; margin: 16px 0; }
+  .center { text-align: center; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; margin-bottom: 16px; }
+  .card.ritual { background: linear-gradient(150deg, rgba(201,165,72,0.12), rgba(155,127,212,0.08)); border-color: var(--line-strong); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Jost', sans-serif; font-weight: 700; font-size: 14px; padding: 13px 26px; border-radius: 999px; border: none; cursor: pointer; text-decoration: none; }
+  .btn.gold { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; box-shadow: 0 6px 20px rgba(201,165,72,0.3); }
+  .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line-strong); }
+  .btn.small { padding: 8px 16px; font-size: 12px; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  textarea { width: 100%; background: rgba(0,0,0,0.18); border: 1px solid var(--line); border-radius: 12px; color: var(--text); font-family: 'Jost', sans-serif; font-size: 14.5px; padding: 13px; resize: vertical; min-height: 72px; margin-bottom: 14px; }
+  .journal-q { font-size: 13.5px; color: var(--text); margin-bottom: 6px; font-weight: 500; }
+  .topbar-left { display: flex; align-items: center; gap: 12px; justify-content: center; margin: 36px 0 10px; }
+  .topbar-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--gold-soft), var(--violet)); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .topbar-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; }
 
+  .topnav-wrap { position: sticky; top: 0; z-index: 10; padding: 16px 0 12px; }
+  .topnav-brand-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 14px; }
+  .topnav-brand-row .icon { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--gold-soft), var(--violet)); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .topnav-brand-row .name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 13px; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; justify-content: center; flex-wrap: wrap; }
+  .tab { flex-shrink: 0; font-family: 'Jost', sans-serif; font-weight: 600; font-size: 12px; background: var(--card); border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 9px 15px; cursor: pointer; }
+  .tab.active { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; border-color: transparent; font-weight: 700; }
+
+  .step-progress { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; color: var(--muted-2); text-align: center; margin-bottom: 8px; }
+  .step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; }
+  .step-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); }
+  .step-dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
+
+  .child-card { background: linear-gradient(150deg, rgba(155,127,212,0.14), rgba(140,168,232,0.10)); border: 1px solid var(--line-strong); border-radius: 18px; padding: 22px; margin-bottom: 14px; }
+  .child-card .name { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .child-card .quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 17px; color: var(--gold-soft); line-height: 1.5; margin-bottom: 10px; }
+  .child-card .cards { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--muted-2); }
+
+  .breathe-wrap { display: flex; flex-direction: column; align-items: center; padding: 12px 0 4px; }
+  .breathe-ball { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--root) 55%, #7a2e26 100%); box-shadow: 0 0 40px rgba(196,84,74,0.4); transition: transform 4s ease-in-out; margin-bottom: 16px; }
+  .breathe-label { font-family: 'Playfair Display', serif; font-size: 16px; min-height: 22px; text-align: center; color: var(--gold-soft); }
+
+  .day-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .day-pill { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--card); border: 1.5px solid var(--line); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .day-pill.active { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; border-color: transparent; font-weight: 700; }
+  .day-pill.done { border-color: var(--gold); }
+
+  .day-badge { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 6px; }
+  .practice-box { background: rgba(0,0,0,0.15); border-left: 3px solid var(--root); border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 14px 0; }
+  .practice-box .lbl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-soft); margin-bottom: 4px; }
+
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin: 20px 0 8px; }
+
+  .site-footer { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); text-align: center; }
+  .site-footer .brand { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .site-footer .brand em { font-style: italic; color: var(--gold-soft); }
+  .site-footer .links { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--muted-2); line-height: 1.9; }
+  .site-footer a { color: var(--muted-2); text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="sparkles"></div>
+<div id="app"></div>
+
+<script>
+(function initSparkles() {
+  const wrap = document.getElementById("sparkles");
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement("div");
+    s.className = "spark";
+    const size = 2 + Math.random() * 4;
+    s.style.width = size + "px"; s.style.height = size + "px";
+    s.style.left = Math.random() * 100 + "%"; s.style.top = Math.random() * 100 + "%";
+    s.style.animationDelay = (Math.random() * 4.5) + "s";
+    wrap.appendChild(s);
+  }
+})();
+
+/* ---------- DATA, PULLED FROM MARIE-EVE'S ACTUAL CHILDREN'S READING ---------- */
+
+const INTERRUPT_STEPS = [
+  { title: "Notice The Grief", prompt: "What's the grief or guilt about the distance saying to you right now? Let it be exactly as heavy as it is." },
+  { title: "Return To The Throat", prompt: "Your children's message started in the throat chakra, frustration at not being able to reach you fully in the 3D. Where do you feel that same frustration living in your own body right now?" },
+  { title: "Remember The Bond", prompt: "They are not waiting for you to be different. The bond is already enough. Read that again, slowly. What shifts when you actually let that be true?" },
+  { title: "Call On Your Queen Of Swords", prompt: "Your own card in this reading was the Queen of Swords, clear, strong, independent energy. What would she say to you about this guilt right now?" },
+  { title: "Come Back To Now", prompt: "What's one true thing about your connection with Elsie, Albert, and Otto that is real and alive, right now, regardless of the distance?" }
+];
+
+const CHILDREN = [
+  { name: "Elsie", cards: "9 of Wands \u00B7 10 of Cups", quote: "You being our mother is enough." },
+  { name: "Albert", cards: "6 of Cups \u00B7 Queen of Swords \u00B7 9 of Wands \u00B7 The Moon", quote: "I understand the choices you made." },
+  { name: "Otto", cards: "Knight of Wands \u00B7 The Hermit rev. \u00B7 Judgement rev. \u00B7 The Lovers \u00B7 10 of Pentacles \u00B7 Justice", quote: "We're okay, we're happy, and we love you." }
+];
+
+const JOURNAL_PROMPTS = [
+  "Where did you feel a moment of connection with Elsie, Albert, or Otto today, energetic or physical?",
+  "Where did your own Queen of Swords steadiness show up today?",
+  "What guilt about the distance are you ready to set down today, even just a little?"
+];
+
+const TOTAL_DAYS = 30;
+
+/* ---------- STATE ---------- */
+
+let state = {
+  activeTab: "pattern",
+  interruptStep: 0, interruptAnswers: {}, savedInterrupts: [],
+  breathing: false,
+  activeDay: 1, dayJournal: {}
+};
+
+const STORAGE_KEY = "marie-eve-children-connection-dashboard-v1";
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+function loadState() { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) state = { ...state, ...JSON.parse(raw) }; } catch (e) {} }
+function go(patch) { state = { ...state, ...patch }; render(); }
+
+/* ---------- CHROME ---------- */
+
+function topNav() {
+  const tabs = [
+    { id: "pattern", label: "Your Pattern" },
+    { id: "interrupt", label: "Interrupt Tool" },
+    { id: "children", label: "Elsie, Albert & Otto" },
+    { id: "practice", label: "Daily Practice" },
+    { id: "journal", label: "30-Day Journal" }
+  ];
+  return `<div class="topnav-wrap">
+    <div class="topnav-brand-row"><div class="icon">\u{1F49C}</div><div class="name">Your Bond With Elsie, Albert &amp; Otto</div></div>
+    <div class="tabs">${tabs.map(t => `<div class="tab ${state.activeTab === t.id ? "active" : ""}" onclick="go({activeTab:'${t.id}'})">${t.label}</div>`).join("")}</div>
+  </div>`;
+}
+
+function footer() {
+  return `<div class="site-footer">
+    <div class="brand">Luana <em>Spirits</em></div>
+    <div class="links">
+      <a href="mailto:luana@luanaspirits.com">luana@luanaspirits.com</a> &middot;
+      <a href="https://docs.google.com/document/d/12oUQEXXesDmVw_XEZH-GEc8NVbtFYyLYf3359hvxyFE/edit?usp=sharing" target="_blank" rel="noopener">Privacy Policy</a> &middot;
+      <a href="https://docs.google.com/document/d/1i395On2ZByesCyRaIDocu1aIguhVxuHBQ1l_nPfVReQ/edit?usp=sharing" target="_blank" rel="noopener">Terms &amp; Conditions</a> &middot; &copy; 2026
+    </div>
+  </div>`;
+}
+
+/* ---------- YOUR PATTERN ---------- */
+
+function patternHtml() {
+  return `
+    <div class="topbar-left"><div class="topbar-icon">\u{1F49C}</div><div class="topbar-title">Welcome, Marie-Eve</div></div>
+    <h2 class="center">Your Pattern: The Distance vs. The Bond</h2>
+    <div class="card ritual">
+      <p style="margin-bottom:0; color:var(--text);">The very first thing that came through in this reading wasn't a card, it was a feeling. A fiery frustration centered in the throat chakra, felt collectively from Elsie, Albert, and Otto. Anger and frustration at the distance, and a strong desire to connect with you, their mother, more fully in the 3D physical world.</p>
+    </div>
+    <div class="card">
+      <p style="margin-bottom:0;">But underneath that frustration is the real message: they are not waiting for you to be different. The bond is already enough. Not once you're closer. Not once things change in the 3D. Now, exactly as it is.</p>
+    </div>
+    <div class="tagline">The bond is enough, regardless of the distance between you.</div>
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn gold" onclick="go({activeTab:'interrupt'})">Open The Interrupt Tool &rarr;</button>
+    </div>
+  `;
+}
+
+/* ---------- INTERRUPT TOOL ---------- */
+
+function interruptHtml() {
+  const step = INTERRUPT_STEPS[state.interruptStep];
+  const isLast = state.interruptStep === INTERRUPT_STEPS.length - 1;
+  const dots = INTERRUPT_STEPS.map((s, i) => `<div class="step-dot ${i === state.interruptStep ? "active" : ""}"></div>`).join("");
+  return `
+    <h2>\u{1F338} When Grief Or Guilt About The Distance Comes Up</h2>
+    <p>A 5-step practice built from your own reading, to walk you back to the bond being enough.</p>
+    <div class="step-progress">STEP ${state.interruptStep + 1} OF ${INTERRUPT_STEPS.length}</div>
+    <div class="step-dots">${dots}</div>
+    <div class="card">
+      <h3>${step.title}</h3>
+      <div class="journal-q">${step.prompt}</div>
+      <textarea id="interruptField">${state.interruptAnswers[state.interruptStep] || ""}</textarea>
+    </div>
+    <div class="btn-row">
+      ${state.interruptStep > 0 ? `<button class="btn ghost" onclick="interruptNav(-1)">&larr; Back</button>` : ""}
+      ${isLast ? `<button class="btn gold" onclick="saveInterrupt()">Save This Practice</button>` : `<button class="btn gold" onclick="interruptNav(1)">Continue &rarr;</button>`}
+    </div>
+  `;
+}
+
+function interruptNav(dir) {
+  state.interruptAnswers[state.interruptStep] = document.getElementById("interruptField").value;
+  go({ interruptStep: state.interruptStep + dir });
+}
+
+function saveInterrupt() {
+  state.interruptAnswers[state.interruptStep] = document.getElementById("interruptField").value;
+  state.savedInterrupts.push({ date: new Date().toLocaleString(), answers: { ...state.interruptAnswers } });
+  go({ interruptStep: 0, interruptAnswers: {}, activeTab: "journal" });
+}
+
+/* ---------- CHILDREN ---------- */
+
+function childrenHtml() {
+  const cards = CHILDREN.map(c => `
+    <div class="child-card">
+      <div class="name">${c.name.toUpperCase()}'S MESSAGE</div>
+      <div class="quote">"${c.quote}"</div>
+      <div class="cards">${c.cards}</div>
+    </div>
+  `).join("");
+  return `
+    <h2>\u2728 Elsie, Albert &amp; Otto</h2>
+    <p>One message from each of your children, exactly as it came through.</p>
+    ${cards}
+  `;
+}
+
+/* ---------- DAILY PRACTICE ---------- */
+
+let breathTimer = null;
+const BOX_PHASES = ["Breathe in...", "Hold...", "Breathe out...", "Hold..."];
+
+function practiceHtml() {
+  return `
+    <h2>\u{1F56F} Your Daily Connection Practice</h2>
+    <div class="practice-box">
+      <div class="lbl">The Ritual</div>
+      <p style="margin-bottom:0; color:var(--text);">Light a candle for Elsie, Albert, and Otto. As it burns, let each of them energetically "choose" something small, a color, a feeling, a word that comes to mind. You're not performing this correctly or incorrectly, you're simply making space for their energy to reach you the way it already wants to.</p>
+    </div>
+    <p>Ground first with a root chakra breath, then light your candle.</p>
+    <div class="breathe-wrap">
+      <div class="breathe-ball" id="breatheBall"></div>
+      <div class="breathe-label" id="breatheLabel">Press start when you're ready</div>
+      <button class="btn ghost small" id="breatheBtn" onclick="toggleBreathing()">Start Root Chakra Breathing</button>
+    </div>
+  `;
+}
+
+function toggleBreathing() {
+  const ball = document.getElementById("breatheBall");
+  const label = document.getElementById("breatheLabel");
+  const btn = document.getElementById("breatheBtn");
+  if (state.breathing) {
+    state.breathing = false; clearTimeout(breathTimer);
+    ball.style.transform = "scale(1)"; label.textContent = "Press start when you're ready"; btn.textContent = "Start Root Chakra Breathing";
+    return;
+  }
+  state.breathing = true; btn.textContent = "Stop";
+  let phase = 0;
+  const runPhase = () => {
+    if (!state.breathing) return;
+    label.textContent = BOX_PHASES[phase];
+    ball.style.transition = "transform 4s ease-in-out";
+    if (phase === 0) ball.style.transform = "scale(1.35)";
+    else if (phase === 2) ball.style.transform = "scale(1)";
+    phase = (phase + 1) % 4;
+    breathTimer = setTimeout(runPhase, 4000);
+  };
+  runPhase();
+}
+
+/* ---------- 30-DAY JOURNAL ---------- */
+
+function journalHtml() {
+  const n = state.activeDay;
+  const existing = state.dayJournal[n] || {};
+  const pills = Array.from({ length: TOTAL_DAYS }, (_, i) => i + 1).map(num => {
+    const hasEntry = state.dayJournal[num] && JOURNAL_PROMPTS.every((p, i) => state.dayJournal[num][i] && state.dayJournal[num][i].trim());
+    return `<div class="day-pill ${n === num ? "active" : ""} ${hasEntry ? "done" : ""}" onclick="go({activeDay:${num}})">${num}</div>`;
+  }).join("");
+
+  const fields = JOURNAL_PROMPTS.map((p, i) => `
+    <div class="journal-q">${p}</div>
+    <textarea id="jday-${i}">${existing[i] || ""}</textarea>
+  `).join("");
+
+  const pastInterrupts = state.savedInterrupts.length ? `
+    <div class="section-label">Saved Interrupt Practices</div>
+    <div class="card">${[...state.savedInterrupts].reverse().map(p => `
+      <div style="margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--line);">
+        <div class="journal-q" style="color:var(--gold-soft);">${p.date}</div>
+        ${INTERRUPT_STEPS.map((s, i) => p.answers[i] ? `<div class="journal-q">${s.title}</div><p style="margin-bottom:8px;">${p.answers[i]}</p>` : "").join("")}
+      </div>
+    `).join("")}</div>
+  ` : "";
+
+  return `
+    <h2>\u{1F4D3} Your 30-Day Journal</h2>
+    <p>One check-in a day, noticing connection, your own steadiness, and releasing the guilt as it comes up.</p>
+    <div class="day-pills">${pills}</div>
+    <div class="card">
+      <div class="day-badge">DAY ${n} OF 30</div>
+      ${fields}
+      <button class="btn gold small" onclick="saveDayJournal()">${state.dayJournal[n] ? "\u2726 Update" : "Save Today"}</button>
+    </div>
+    ${pastInterrupts}
+    <div class="btn-row"><button class="btn gold" onclick="downloadJournal()">Download My Journal</button></div>
+  `;
+}
+
+function saveDayJournal() {
+  const answers = {};
+  JOURNAL_PROMPTS.forEach((p, i) => { answers[i] = document.getElementById("jday-" + i).value; });
+  state.dayJournal[state.activeDay] = answers;
+  render();
+}
+
+function downloadJournal() {
+  let text = "YOUR BOND WITH ELSIE, ALBERT & OTTO\nMarie-Eve's Journal\n\n";
+  const days = Object.keys(state.dayJournal).map(k => parseInt(k)).sort((a, b) => a - b);
+  if (days.length) {
+    text += "== 30-DAY JOURNAL ==\n";
+    days.forEach(n => {
+      const ans = state.dayJournal[n];
+      text += "Day " + n + "\n";
+      JOURNAL_PROMPTS.forEach((p, i) => { if (ans[i]) text += p + "\n" + ans[i] + "\n\n"; });
+    });
+  }
+  if (state.savedInterrupts.length) {
+    text += "== INTERRUPT PRACTICES ==\n";
+    state.savedInterrupts.forEach(p => {
+      text += p.date + "\n";
+      INTERRUPT_STEPS.forEach((s, i) => { if (p.answers[i]) text += s.title + ": " + p.answers[i] + "\n"; });
+      text += "\n";
+    });
+  }
+  if (!days.length && !state.savedInterrupts.length) text += "No entries yet.\n";
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "marie-eve-children-connection-journal.txt";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- ROUTER ---------- */
+
+function render() {
+  saveState();
+  let content = "";
+  if (state.activeTab === "pattern") content = patternHtml();
+  else if (state.activeTab === "interrupt") content = interruptHtml();
+  else if (state.activeTab === "children") content = childrenHtml();
+  else if (state.activeTab === "practice") content = practiceHtml();
+  else if (state.activeTab === "journal") content = journalHtml();
+
+  document.getElementById("app").innerHTML = `${topNav()}${content}${footer()}`;
+}
+
+loadState();
+render();
+</script>
+</body>
+</html>
