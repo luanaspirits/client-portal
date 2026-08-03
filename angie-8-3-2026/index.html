@@ -1,1 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angie's Union Journey — 6-Month Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#2a1640;
+    --bg-2:#33184d;
+    --panel:rgba(255,255,255,0.07);
+    --panel-border:rgba(255,255,255,0.12);
+    --gold:#c9a548;
+    --gold-soft:#e0c67a;
+    --violet:#a988e8;
+    --blue:#8ca8e8;
+    --text:#f2ecfa;
+    --text-dim:#c7b8dd;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(169,136,232,0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 100%, rgba(201,165,72,0.12), transparent 50%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    color:var(--text);
+    font-family:'Jost',sans-serif;
+    position:relative;
+    overflow-x:hidden;
+  }
+  #sparkles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .sparkle{position:absolute;width:3px;height:3px;background:var(--gold-soft);border-radius:50%;opacity:.5;animation:twinkle 4s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.15;transform:scale(1);}50%{opacity:.7;transform:scale(1.6);}}
 
+  .wrap{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 18px 70px;}
+
+  nav{
+    position:sticky;top:0;z-index:20;
+    backdrop-filter:blur(14px);
+    background:rgba(42,22,64,0.82);
+    border-bottom:1px solid var(--panel-border);
+    padding:14px 0 0;
+    margin-bottom:22px;
+  }
+  .nav-inner{max-width:820px;margin:0 auto;padding:0 18px;}
+  .brand{
+    font-family:'Playfair Display',serif;
+    font-size:15px;
+    font-weight:600;
+    color:var(--gold-soft);
+    margin-bottom:10px;
+    letter-spacing:.02em;
+  }
+  .tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:12px;-webkit-overflow-scrolling:touch;}
+  .tab{
+    flex:0 0 auto;
+    background:transparent;border:1px solid transparent;
+    color:var(--text-dim);
+    font-family:'Jost',sans-serif;font-size:12.5px;font-weight:500;
+    padding:8px 13px;border-radius:999px;cursor:pointer;white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .tab:hover{color:var(--text);}
+  .tab.active{background:linear-gradient(120deg,var(--gold) 0%,#a9803a 100%);color:#241305;border-color:var(--gold);font-weight:600;}
+
+  .view{display:none;animation:fadeIn .3s ease;}
+  .view.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  header.hero{text-align:center;padding:18px 0 30px;}
+  .eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:10px;}
+  h1.hero-title{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(26px,6vw,36px);margin:0 0 10px;line-height:1.15;}
+  .hero-sub{color:var(--text-dim);font-size:14.5px;max-width:480px;margin:0 auto;line-height:1.6;}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--panel-border);
+    border-radius:16px;
+    padding:22px 22px 24px;
+    margin-bottom:18px;
+    box-shadow:0 4px 24px rgba(0,0,0,0.15);
+  }
+  .card h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--gold-soft);margin:0 0 12px;font-weight:600;}
+  .card h3{font-family:'Playfair Display',serif;font-size:15.5px;color:var(--violet);margin:0 0 8px;font-weight:600;}
+  .card p{line-height:1.65;font-size:14.5px;color:var(--text);margin:0 0 10px;}
+  .quote{
+    font-family:'Playfair Display',serif;font-style:italic;font-size:15.5px;
+    color:var(--gold-soft);border-left:2px solid var(--gold);padding-left:16px;
+    line-height:1.6;margin:14px 0;
+  }
+
+  textarea, input[type=text]{
+    width:100%;background:rgba(0,0,0,0.2);border:1px solid var(--panel-border);
+    border-radius:10px;color:var(--text);font-family:'Jost',sans-serif;font-size:14px;
+    padding:12px 14px;resize:vertical;min-height:70px;line-height:1.5;
+  }
+  textarea:focus, input:focus{outline:none;border-color:var(--gold);}
+
+  .btn{
+    background:linear-gradient(120deg,var(--gold) 0%,#a9803a 100%);
+    color:#241305;border:none;font-family:'Jost',sans-serif;font-weight:600;font-size:13.5px;
+    padding:11px 20px;border-radius:10px;cursor:pointer;transition:transform .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn.ghost{background:transparent;border:1px solid var(--violet);color:var(--violet);}
+  .btn.small{padding:7px 14px;font-size:12px;}
+
+  .step{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--panel-border);}
+  .step:last-of-type{border-bottom:none;}
+  .step-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px;}
+
+  .deck-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .deck-card{
+    background:linear-gradient(160deg, rgba(169,136,232,0.14), rgba(201,165,72,0.08));
+    border:1px solid var(--panel-border);border-radius:14px;padding:18px;
+  }
+  .deck-card .who{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:block;}
+  .deck-card p{font-family:'Playfair Display',serif;font-style:italic;font-size:14px;color:var(--text);margin:0;line-height:1.55;}
+
+  .pull-zone{text-align:center;padding:20px 0;}
+  .tarot-card{
+    width:150px;height:230px;margin:0 auto 18px;border-radius:14px;
+    background:linear-gradient(160deg, var(--violet), var(--gold));
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:transform .3s ease;
+    box-shadow:0 10px 30px rgba(0,0,0,0.35);
+    font-family:'Playfair Display',serif;font-size:44px;color:rgba(255,255,255,0.85);
+  }
+  .tarot-card:hover{transform:translateY(-4px) scale(1.02);}
+  .tarot-result{
+    background:var(--panel);border:1px solid var(--gold);border-radius:14px;
+    padding:20px;margin-top:8px;text-align:left;
+  }
+  .tarot-result h3{color:var(--gold-soft);margin-bottom:6px;}
+  .tarot-result .meaning{font-size:13.5px;color:var(--text-dim);line-height:1.6;}
+
+  .progress-track{background:rgba(0,0,0,0.25);border-radius:999px;height:10px;overflow:hidden;margin:10px 0 6px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--gold));border-radius:999px;transition:width .4s ease;}
+  .stat-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;}
+  .stat{flex:1;min-width:100px;background:rgba(0,0,0,0.18);border-radius:12px;padding:14px;text-align:center;}
+  .stat .num{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold-soft);font-weight:700;}
+  .stat .label{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;color:var(--text-dim);letter-spacing:.06em;margin-top:2px;}
+
+  .quarter-chip{
+    display:inline-block;font-family:'DM Mono',monospace;font-size:10.5px;
+    padding:4px 10px;border-radius:999px;margin-bottom:10px;
+    background:rgba(201,165,72,0.15);color:var(--gold-soft);border:1px solid rgba(201,165,72,0.3);
+  }
+
+  .prompt-label{font-family:'DM Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet);display:block;margin-bottom:6px;}
+
+  .saved-msg{font-size:12px;color:var(--gold-soft);opacity:0;transition:opacity .3s ease;margin-top:8px;font-family:'DM Mono',monospace;}
+  .saved-msg.show{opacity:1;}
+
+  .log-entry{background:rgba(0,0,0,0.15);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:13px;color:var(--text-dim);}
+  .log-entry .log-date{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--gold);margin-bottom:4px;display:block;}
+
+  footer{text-align:center;padding:30px 0 10px;color:var(--text-dim);font-size:11.5px;}
+  footer a{color:var(--violet);text-decoration:none;}
+  footer .foot-links{margin-top:6px;}
+  footer .foot-links a{margin:0 8px;}
+
+  @media (max-width:520px){
+    .card{padding:18px;}
+    .deck-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div id="sparkles"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">🦁 Angie's Union Journey</div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- WELCOME -->
+  <div class="view active" id="view-welcome">
+    <header class="hero">
+      <span class="eyebrow">The Lion's Gate Union Activation · 6-Month Edition</span>
+      <h1 class="hero-title">Your Season of Receiving</h1>
+      <p class="hero-sub">A private space to integrate your reading, stay accountable to yourself, and practice the one thing your entire session pointed to: learning to receive.</p>
+    </header>
+
+    <div class="card">
+      <h2>The Core Pattern in Your Reading</h2>
+      <p>Every thread in your session, your current connection, Martin, your own healing, kept circling back to the same invitation. You are moving through a divine feminine initiation, shifting out of overthinking, people-pleasing, and guardedness, into a season of actually receiving love, abundance, and affection without having to earn it first.</p>
+      <div class="quote">"Part of the initiation for the divine feminine is learning how to receive... allow yourself to receive that love. Allow yourself to receive the adoration."</div>
+      <p>And on the pattern you're releasing:</p>
+      <div class="quote">"You are healing your ability to people please... you are shifting into the receiving energy, releasing overthinking."</div>
+      <p>This dashboard exists to help that actually integrate, not just be information you read once and forget.</p>
+    </div>
+
+    <div class="card">
+      <h2>How To Use This Space</h2>
+      <p><strong>Daily Ritual</strong> — your main daily touchpoint. A short grounding practice, a card pull, and a journal entry, all in one place.</p>
+      <p><strong>Interrupt Tool</strong> — for the moments an old trigger or spiral shows up. Walk through it instead of getting pulled under by it.</p>
+      <p><strong>Message Deck</strong> — direct lines from your actual reading, to return to whenever you need reminding.</p>
+      <p><strong>Your Journey</strong> — a simple way to see your progress across the full six months, Quarter One and Quarter Two.</p>
+    </div>
+  </div>
+
+  <!-- DAILY RITUAL -->
+  <div class="view" id="view-daily">
+    <header class="hero">
+      <span class="eyebrow">Daily Ritual</span>
+      <h1 class="hero-title">Today's Practice</h1>
+    </header>
+
+    <div class="card">
+      <h2>🌙 Grounding Practice</h2>
+      <p>Your reading pointed to a sacral chakra awakening this season, reconnecting with your body, your creativity, your sense of ease in your own skin. Before you journal, take two minutes for this:</p>
+      <p>Place a hand on your lower belly. Take five slow breaths. With each exhale, silently repeat: <em>"I don't have to earn what's already mine to receive."</em> Notice, without judging, where in your body you feel resistance to that sentence. That's simply information, not a problem to fix today.</p>
+      <label style="display:flex;align-items:center;gap:10px;margin-top:10px;cursor:pointer;">
+        <input type="checkbox" id="practice-check" style="width:18px;height:18px;accent-color:var(--gold);">
+        <span style="font-size:13.5px;color:var(--text-dim);">I completed today's grounding practice</span>
+      </label>
+    </div>
+
+    <div class="card">
+      <h2>🔮 Daily Card Pull</h2>
+      <p style="color:var(--text-dim);font-size:13px;">Pull one card each day as a small check-in with your own energy. Not a prediction, just a mirror.</p>
+      <div class="pull-zone">
+        <div class="tarot-card" id="pull-btn" onclick="pullCard()">🦁</div>
+        <button class="btn" onclick="pullCard()">Pull Today's Card</button>
+        <div id="tarot-result-zone"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>✍️ Today's Journal</h2>
+      <div class="quarter-chip" id="quarter-chip-label">Quarter One · Healing & Receiving</div>
+      <span class="prompt-label" id="journal-prompt-label">Today's Prompt</span>
+      <p id="journal-prompt-text" style="font-style:italic;color:var(--gold-soft);"></p>
+      <textarea id="journal-text" placeholder="Write freely here..."></textarea>
+      <div style="margin-top:10px;">
+        <button class="btn" onclick="saveJournal()">Save Entry</button>
+        <span class="saved-msg" id="journal-saved">Saved 💜</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERRUPT TOOL -->
+  <div class="view" id="view-interrupt">
+    <header class="hero">
+      <span class="eyebrow">For The Hard Moments</span>
+      <h1 class="hero-title">The Interrupt Tool</h1>
+      <p class="hero-sub">For when an old trigger, an overthinking spiral, or the fear of "the other shoe dropping" shows up. Walk through this instead of getting swept into it.</p>
+    </header>
+
+    <div class="card">
+      <div class="step">
+        <span class="step-num">Step 1</span>
+        <h3>Name what's happening, right now</h3>
+        <p style="font-size:13.5px;color:var(--text-dim);">No need to fix it yet. Just name it.</p>
+        <textarea id="int-1" placeholder="What am I feeling or thinking right now?"></textarea>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 2</span>
+        <h3>Is this actually about now, or about then?</h3>
+        <p style="font-size:13.5px;color:var(--text-dim);">Your reading was clear: old insecurities and triggers surfacing isn't a setback, it's the process working.</p>
+        <textarea id="int-2" placeholder="Does this feeling connect to something older than this moment?"></textarea>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 3</span>
+        <h3>What would receiving, instead of guarding, look like here?</h3>
+        <textarea id="int-3" placeholder="If I let myself receive support/love/ease right now, what would that look like?"></textarea>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 4</span>
+        <h3>One conscious choice, not an impulsive one</h3>
+        <p style="font-size:13.5px;color:var(--text-dim);">Your guides were specific about this: act consciously, not impulsively. Take a beat before you act.</p>
+        <textarea id="int-4" placeholder="What's one grounded next step I can take, or choose to take no action at all?"></textarea>
+      </div>
+      <div class="step">
+        <span class="step-num">Step 5</span>
+        <h3>Return to the core message</h3>
+        <div class="quote">"You don't need to fix that for him, and you don't need to wait for him to resolve it before you keep living fully."</div>
+      </div>
+      <button class="btn" onclick="saveInterrupt()">Save This Session</button>
+      <span class="saved-msg" id="interrupt-saved">Saved 💜</span>
+    </div>
+
+    <div class="card">
+      <h2>Past Sessions</h2>
+      <div id="interrupt-log"></div>
+    </div>
+  </div>
+
+  <!-- MESSAGE DECK -->
+  <div class="view" id="view-deck">
+    <header class="hero">
+      <span class="eyebrow">From Your Reading</span>
+      <h1 class="hero-title">Your Message Deck</h1>
+      <p class="hero-sub">Direct lines channeled during your session. Return here anytime you need to hear it again.</p>
+    </header>
+    <div class="deck-grid" id="deck-grid"></div>
+  </div>
+
+  <!-- JOURNEY -->
+  <div class="view" id="view-journey">
+    <header class="hero">
+      <span class="eyebrow">Six Months, Two Quarters</span>
+      <h1 class="hero-title">Your Journey</h1>
+    </header>
+
+    <div class="card">
+      <h2>Progress Through Your Six Months</h2>
+      <div class="progress-track"><div class="progress-fill" id="journey-fill"></div></div>
+      <p id="journey-text" style="font-size:13px;color:var(--text-dim);"></p>
+      <div class="stat-row">
+        <div class="stat"><div class="num" id="stat-days">0</div><div class="label">Journal Entries</div></div>
+        <div class="stat"><div class="num" id="stat-pulls">0</div><div class="label">Cards Pulled</div></div>
+        <div class="stat"><div class="num" id="stat-interrupts">0</div><div class="label">Interrupt Sessions</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Quarter One — Aug 3 to Nov 3</h2>
+      <p style="font-size:13.5px;color:var(--text-dim);">Healing old hurts, a sacral chakra awakening, reconnecting with a younger version of yourself, and setting real boundaries. Expect triggers, they're the doorway, not the detour.</p>
+    </div>
+    <div class="card">
+      <h2>Quarter Two — Nov 3 to Feb 3</h2>
+      <p style="font-size:13.5px;color:var(--text-dim);">Overcoming the overthinking pattern at its root, receiving real abundance in your work and friendships, and arriving at a steadier, more confident version of yourself.</p>
+    </div>
+
+    <div class="card">
+      <h2>🦁 Ready for the Full Year?</h2>
+      <p>You can upgrade to the 12-Month Edition within one month of your original booking. Your third and fourth quarter would be delivered written, matching this exact reading.</p>
+      <a href="https://stan.store/luanaspirits" class="btn ghost" style="display:inline-block;text-decoration:none;">Learn More</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Luana Spirits · Twin Flame Guide, Psychic Medium &amp; Energy Healer<br>
+  <span style="font-size:10.5px;">This dashboard is a private tool for personal integration and does not replace medical, legal, financial, or therapeutic advice.</span>
+  <div class="foot-links">
+    <a href="https://stan.store/luanaspirits">stan.store/luanaspirits</a> · <a href="mailto:luana@luanaspirits.com">Contact</a> · <a href="#">Privacy Policy</a> · <a href="#">Terms</a>
+  </div>
+</footer>
+
+<script>
+const STORAGE_KEY = 'angie-dinkel-lions-gate-6month-dashboard-v1';
+
+const TABS = [
+  {id:'welcome', label:'Welcome'},
+  {id:'daily', label:'Daily Ritual'},
+  {id:'interrupt', label:'Interrupt Tool'},
+  {id:'deck', label:'Message Deck'},
+  {id:'journey', label:'Your Journey'}
+];
+
+const JOURNAL_PROMPTS = [
+  {theme:'Healing & Receiving', q:'Where did I let myself receive something today, love, help, a compliment, ease, instead of deflecting it?'},
+  {theme:'Triggers as Doorways', q:'What old trigger showed up today, and what might it actually be pointing me toward integrating?'},
+  {theme:'Boundaries & Saying No', q:'Did I say yes to something today out of habit rather than genuine desire? What would saying no have looked like?'},
+  {theme:'Reconnecting With My Body', q:'How did I feel in my body today? Where do I notice more ease, or more resistance, than usual?'},
+  {theme:'Martin: Conscious, Not Impulsive', q:'If Martin crossed my mind today, what did I notice, and did I respond consciously or on impulse?'},
+  {theme:'Choosing Myself', q:'What is one way I chose myself today, even in something small?'},
+  {theme:'Friendships & Support', q:'Who showed up for me today, or who did I let myself lean on?'}
+];
+
+const MESSAGE_CARDS = [
+  {who:'On Receiving', text:"Part of the initiation for the divine feminine is learning how to receive. Allow yourself to receive that love, the adoration."},
+  {who:'On Triggers', text:"Expect triggers to be bountiful during this time, but it's not a bad thing. See your triggers as the doorway to union, to receiving more love."},
+  {who:'On Martin', text:"This is not because of anything you have done. It comes from within his own mind and heart, from things he has done, said, or thought to himself."},
+  {who:'On Your Path Forward', text:"You don't have to force yourself to not think about him or to not contact him. Just be conscious when you're doing it. Do it because you are choosing to, not something impulsive."},
+  {who:'On Your Own Abundance', text:"You still have your abundance. You are still the center of your world, even if someone else is struggling. That is their process, not a reflection of what's available to you."},
+  {who:'On Boundaries', text:"You are healing your ability to people please. You are shifting into the receiving energy, releasing overthinking, learning how to say no."},
+  {who:'On This Season', text:"This is a time to really get to know who you are, your personality, the things you like and want and dislike. Be really good at being your own person."},
+  {who:'On Free Will', text:"Your guides want to emphasize how much free will you have here. If you feel guided to reach out, follow that. If you feel guided to pull back, that's just as valid."}
+];
+
+const CARD_DECK = [
+  ['The Sun','A day for warmth, clarity, and letting yourself be seen exactly as you are.'],
+  ['The Empress','Your divine feminine energy is asking to be honored today, not earned.'],
+  ['Queen of Cups','Lean back into your feelings today. You don\'t have to hold everything together.'],
+  ['The World','Something is completing or integrating today. Notice what feels finished.'],
+  ['Ace of Cups','A fresh wave of feeling or connection may be opening today. Let it in.'],
+  ['The Hermit','A day for turning inward. You don\'t owe anyone your energy today.'],
+  ['Queen of Wands','Your confidence and magnetism are available today, if you claim them.'],
+  ['The Chariot','Forward motion today. Trust the direction you\'re already moving in.'],
+  ['Six of Cups','A gentle day, maybe touched by nostalgia. Let old memories visit without staying too long.'],
+  ['The High Priestess','Trust your intuition today over any outside voice, including your own overthinking.'],
+  ['Justice','A day to notice where balance is or isn\'t present in your relationships.'],
+  ['Knight of Wands','Bold, forward energy today. A good day to say the brave thing.'],
+  ['Four of Cups','You might feel a little emotionally flat today. That\'s okay, it usually passes.'],
+  ['Death','Something is ready to be released today, to make room for what\'s next.'],
+  ['The Star','A hopeful, healing day. Let yourself feel a little lighter than usual.'],
+  ['Nine of Pentacles','You\'ve built something real. Let yourself enjoy it today, no guilt required.'],
+  ['Two of Swords','A choice may be sitting in front of you today. It\'s okay not to force clarity yet.'],
+  ['Queen of Pentacles','Nurture yourself the way you\'d nurture someone you love today.'],
+  ['The Moon','Feelings may run a little foggy today. Be gentle rather than trying to "figure it out."'],
+  ['Ten of Cups','A day for noticing the good that\'s already present in your life.'],
+  ['King of Wands','A day for leading with passion. Say yes to the thing that lights you up.'],
+  ['Wheel of Fortune','Something is shifting today, in your favor, even if it\'s not obvious yet.'],
+  ['The Magician','You have exactly what you need today. Trust your own resourcefulness.'],
+  ['Seven of Cups','Watch for scattered thinking today. Pick one thing and follow it through.'],
+  ['Strength','Gentleness is your real power today, not force.'],
+  ['Eight of Cups','It might be a day to walk away from something that no longer fits.'],
+  ['Three of Cups','A good day to reach out to a friend, celebration energy is around you.'],
+  ['The Lovers','A day about alignment, with yourself first, then with others.'],
+  ['Page of Cups','A sweet, curious energy today. Let yourself feel things without needing an explanation.'],
+  ['Temperance','Balance and patience are the theme today. No need to rush anything.'],
+  ['Five of Pentacles','If today feels a little lonely or lacking, be extra gentle with yourself.'],
+  ['The Sun (reversed)','A quieter day than usual. Rest is productive too.'],
+  ['King of Cups','Emotional steadiness is available to you today, even amid a lot going on.'],
+  ['Six of Swords','A day of gentle transition. You\'re moving toward calmer waters.'],
+  ['Ace of Pentacles','A small new beginning may show up today. Notice it.'],
+  ['The Tower (reversed)','Avoiding a needed change today may cost more than facing it.'],
+  ['Judgement','A day for self-reflection without harsh self-judgment.'],
+  ['Two of Cups','Connection is highlighted today, notice who feels mutual.'],
+  ['Eight of Wands','Things may move quickly today. Stay present instead of getting swept along.'],
+  ['The Star (reversed)','If hope feels distant today, that\'s temporary, not permanent.']
+];
+
+let state = {
+  journal: {},
+  interrupts: [],
+  cardPulls: [],
+  practiceChecks: {}
+};
+
+function todayKey(){
+  return new Date().toISOString().slice(0,10);
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      state = Object.assign(state, parsed);
+    }
+  }catch(e){
+    console.error('Could not load saved state', e);
+  }
+}
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){
+    console.error('Could not save state', e);
+  }
+}
+
+function showTemp(elId){
+  const el = document.getElementById(elId);
+  if(!el) return;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 1800);
+}
+
+function switchView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.target===id));
+  const target = document.getElementById('view-'+id);
+  if(target) target.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  render();
+}
+
+function buildNav(){
+  const tabsEl = document.getElementById('tabs');
+  TABS.forEach((t,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i===0 ? ' active' : '');
+    btn.textContent = t.label;
+    btn.dataset.target = t.id;
+    btn.addEventListener('click', ()=>switchView(t.id));
+    tabsEl.appendChild(btn);
+  });
+}
+
+function getJournalPrompt(){
+  const dayIndex = Math.floor((new Date() - new Date('2026-08-03')) / 86400000);
+  const idx = ((dayIndex % JOURNAL_PROMPTS.length) + JOURNAL_PROMPTS.length) % JOURNAL_PROMPTS.length;
+  return JOURNAL_PROMPTS[idx];
+}
+
+function renderDaily(){
+  const key = todayKey();
+  const prompt = getJournalPrompt();
+  document.getElementById('journal-prompt-label').textContent = 'Today\'s Prompt · ' + prompt.theme;
+  document.getElementById('journal-prompt-text').textContent = prompt.q;
+
+  const dayIndex = Math.floor((new Date() - new Date('2026-08-03')) / 86400000);
+  const quarterLabel = dayIndex < 92 ? 'Quarter One · Healing & Receiving' : 'Quarter Two · Overcoming & Abundance';
+  document.getElementById('quarter-chip-label').textContent = quarterLabel;
+
+  const existing = state.journal[key];
+  document.getElementById('journal-text').value = existing ? existing.text : '';
+
+  const practiceBox = document.getElementById('practice-check');
+  practiceBox.checked = !!state.practiceChecks[key];
+  practiceBox.onchange = function(){
+    state.practiceChecks[key] = practiceBox.checked;
+    saveState();
+  };
+
+  renderTarotResultZone();
+}
+
+function saveJournal(){
+  const key = todayKey();
+  const text = document.getElementById('journal-text').value;
+  const prompt = getJournalPrompt();
+  state.journal[key] = {text: text, theme: prompt.theme, date: key};
+  saveState();
+  showTemp('journal-saved');
+}
+
+function pullCard(){
+  const key = todayKey();
+  const idx = Math.floor(Math.random() * CARD_DECK.length);
+  const [name, meaning] = CARD_DECK[idx];
+  state.cardPulls.push({date:key, name:name, meaning:meaning, ts: Date.now()});
+  saveState();
+  renderTarotResultZone(name, meaning);
+}
+
+function renderTarotResultZone(name, meaning){
+  const zone = document.getElementById('tarot-result-zone');
+  if(!zone) return;
+  const key = todayKey();
+  const todaysPulls = state.cardPulls.filter(p => p.date === key);
+  if(todaysPulls.length === 0){
+    zone.innerHTML = '';
+    return;
+  }
+  const last = todaysPulls[todaysPulls.length - 1];
+  zone.innerHTML = '<div class="tarot-result"><h3>' + last.name + '</h3><div class="meaning">' + last.meaning + '</div></div>';
+}
+
+function saveInterrupt(){
+  const entry = {
+    date: new Date().toLocaleString(),
+    a1: document.getElementById('int-1').value,
+    a2: document.getElementById('int-2').value,
+    a3: document.getElementById('int-3').value,
+    a4: document.getElementById('int-4').value
+  };
+  state.interrupts.push(entry);
+  saveState();
+  showTemp('interrupt-saved');
+  ['int-1','int-2','int-3','int-4'].forEach(id => document.getElementById(id).value = '');
+  renderInterruptLog();
+}
+
+function renderInterruptLog(){
+  const logEl = document.getElementById('interrupt-log');
+  if(!logEl) return;
+  if(state.interrupts.length === 0){
+    logEl.innerHTML = '<p style="font-size:13px;color:var(--text-dim);">No sessions logged yet. That\'s a good thing.</p>';
+    return;
+  }
+  logEl.innerHTML = state.interrupts.slice().reverse().map(e =>
+    '<div class="log-entry"><span class="log-date">' + e.date + '</span>' +
+    (e.a1 ? e.a1 : '<em>No notes recorded</em>') + '</div>'
+  ).join('');
+}
+
+function renderDeck(){
+  const grid = document.getElementById('deck-grid');
+  if(grid.children.length > 0) return;
+  MESSAGE_CARDS.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'deck-card';
+    div.innerHTML = '<span class="who">' + c.who + '</span><p>"' + c.text + '"</p>';
+    grid.appendChild(div);
+  });
+}
+
+function renderJourney(){
+  const dayIndex = Math.floor((new Date() - new Date('2026-08-03')) / 86400000);
+  const totalDays = 184;
+  const clamped = Math.max(0, Math.min(dayIndex, totalDays));
+  const pct = Math.round((clamped / totalDays) * 100);
+  document.getElementById('journey-fill').style.width = pct + '%';
+
+  let text;
+  if(dayIndex < 0){
+    text = 'Your journey begins August 3rd.';
+  } else if(dayIndex >= totalDays){
+    text = 'You\'ve completed your six month window. What a season.';
+  } else {
+    text = 'Day ' + (clamped+1) + ' of your six month journey (' + pct + '% through).';
+  }
+  document.getElementById('journey-text').textContent = text;
+
+  document.getElementById('stat-days').textContent = Object.keys(state.journal).length;
+  document.getElementById('stat-pulls').textContent = state.cardPulls.length;
+  document.getElementById('stat-interrupts').textContent = state.interrupts.length;
+}
+
+function createSparkles(){
+  const container = document.getElementById('sparkles');
+  for(let i=0;i<28;i++){
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random()*100 + '%';
+    s.style.top = Math.random()*100 + '%';
+    s.style.animationDelay = (Math.random()*4) + 's';
+    container.appendChild(s);
+  }
+}
+
+function render(){
+  renderDaily();
+  renderInterruptLog();
+  renderDeck();
+  renderJourney();
+}
+
+buildNav();
+createSparkles();
+loadState();
+render();
+</script>
+</body>
+</html>
