@@ -1,1 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kaylyn's private Lion's Gate Union Activation dashboard, built from her 12-month reading.">
+<title>Kaylyn's Union Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #2a1640; --card: rgba(255,255,255,0.07); --text: #f5eefb; --muted: #c2aed8; --muted-2: #9880b8;
+    --gold: #c9a548; --gold-soft: #e8d5a0; --violet: #a988e8; --periwinkle: #8ca8e8;
+    /* OPTIONAL: --accent2 can shift to match a dominant chakra/card/season for this client,
+       e.g. --accent2: #c4544a for root chakra red. Leave as violet if no strong theme fits. */
+    --line: rgba(255,255,255,0.14); --line-strong: rgba(255,255,255,0.26);
+  }
+  body {
+    background: radial-gradient(ellipse at 15% 0%, #4a2c6e60 0%, transparent 55%),
+                radial-gradient(ellipse at 88% 10%, #8ca8e830 0%, transparent 48%),
+                radial-gradient(ellipse at 50% 105%, #c9a54830 0%, transparent 55%), var(--bg);
+    color: var(--text); font-family: 'Jost', sans-serif; font-weight: 300; min-height: 100vh; position: relative;
+  }
+  #sparkles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .spark { position: absolute; border-radius: 50%; background: radial-gradient(circle, #fff, var(--violet) 70%, transparent 100%); animation: twinkle 4.5s ease-in-out infinite; }
+  @keyframes twinkle { 0%,100%{opacity:.15;transform:scale(.7);} 50%{opacity:.8;transform:scale(1.25);} }
+  #app { position: relative; z-index: 2; max-width: 660px; margin: 0 auto; padding: 0 20px 60px; }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--text); margin-bottom: 12px; }
+  h1 { font-weight: 700; font-size: 27px; line-height: 1.3; }
+  h2 { font-weight: 600; font-size: 21px; }
+  h3 { font-weight: 600; font-size: 16px; }
+  p { line-height: 1.75; color: var(--muted); font-size: 14.5px; margin-bottom: 14px; }
+  em.hl { font-style: italic; color: var(--gold-soft); }
+  .tagline { font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold-soft); font-size: 16.5px; text-align: center; margin: 16px 0; }
+  .center { text-align: center; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; margin-bottom: 16px; }
+  .card.ritual { background: linear-gradient(150deg, rgba(201,165,72,0.12), rgba(155,127,212,0.08)); border-color: var(--line-strong); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Jost', sans-serif; font-weight: 700; font-size: 14px; padding: 13px 26px; border-radius: 999px; border: none; cursor: pointer; text-decoration: none; }
+  .btn.gold { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; box-shadow: 0 6px 20px rgba(201,165,72,0.3); }
+  .btn.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line-strong); }
+  .btn.small { padding: 8px 16px; font-size: 12px; }
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  textarea { width: 100%; background: rgba(0,0,0,0.18); border: 1px solid var(--line); border-radius: 12px; color: var(--text); font-family: 'Jost', sans-serif; font-size: 14.5px; padding: 13px; resize: vertical; min-height: 72px; margin-bottom: 14px; }
+  .journal-q { font-size: 13.5px; color: var(--text); margin-bottom: 6px; font-weight: 500; }
+  .topbar-left { display: flex; align-items: center; gap: 12px; justify-content: center; margin: 36px 0 10px; }
+  .topbar-icon { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--gold-soft), var(--violet)); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .topbar-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; }
 
+  .topnav-wrap { position: sticky; top: 0; z-index: 10; padding: 16px 0 12px; }
+  .topnav-brand-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 14px; }
+  .topnav-brand-row .icon { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--gold-soft), var(--violet)); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .topnav-brand-row .name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 13px; }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; justify-content: center; flex-wrap: wrap; }
+  .tab { flex-shrink: 0; font-family: 'Jost', sans-serif; font-weight: 600; font-size: 12px; background: var(--card); border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 9px 15px; cursor: pointer; }
+  .tab.active { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; border-color: transparent; font-weight: 700; }
+
+  .step-progress { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1px; color: var(--muted-2); text-align: center; margin-bottom: 8px; }
+  .step-dots { display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; }
+  .step-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); }
+  .step-dot.active { background: var(--gold); width: 20px; border-radius: 4px; }
+
+  .qtrack { display: flex; align-items: flex-start; justify-content: space-between; margin: 20px 0 26px; position: relative; }
+  .qtrack::before { content: ""; position: absolute; top: 17px; left: 8%; right: 8%; height: 2px; background: var(--line-strong); z-index: 0; }
+  .qnode { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; cursor: pointer; }
+  .qnode .dot { width: 34px; height: 34px; border-radius: 50%; background: var(--card); border: 2px solid var(--line-strong); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .qnode.current .dot { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; border-color: transparent; font-weight: 700; box-shadow: 0 0 18px rgba(201,165,72,0.45); }
+  .qnode.past .dot { border-color: var(--gold); color: var(--gold-soft); }
+  .qnode .qlabel { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-2); text-align: center; }
+  .qnode.current .qlabel { color: var(--gold-soft); font-weight: 700; }
+  .qnode .qhere { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1px; color: var(--gold); margin-top: 2px; }
+
+  .qcard { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 14px; }
+  .qcard.current { border-color: var(--gold); background: linear-gradient(150deg, rgba(201,165,72,0.10), rgba(155,127,212,0.06)); }
+  .qcard .qdate { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .qcard h3 { margin-bottom: 10px; }
+  .qcard .qsection-lbl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--violet); margin: 12px 0 4px; }
+  .qcard .qsection-lbl:first-of-type { margin-top: 0; }
+
+  .quote-card { background: linear-gradient(150deg, rgba(155,127,212,0.14), rgba(140,168,232,0.10)); border: 1px solid var(--line-strong); border-radius: 18px; padding: 22px; margin-bottom: 14px; }
+  .quote-card .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .quote-card .quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 17px; color: var(--gold-soft); line-height: 1.5; margin-bottom: 10px; }
+  .quote-card .meta { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--muted-2); }
+
+  .breathe-wrap { display: flex; flex-direction: column; align-items: center; padding: 12px 0 4px; }
+  .breathe-ball { width: 100px; height: 100px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff, var(--violet) 55%, #6b4fa0 100%); box-shadow: 0 0 40px rgba(169,136,232,0.4); transition: transform 4s ease-in-out; margin-bottom: 16px; }
+  .breathe-label { font-family: 'Playfair Display', serif; font-size: 16px; min-height: 22px; text-align: center; color: var(--gold-soft); }
+
+  .day-pills { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .day-pill { flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--card); border: 1.5px solid var(--line); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+  .day-pill.active { background: linear-gradient(135deg, var(--gold-soft), var(--violet)); color: #2a1640; border-color: transparent; font-weight: 700; }
+  .day-pill.done { border-color: var(--gold); }
+
+  .day-badge { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: var(--gold); margin-bottom: 6px; }
+  .practice-box { background: rgba(0,0,0,0.15); border-left: 3px solid var(--violet); border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 14px 0; }
+  .practice-box .lbl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold-soft); margin-bottom: 4px; }
+
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin: 20px 0 8px; }
+
+  .site-footer { margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--line); text-align: center; }
+  .site-footer .brand { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .site-footer .brand em { font-style: italic; color: var(--gold-soft); }
+  .site-footer .links { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--muted-2); line-height: 1.9; }
+  .site-footer a { color: var(--muted-2); text-decoration: none; }
+</style>
+</head>
+<body>
+<div id="sparkles"></div>
+<div id="app"></div>
+
+<script>
+(function initSparkles() {
+  const wrap = document.getElementById("sparkles");
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement("div");
+    s.className = "spark";
+    const size = 2 + Math.random() * 4;
+    s.style.width = size + "px"; s.style.height = size + "px";
+    s.style.left = Math.random() * 100 + "%"; s.style.top = Math.random() * 100 + "%";
+    s.style.animationDelay = (Math.random() * 4.5) + "s";
+    wrap.appendChild(s);
+  }
+})();
+
+/* =========================================================================
+   DATA, REPLACE EVERYTHING IN THIS SECTION WITH THIS CLIENT'S REAL READING
+   CONTENT. Do not invent details, pull directly from the reading transcript
+   or coaching call history. If content isn't available, leave a clear
+   [MISSING: ...] flag instead of guessing.
+   ========================================================================= */
+
+// The core pattern/theme named in plain language, quoting the reading directly.
+const PATTERN_TITLE = "Regulate First, Then Reach For Each Other";
+const PATTERN_INTRO = [
+  "This is a real, divine connection moving through a genuine karmic cleanup, not evidence it's ending. Colan's exhaustion, his self-doubt, his withdrawal, these are his own inherited patterns working themselves out, not verdicts on what you two have.",
+  "Healing your triggers doesn't just serve this relationship, it's actively building the version of you that your larger soul purpose requires."
+];
+const PATTERN_TAGLINE = "Regulate yourself first. Extend that same grounded compassion outward second. That order carries you through every quarter.";
+
+// The Interrupt Tool, a guided multi-step practice for this client's specific trigger.
+// 4-6 steps is typical. Each step needs a title and a prompt tied to the reading.
+const INTERRUPT_STEPS = [
+  { title: "Notice What's Happening", prompt: "What am I feeling right now, without judging it?" },
+  { title: "Is This The Moon Talking?", prompt: "The Moon card means things can feel distorted right now, not fully clear. Am I seeing this situation clearly, or am I in the confusion?" },
+  { title: "Whose Pattern Is This?", prompt: "Is this coming from Colan's inherited exhaustion and self-doubt, or is it actually about us?" },
+  { title: "Regulate First", prompt: "Before I reach for him, can I self-soothe first? A few slow breaths, a hand on my heart, Queen of Cups energy for myself." },
+  { title: "Return To What's True", prompt: "This is a real, divine connection moving through a karmic cleanup. This isn't ending." }
+];
+
+// Direct quotes pulled from the reading. If multiple people are involved
+// (children, a twin flame, family), give each their own card.
+const QUOTE_CARDS = [
+  { label: "From Colan's Higher Self", quote: "I'm so grateful that you're in my life. Thank you for being in my life.", meta: "Quarter Two" },
+  { label: "On Your Soul Purpose", quote: "A huge part of your purpose is embodying the frequency of union itself, and paving that path for others.", meta: "Your Spiritual Path" },
+  { label: "On This Connection", quote: "This is a real, divine connection moving through a genuine karmic cleanup, not evidence that it's ending.", meta: "Final Advice" },
+  { label: "On Regulation", quote: "Bring self-patience and self-compassion first, then connect with each other.", meta: "Violet Flame Healing" },
+  { label: "On Transmuting Pain", quote: "You pour life back into something that could have felt lost or dead, and revive it beautifully instead.", meta: "Your Spiritual Path" },
+  { label: "On Moving Forward", quote: "You are both closing the chapter on old chaos and conflict together.", meta: "Karmic Release" }
+];
+
+// A grounding/connection ritual specific to this client, ideally something
+// already suggested in the reading or a coaching call, not generic.
+const PRACTICE_TITLE = "Your Daily Regulation Practice";
+const PRACTICE_BODY = "Before reaching out to Colan or reacting to a trigger, pause and self-soothe first. Queen of Cups energy: compassionate, calm, comforting. A hand on your heart, a few slow breaths, or a few minutes of Reiki on yourself. Regulate first, connect second, that sequence is what your reading pointed to as the real key this year.";
+
+// Journal prompts, 2-4 rotating themes tied specifically to this reading.
+const JOURNAL_PROMPTS = [
+  "What triggered me today, and did I regulate myself before reacting?",
+  "Where did I notice Colan's pattern showing up, and could I separate it from my own worth?",
+  "What's one way I moved closer to my own soul purpose today, independent of this connection?"
+];
+const TOTAL_DAYS = 366; // twelve months, Aug 6 2026 to Aug 6 2027
+
+// The four-quarter forecast, used to build the visual timeline map.
+const TIMELINE_START = new Date('2026-08-06T00:00:00');
+const TIMELINE_DATA = [
+  {
+    label: "Quarter One",
+    dateRange: "Aug \u2013 Nov 2026",
+    forecast: "Working through fears around stability, old triggers around love and abandonment. Colan is carrying real stress and exhaustion tied to his own obligations, feeling stuck and limited. Your energy acts as a genuine anchor for him.",
+    advice: "Slow down and attend to hurts directly rather than scrambling separately. Bring compassion, patience, and unconditional love. Watch for the ego trying to win arguments instead of connecting."
+  },
+  {
+    label: "Quarter Two",
+    dateRange: "Nov 2026 \u2013 Feb 3, 2027",
+    forecast: "Calmer than Q1. Colan may feel frustrated with himself in his career, a dip in his usual confidence. Real gratitude flows both ways, you become a sanctuary for each other amid life's chaos. A turning point builds toward January/February as he steps into his masculine energy.",
+    advice: "Self-love, self-care, staying in your Empress energy. It's having a genuinely positive ripple effect on him too."
+  },
+  {
+    label: "Quarter Three",
+    dateRange: "Feb \u2013 May 2027",
+    forecast: "Real stability and communication breakthroughs. Colan steps up significantly, closing out a heavy burden. Water between you runs clean and pure, you've moved through hard times by communicating and showing up for each other.",
+    advice: "If old arguments resurface, watch for feelings of imbalance or unfairness. Speak calmly, hear each other out fully. You come through this quarter genuinely victorious."
+  },
+  {
+    label: "Quarter Four",
+    dateRange: "May \u2013 Aug 2027",
+    forecast: "Real love and physical attraction flowing, alongside inner child healing for both of you. Colan may need to work on truly listening rather than just being heard. Physical connection could be especially healing this quarter.",
+    advice: "Be confident, communicate, don't shy away from hard conversations. Don't brush arguments under the rug, resolve them as they come. Commit to caring for each other every single day."
+  }
+];
+
+function getCurrentQuarterIndex() {
+  const dayIndex = Math.floor((new Date() - TIMELINE_START) / 86400000);
+  return Math.max(0, Math.min(3, Math.floor(dayIndex / 91.5)));
+}
+
+
+
+/* =========================================================================
+   END OF CLIENT-SPECIFIC DATA. Everything below this line is reusable
+   scaffolding, only touch it if the dashboard needs a structural change,
+   not just new content.
+   ========================================================================= */
+
+let state = {
+  activeTab: "pattern",
+  interruptStep: 0, interruptAnswers: {}, savedInterrupts: [],
+  breathing: false,
+  activeDay: 1, dayJournal: {},
+  cardPullLog: {}
+};
+
+const STORAGE_KEY = "kaylyn-lions-gate-12month-dashboard-v1";
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+function loadState() { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) state = { ...state, ...JSON.parse(raw) }; } catch (e) {} }
+function go(patch) { state = { ...state, ...patch }; render(); }
+
+function topNav() {
+  const tabs = [
+    { id: "pattern", label: "Your Pattern" },
+    { id: "timeline", label: "Your Timeline" },
+    { id: "interrupt", label: "Interrupt Tool" },
+    { id: "quotes", label: "Your Messages" },
+    { id: "practice", label: "Daily Practice" },
+    { id: "journal", label: "Journal" }
+  ];
+  return `<div class="topnav-wrap">
+    <div class="topnav-brand-row"><div class="icon">\u{1F981}</div><div class="name">Kaylyn's Union Journey</div></div>
+    <div class="tabs">${tabs.map(t => `<div class="tab ${state.activeTab === t.id ? "active" : ""}" onclick="go({activeTab:'${t.id}'})">${t.label}</div>`).join("")}</div>
+  </div>`;
+}
+
+function footer() {
+  return `<div class="site-footer">
+    <div class="brand">Luana <em>Spirits</em></div>
+    <div class="links">
+      <a href="mailto:luana@luanaspirits.com">luana@luanaspirits.com</a> &middot;
+      <a href="https://docs.google.com/document/d/12oUQEXXesDmVw_XEZH-GEc8NVbtFYyLYf3359hvxyFE/edit?usp=sharing" target="_blank" rel="noopener">Privacy Policy</a> &middot;
+      <a href="https://docs.google.com/document/d/1i395On2ZByesCyRaIDocu1aIguhVxuHBQ1l_nPfVReQ/edit?usp=sharing" target="_blank" rel="noopener">Terms &amp; Conditions</a> &middot; &copy; 2026
+    </div>
+  </div>`;
+}
+
+/* ---------- YOUR PATTERN ---------- */
+
+function patternHtml() {
+  return `
+    <div class="topbar-left"><div class="topbar-icon">\u{1F981}</div><div class="topbar-title">Welcome, Kaylyn</div></div>
+    <h2 class="center">${PATTERN_TITLE}</h2>
+    <div class="card ritual">
+      <p style="margin-bottom:0; color:var(--text);">${PATTERN_INTRO[0]}</p>
+    </div>
+    <div class="card">
+      <p style="margin-bottom:0;">${PATTERN_INTRO[1]}</p>
+    </div>
+    <div class="tagline">${PATTERN_TAGLINE}</div>
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn gold" onclick="go({activeTab:'interrupt'})">Open The Interrupt Tool &rarr;</button>
+    </div>
+  `;
+}
+
+/* ---------- YOUR TIMELINE ---------- */
+
+function timelineHtml() {
+  const currentIdx = getCurrentQuarterIndex();
+  const track = TIMELINE_DATA.map((q, i) => {
+    const state_cls = i === currentIdx ? "current" : (i < currentIdx ? "past" : "");
+    return `
+      <div class="qnode ${state_cls}" onclick="scrollToQuarter(${i})">
+        <div class="dot">${i + 1}</div>
+        <div class="qlabel">${q.label}</div>
+        ${i === currentIdx ? '<div class="qhere">YOU ARE HERE</div>' : ""}
+      </div>
+    `;
+  }).join("");
+
+  const cards = TIMELINE_DATA.map((q, i) => `
+    <div class="qcard ${i === currentIdx ? "current" : ""}" id="qcard-${i}">
+      <div class="qdate">${q.dateRange}${i === currentIdx ? " \u00b7 CURRENT QUARTER" : ""}</div>
+      <h3>${q.label}</h3>
+      <div class="qsection-lbl">Energy Forecast</div>
+      <p style="margin-bottom:0;">${q.forecast}</p>
+      <div class="qsection-lbl">Advice</div>
+      <p style="margin-bottom:0;">${q.advice}</p>
+    </div>
+  `).join("");
+
+  return `
+    <h2>\u{1F5FA}\uFE0F Your Year At A Glance</h2>
+    <p>A visual map of your full twelve-month forecast, quarter by quarter.</p>
+    <div class="qtrack">${track}</div>
+    ${cards}
+  `;
+}
+
+function scrollToQuarter(i) {
+  const el = document.getElementById("qcard-" + i);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+/* ---------- INTERRUPT TOOL ---------- */
+
+function interruptHtml() {
+  const step = INTERRUPT_STEPS[state.interruptStep];
+  const isLast = state.interruptStep === INTERRUPT_STEPS.length - 1;
+  const dots = INTERRUPT_STEPS.map((s, i) => `<div class="step-dot ${i === state.interruptStep ? "active" : ""}"></div>`).join("");
+  return `
+    <h2>\u{1F338} When A Trigger Hits</h2>
+    <p>Walk through this instead of reacting from it. Regulate first, reach for him second.</p>
+    <div class="step-progress">STEP ${state.interruptStep + 1} OF ${INTERRUPT_STEPS.length}</div>
+    <div class="step-dots">${dots}</div>
+    <div class="card">
+      <h3>${step.title}</h3>
+      <div class="journal-q">${step.prompt}</div>
+      <textarea id="interruptField">${state.interruptAnswers[state.interruptStep] || ""}</textarea>
+    </div>
+    <div class="btn-row">
+      ${state.interruptStep > 0 ? `<button class="btn ghost" onclick="interruptNav(-1)">&larr; Back</button>` : ""}
+      ${isLast ? `<button class="btn gold" onclick="saveInterrupt()">Save This Practice</button>` : `<button class="btn gold" onclick="interruptNav(1)">Continue &rarr;</button>`}
+    </div>
+  `;
+}
+
+function interruptNav(dir) {
+  state.interruptAnswers[state.interruptStep] = document.getElementById("interruptField").value;
+  go({ interruptStep: state.interruptStep + dir });
+}
+
+function saveInterrupt() {
+  state.interruptAnswers[state.interruptStep] = document.getElementById("interruptField").value;
+  state.savedInterrupts.push({ date: new Date().toLocaleString(), answers: { ...state.interruptAnswers } });
+  go({ interruptStep: 0, interruptAnswers: {}, activeTab: "journal" });
+}
+
+/* ---------- QUOTE CARDS ---------- */
+
+function quotesHtml() {
+  const cards = QUOTE_CARDS.map(c => `
+    <div class="quote-card">
+      <div class="label">${c.label.toUpperCase()}</div>
+      <div class="quote">"${c.quote}"</div>
+      ${c.meta ? `<div class="meta">${c.meta}</div>` : ""}
+    </div>
+  `).join("");
+  return `
+    <h2>\u2728 Your Messages</h2>
+    <p>Direct lines channeled during your Lion's Gate reading. Come back to these anytime you need to hear it again.</p>
+    ${cards}
+  `;
+}
+
+/* ---------- DAILY PRACTICE + CARD PULL ---------- */
+
+let breathTimer = null;
+const BOX_PHASES = ["Breathe in...", "Hold...", "Breathe out...", "Hold..."];
+
+const CARD_DECK = [
+  ["The Sun", "A day for warmth, clarity, and letting yourself be seen exactly as you are."],
+  ["The Empress", "Your divine feminine energy is asking to be honored today, not earned."],
+  ["Queen of Cups", "Lean back into your feelings today. You don't have to hold everything together."],
+  ["The World", "Something is completing or integrating today. Notice what feels finished."],
+  ["Ace of Cups", "A fresh wave of feeling or connection may be opening today. Let it in."],
+  ["The Hermit", "A day for turning inward. You don't owe anyone your energy today."],
+  ["Queen of Wands", "Your confidence and magnetism are available today, if you claim them."],
+  ["The Chariot", "Forward motion today. Trust the direction you're already moving in."],
+  ["Six of Cups", "A gentle day, maybe touched by nostalgia. Let old memories visit without staying too long."],
+  ["The High Priestess", "Trust your intuition today over any outside voice, including your own overthinking."],
+  ["Justice", "A day to notice where balance is or isn't present in your relationships."],
+  ["Knight of Wands", "Bold, forward energy today. A good day to say the brave thing."],
+  ["Four of Cups", "You might feel a little emotionally flat today. That's okay, it usually passes."],
+  ["Death", "Something is ready to be released today, to make room for what's next."],
+  ["The Star", "A hopeful, healing day. Let yourself feel a little lighter than usual."],
+  ["Nine of Pentacles", "You've built something real. Let yourself enjoy it today, no guilt required."],
+  ["Two of Swords", "A choice may be sitting in front of you today. It's okay not to force clarity yet."],
+  ["Queen of Pentacles", "Nurture yourself the way you'd nurture someone you love today."],
+  ["The Moon", "Feelings may run a little foggy today. Be gentle rather than trying to figure it out."],
+  ["Ten of Cups", "A day for noticing the good that's already present in your life."],
+  ["King of Wands", "A day for leading with passion. Say yes to the thing that lights you up."],
+  ["Wheel of Fortune", "Something is shifting today, in your favor, even if it's not obvious yet."],
+  ["The Magician", "You have exactly what you need today. Trust your own resourcefulness."],
+  ["Strength", "Gentleness is your real power today, not force."],
+  ["Three of Cups", "A good day to reach out to a friend, celebration energy is around you."],
+  ["Temperance", "Balance and patience are the theme today. No need to rush anything."],
+  ["Ace of Pentacles", "A small new beginning may show up today. Notice it."],
+  ["Judgement", "A day for self-reflection without harsh self-judgment."],
+  ["Two of Cups", "Connection is highlighted today, notice who feels mutual."],
+  ["King of Cups", "Emotional steadiness is available to you today, even amid a lot going on."]
+];
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function practiceHtml() {
+  const key = todayKey();
+  const pulled = state.cardPullLog[key];
+  const cardResultHtml = pulled ? `
+    <div class="quote-card" style="margin-top:14px;">
+      <div class="label">TODAY'S CARD</div>
+      <div class="quote">${pulled.name}</div>
+      <div class="meta" style="margin-top:6px; color:var(--muted);">${pulled.meaning}</div>
+    </div>
+  ` : "";
+  return `
+    <h2>\u{1F56F} ${PRACTICE_TITLE}</h2>
+    <div class="practice-box">
+      <div class="lbl">The Ritual</div>
+      <p style="margin-bottom:0; color:var(--text);">${PRACTICE_BODY}</p>
+    </div>
+    <p>Ground first with a short breath, then begin.</p>
+    <div class="breathe-wrap">
+      <div class="breathe-ball" id="breatheBall"></div>
+      <div class="breathe-label" id="breatheLabel">Press start when you're ready</div>
+      <button class="btn ghost small" id="breatheBtn" onclick="toggleBreathing()">Start Breathing</button>
+    </div>
+    <div class="section-label">Daily Card Pull</div>
+    <p>Pull one card each day as a small check-in with your own energy. Not a prediction, just a mirror.</p>
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn gold" onclick="pullCard()">${pulled ? "Pull Again" : "Pull Today's Card"}</button>
+    </div>
+    ${cardResultHtml}
+  `;
+}
+
+function pullCard() {
+  const key = todayKey();
+  const idx = Math.floor(Math.random() * CARD_DECK.length);
+  const [name, meaning] = CARD_DECK[idx];
+  state.cardPullLog[key] = { name, meaning };
+  render();
+}
+
+function toggleBreathing() {
+  const ball = document.getElementById("breatheBall");
+  const label = document.getElementById("breatheLabel");
+  const btn = document.getElementById("breatheBtn");
+  if (state.breathing) {
+    state.breathing = false; clearTimeout(breathTimer);
+    ball.style.transform = "scale(1)"; label.textContent = "Press start when you're ready"; btn.textContent = "Start Breathing";
+    return;
+  }
+  state.breathing = true; btn.textContent = "Stop";
+  let phase = 0;
+  const runPhase = () => {
+    if (!state.breathing) return;
+    label.textContent = BOX_PHASES[phase];
+    ball.style.transition = "transform 4s ease-in-out";
+    if (phase === 0) ball.style.transform = "scale(1.35)";
+    else if (phase === 2) ball.style.transform = "scale(1)";
+    phase = (phase + 1) % 4;
+    breathTimer = setTimeout(runPhase, 4000);
+  };
+  runPhase();
+}
+
+/* ---------- JOURNAL ---------- */
+
+function journalHtml() {
+  const n = state.activeDay;
+  const existing = state.dayJournal[n] || {};
+  const pills = Array.from({ length: TOTAL_DAYS }, (_, i) => i + 1).map(num => {
+    const hasEntry = state.dayJournal[num] && JOURNAL_PROMPTS.every((p, i) => state.dayJournal[num][i] && state.dayJournal[num][i].trim());
+    return `<div class="day-pill ${n === num ? "active" : ""} ${hasEntry ? "done" : ""}" onclick="go({activeDay:${num}})">${num}</div>`;
+  }).join("");
+
+  const fields = JOURNAL_PROMPTS.map((p, i) => `
+    <div class="journal-q">${p}</div>
+    <textarea id="jday-${i}">${existing[i] || ""}</textarea>
+  `).join("");
+
+  const pastInterrupts = state.savedInterrupts.length ? `
+    <div class="section-label">Saved Interrupt Practices</div>
+    <div class="card">${[...state.savedInterrupts].reverse().map(p => `
+      <div style="margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--line);">
+        <div class="journal-q" style="color:var(--gold-soft);">${p.date}</div>
+        ${INTERRUPT_STEPS.map((s, i) => p.answers[i] ? `<div class="journal-q">${s.title}</div><p style="margin-bottom:8px;">${p.answers[i]}</p>` : "").join("")}
+      </div>
+    `).join("")}</div>
+  ` : "";
+
+  return `
+    <h2>\u{1F4D3} Your Journal</h2>
+    <p>Your private space to check in as you move through this full year, day by day.</p>
+    <div class="day-pills">${pills}</div>
+    <div class="card">
+      <div class="day-badge">DAY ${n} OF ${TOTAL_DAYS}</div>
+      ${fields}
+      <button class="btn gold small" onclick="saveDayJournal()">${state.dayJournal[n] ? "\u2726 Update" : "Save Today"}</button>
+    </div>
+    ${pastInterrupts}
+    <div class="btn-row"><button class="btn gold" onclick="downloadJournal()">Download My Journal</button></div>
+  `;
+}
+
+function saveDayJournal() {
+  const answers = {};
+  JOURNAL_PROMPTS.forEach((p, i) => { answers[i] = document.getElementById("jday-" + i).value; });
+  state.dayJournal[state.activeDay] = answers;
+  render();
+}
+
+function downloadJournal() {
+  let text = "The Lion's Gate Union Activation\nKaylyn's Journal\n\n";
+  const days = Object.keys(state.dayJournal).map(k => parseInt(k)).sort((a, b) => a - b);
+  if (days.length) {
+    text += "== JOURNAL ==\n";
+    days.forEach(n => {
+      const ans = state.dayJournal[n];
+      text += "Day " + n + "\n";
+      JOURNAL_PROMPTS.forEach((p, i) => { if (ans[i]) text += p + "\n" + ans[i] + "\n\n"; });
+    });
+  }
+  if (state.savedInterrupts.length) {
+    text += "== INTERRUPT PRACTICES ==\n";
+    state.savedInterrupts.forEach(p => {
+      text += p.date + "\n";
+      INTERRUPT_STEPS.forEach((s, i) => { if (p.answers[i]) text += s.title + ": " + p.answers[i] + "\n"; });
+      text += "\n";
+    });
+  }
+  if (!days.length && !state.savedInterrupts.length) text += "No entries yet.\n";
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "kaylyn-lions-gate-journal.txt";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ---------- ROUTER ---------- */
+
+function render() {
+  saveState();
+  let content = "";
+  if (state.activeTab === "pattern") content = patternHtml();
+  else if (state.activeTab === "timeline") content = timelineHtml();
+  else if (state.activeTab === "interrupt") content = interruptHtml();
+  else if (state.activeTab === "quotes") content = quotesHtml();
+  else if (state.activeTab === "practice") content = practiceHtml();
+  else if (state.activeTab === "journal") content = journalHtml();
+
+  document.getElementById("app").innerHTML = `${topNav()}${content}${footer()}`;
+}
+
+loadState();
+(function setInitialDay() {
+  const START = new Date('2026-08-06T00:00:00');
+  const dayIndex = Math.floor((new Date() - START) / 86400000) + 1;
+  const clamped = Math.max(1, Math.min(dayIndex, TOTAL_DAYS));
+  if (!state.hasVisited) {
+    state.activeDay = clamped;
+    state.hasVisited = true;
+  }
+})();
+render();
+</script>
+</body>
+</html>
