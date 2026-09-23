@@ -1,1 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Laura · Union Pathway Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#3E2450; --plum2:#5B3A73; --gold:#B08A4A; --goldl:#E9DCC3; --cream:#FCF8F2;
+  --paper:#FFFFFF; --lav:#F1EAF5; --blush:#F7ECE8; --ink:#2E2433; --muted:#7A6E80; --line:#EADFCF;
+  --serif:'Lora',Georgia,serif; --sans:'Poppins',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--serif);font-size:17px;line-height:1.7}
+a{color:var(--plum2)}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
 
+/* hero */
+.hero{background:var(--plum);color:#fff;text-align:center;padding:56px 20px 64px;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:14px;border:1px solid rgba(176,138,74,.6);pointer-events:none}
+.moon{width:70px;height:70px;border-radius:50%;background:var(--gold);margin:0 auto 18px;position:relative;box-shadow:0 0 0 14px rgba(176,138,74,.08),0 0 0 28px rgba(176,138,74,.05)}
+.moon:after{content:"";position:absolute;width:62px;height:62px;border-radius:50%;background:var(--plum);top:-6px;left:20px}
+.kicker{font-family:var(--sans);font-weight:500;letter-spacing:.28em;font-size:12px;color:var(--gold);text-transform:uppercase}
+.hero h1{font-weight:400;font-size:clamp(34px,6vw,52px);margin:8px 0 4px;line-height:1.15}
+.hero .sub{font-style:italic;color:var(--goldl);font-size:19px}
+.hero .meta{font-family:var(--sans);font-weight:300;font-size:13px;color:var(--goldl);margin-top:18px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(252,248,242,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav a{font-family:var(--sans);font-size:13px;white-space:nowrap;text-decoration:none;color:var(--plum2);padding:7px 13px;border-radius:999px}
+nav a:hover,nav a.on{background:var(--lav);color:var(--plum)}
+
+section{padding:56px 0 8px}
+.eyebrow{font-family:var(--sans);font-weight:500;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h2{font-family:var(--sans);font-weight:500;color:var(--plum);font-size:28px;margin:4px 0 6px;line-height:1.25}
+h2+.rule{width:70px;height:2px;background:var(--gold);margin:6px 0 22px}
+h3{font-family:var(--sans);font-weight:500;color:var(--plum2);font-size:18px;margin:0 0 6px}
+.lead{color:var(--muted);font-style:italic;margin-top:0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+
+/* verdict */
+.verdict{background:linear-gradient(135deg,var(--plum),var(--plum2));color:#fff;border-radius:16px;padding:28px 30px;margin-bottom:18px}
+.verdict .eyebrow{color:var(--goldl)}
+.verdict p{font-size:21px;line-height:1.55;margin:8px 0 0}
+.verdict small{display:block;font-family:var(--sans);font-weight:300;font-size:13px;color:var(--goldl);margin-top:12px}
+.glance .label{font-family:var(--sans);font-weight:500;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.glance p{margin:0;font-size:16px}
+
+/* pattern */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.split{grid-template-columns:1fr}}
+.col-h{font-family:var(--sans);font-weight:500;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:10px 16px;border-radius:10px 10px 0 0}
+.you .col-h{background:var(--lav);color:var(--plum)}
+.him .col-h{background:var(--blush);color:#7a4a3e}
+.col-b{background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;padding:6px 16px 10px}
+.row{padding:10px 0;border-bottom:1px dashed var(--line)}
+.row:last-child{border-bottom:0}
+.row b{font-family:var(--sans);font-weight:500;font-size:14px;color:var(--plum2);display:block}
+.row span{font-size:15.5px}
+
+/* ledger */
+.ledger{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--paper)}
+.ledger>div{padding:14px 18px;border-bottom:1px solid var(--line)}
+.ledger .hd{font-family:var(--sans);font-weight:500;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+.ledger .u{background:#FBF7FD}.ledger .k{background:#FDF9F4;border-left:1px solid var(--line)}
+.ledger .c{font-family:var(--sans);font-weight:500;color:var(--plum);font-size:15px}
+.ledger p{margin:2px 0 0;font-size:15px}
+.ledger>div:nth-last-child(-n+2){border-bottom:0}
+.scale{margin-top:16px}
+.bar{height:12px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--plum2),var(--gold))}
+.scale-l{display:flex;justify-content:space-between;font-family:var(--sans);font-size:12px;color:var(--muted);margin-top:6px}
+
+/* quotes */
+.quote{border-left:3px solid var(--gold);padding:4px 0 4px 18px;margin:0}
+.quote p{font-style:italic;color:var(--plum);font-size:18px;margin:0 0 6px}
+.quote cite{font-family:var(--sans);font-style:normal;font-size:12.5px;color:var(--muted)}
+
+/* forecast */
+.fc-wrap{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px 10px 8px;overflow-x:auto}
+.fc-wrap svg{display:block;min-width:760px;width:100%;height:auto}
+.years{margin-top:18px}
+.year{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--paper)}
+.year .band{background:var(--plum);color:#fff;padding:12px 18px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.year .band b{font-family:var(--sans);font-weight:500;font-size:17px}
+.year .band span{font-family:var(--sans);font-weight:300;font-size:12.5px;color:var(--goldl)}
+.year .bd{padding:14px 18px 6px}
+.chip{display:inline-block;font-family:var(--sans);font-size:12px;background:var(--lav);color:var(--plum);border-radius:999px;padding:3px 10px;margin:0 6px 6px 0}
+.chip.g{background:#F5EEDF;color:#7b5d2a}
+.year p{margin:0 0 10px;font-size:15.5px}
+.now-pill{font-family:var(--sans);font-size:11px;background:var(--gold);color:#fff;border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:middle}
+
+/* practice */
+.steps{counter-reset:s}
+.step{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed var(--line)}
+.step:last-child{border-bottom:0}
+.step input{appearance:none;width:24px;height:24px;border:1.5px solid var(--gold);border-radius:7px;flex:none;margin-top:3px;cursor:pointer;display:grid;place-items:center;background:#fff}
+.step input:checked{background:var(--gold)}
+.step input:checked:after{content:"✓";color:#fff;font-family:var(--sans);font-size:14px}
+.step b{font-family:var(--sans);font-weight:500;color:var(--plum);font-size:15px}
+.step .t{font-family:var(--sans);font-size:12px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase}
+.step p{margin:2px 0 0;font-size:15.5px}
+.week{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.week div{width:40px;text-align:center;font-family:var(--sans);font-size:11px;color:var(--muted)}
+.week i{display:block;width:30px;height:30px;margin:0 auto 4px;border-radius:50%;border:1.5px solid var(--goldl);background:#fff}
+.week i.f{background:var(--gold);border-color:var(--gold)}
+.week i.p{background:var(--goldl)}
+
+/* exercises */
+details.ex{background:var(--paper);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+details.ex summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+details.ex summary::-webkit-details-marker{display:none}
+details.ex summary h3{margin:0}
+details.ex summary small{display:block;font-family:var(--sans);font-size:12.5px;color:var(--muted);margin-top:2px}
+details.ex summary:after{content:"+";font-family:var(--sans);font-size:22px;color:var(--gold);flex:none}
+details.ex[open] summary:after{content:"−"}
+details.ex .bd{padding:0 22px 18px}
+details.ex ol{padding-left:20px;margin:6px 0}
+details.ex li{margin-bottom:6px;font-size:15.5px}
+.src{font-family:var(--sans);font-size:12px;color:var(--gold)}
+
+/* journal */
+.jp{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px}
+.jp .tag{font-family:var(--sans);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.jp p{margin:4px 0 10px;font-size:16.5px;color:var(--plum)}
+textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:var(--serif);font-size:16px;line-height:1.6;background:#FFFDF9;color:var(--ink);resize:vertical}
+textarea:focus{outline:2px solid var(--goldl);border-color:var(--gold)}
+.saved{font-family:var(--sans);font-size:11.5px;color:var(--muted);height:16px;margin-top:4px}
+.jtools{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+button{font-family:var(--sans);font-size:13px;border:1px solid var(--gold);background:#fff;color:var(--plum);border-radius:999px;padding:9px 16px;cursor:pointer}
+button.pri{background:var(--plum);border-color:var(--plum);color:#fff}
+button:hover{filter:brightness(.97)}
+.note{font-family:var(--sans);font-size:13px;color:var(--muted);background:var(--lav);border-radius:10px;padding:10px 14px}
+
+/* cards */
+.tc{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tc b{font-family:var(--sans);font-weight:500;color:var(--plum);font-size:15px}
+.tc .pos{font-family:var(--sans);font-size:11.5px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase}
+.tc p{margin:4px 0 0;font-size:15px}
+.filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter button{padding:6px 12px;font-size:12.5px}
+.filter button.on{background:var(--plum);color:#fff;border-color:var(--plum)}
+
+/* signs */
+ul.stars{list-style:none;padding:0;margin:0}
+ul.stars li{padding:7px 0 7px 26px;position:relative;font-size:15.5px}
+ul.stars li:before{content:"✧";position:absolute;left:2px;color:var(--gold)}
+
+footer{margin-top:60px;background:var(--plum);color:var(--goldl);text-align:center;padding:36px 20px;font-family:var(--sans);font-size:13.5px;font-weight:300}
+footer b{font-family:var(--serif);font-style:italic;font-weight:400;color:#fff;font-size:20px;display:block;margin-bottom:6px}
+footer a{color:#fff}
+.fw{font-family:var(--sans);font-size:12.5px;color:var(--muted);text-align:center;margin-top:18px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="kicker">Luana Spirits · VIP Client Dashboard</div>
+  <h1>The Union Pathway</h1>
+  <div class="sub">Laura's 3-Year Connection Forecast</div>
+  <div class="meta">Connection: Laura &amp; Mathijs · Channeled September 2026</div>
+</header>
+
+<nav><div class="wrap" id="nav">
+  <a href="#overview">Overview</a>
+  <a href="#pattern">The Pattern</a>
+  <a href="#evidence">The Evidence</a>
+  <a href="#forecast">Forecast</a>
+  <a href="#messages">Messages</a>
+  <a href="#practice">Daily Practice</a>
+  <a href="#exercises">Exercises</a>
+  <a href="#journal">Journal</a>
+  <a href="#cards">Card Library</a>
+</div></nav>
+
+<main class="wrap">
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="eyebrow">Your verdict at a glance</div>
+  <h2>Welcome to your dashboard, Laura</h2><div class="rule"></div>
+  <p class="lead">This is your private space to come back to this reading all year long. Your notes, your pattern, your forecast, a daily practice, and your own journal, all in one place.</p>
+
+  <div class="verdict">
+    <div class="eyebrow">The bottom line</div>
+    <p>Based on this energy, the highest pathway doesn't necessarily look like it's with Mathijs, in this life and the way he is in this life. The connection isn't entirely closed. And you deserve a King of Cups energy.</p>
+    <small>A timeline reading is a projection of current energies. You are never stuck in a timeline, and every choice here is yours.</small>
+  </div>
+
+  <div class="grid g2 glance">
+    <div class="card"><div class="label">Connection type</div><p>Twin flame, in the sense of mirrored lives and mirrored lessons. The soul contract is still playing out, in a healthier chapter.</p></div>
+    <div class="card"><div class="label">His heart</div><p>Real desire, deep regret, and a fear of you moving on without him. Alarm bells are going off: he knows something needs to change.</p></div>
+    <div class="card"><div class="label">His readiness</div><p>He wants union, but doesn't yet have the emotional capacity to sustain it. He's pushing feelings down instead of processing them.</p></div>
+    <div class="card"><div class="label">The evidence</div><p>A huge part of the karmic cycle is complete. Your boundaries and self-worth got a double thumbs up from your guides.</p></div>
+    <div class="card"><div class="label">The core block</div><p>His long-standing family entanglement and a mother wound, plus anxious, self-attacking thought loops.</p></div>
+    <div class="card"><div class="label">Your accelerator</div><p>Stop taking responsibility for him. An emotionally mature, patient, giving masculine is lining up with you vibrationally.</p></div>
+  </div>
+</section>
+
+<!-- PATTERN -->
+<section id="pattern">
+  <div class="eyebrow">Your pattern &amp; his pattern</div>
+  <h2>The mirror between you</h2><div class="rule"></div>
+  <p class="lead">You two are going through very similar themes of death and rebirth. Here is where each of you stands, side by side.</p>
+  <div class="split">
+    <div class="you">
+      <div class="col-h">You, Laura</div>
+      <div class="col-b">
+        <div class="row"><b>What this connection came to teach you</b><span>To heal and shift out of lack, in love, in romance, and in self-worth. To come back into the warmth of love with yourself and others. (Five of Pentacles reversed)</span></div>
+        <div class="row"><b>Where you are now</b><span>Fully embodying union and self-union in your thoughts, emotions, habits, and self-love. Radiant, balanced, Empress energy.</span></div>
+        <div class="row"><b>Your small watch-out</b><span>Micromanaging, or unconsciously picking up other people's burdens. Put the suitcases down. (Nine of Wands reversed)</span></div>
+        <div class="row"><b>What to focus on</b><span>Not your lessons. Your boundaries. Being aware of what is fair to you. (Justice)</span></div>
+        <div class="row"><b>How far you've come</b><span>Feb: Queen of Wands reversed, not fully seeing your value. May: the Queen of Wands enthroned in her castle. Now: the Empress, glowing.</span></div>
+      </div>
+    </div>
+    <div class="him">
+      <div class="col-h">Mathijs</div>
+      <div class="col-b">
+        <div class="row"><b>His true feelings</b><span>He feels he held back his love and was stingy with what he could have given. "Story of my life." (Six of Pentacles reversed)</span></div>
+        <div class="row"><b>His fear</b><span>That there's someone else. "Moving on without me." (Three of Cups)</span></div>
+        <div class="row"><b>What he won't say</b><span>Regret that he wasn't open to what you offered. "I had this right in front of me." (Four of Cups reversed)</span></div>
+        <div class="row"><b>His wound</b><span>"Fake it till you make it." Toxic positivity, skipping the emotional processing, an emotional tank full of gunk. (The Sun)</span></div>
+        <div class="row"><b>His readiness</b><span>Wants union, lacks the capacity. Nine suitcases to unpack, ideally with a therapist. (Nine of Wands reversed)</span></div>
+        <div class="row"><b>His block</b><span>Family entanglement, a mother wound, anxious dwelling, and a life vision his family set up for him. (Ten of Pentacles, Nine of Swords, Three of Wands)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCE -->
+<section id="evidence">
+  <div class="eyebrow">Karmic markers vs. union markers</div>
+  <h2>The ledger</h2><div class="rule"></div>
+  <p class="lead">Read across each row. Bottom of the deck: Queen of Swords, a clear head.</p>
+  <div class="ledger">
+    <div class="u hd" style="color:var(--plum)">Union energy</div>
+    <div class="k hd" style="color:#7b5d2a">Karmic energy</div>
+    <div class="u"><div class="c">Death</div><p>Change, realizations, old cycles ending. A rebirth for you, and a more painful one for him.</p></div>
+    <div class="k"><div class="c">The World</div><p>A huge part of the karmic cycle is already complete.</p></div>
+    <div class="u"><div class="c">Knight of Cups reversed</div><p>His strong desire, without the foundation of emotional maturity to sustain it yet.</p></div>
+    <div class="k"><div class="c">Justice</div><p>Your boundaries have been fair to you. You've taken the right steps. "I F'd up," he realizes.</p></div>
+    <div class="u"><div class="c">Four of Pentacles</div><p>You pulling your energy back to yourself is mirroring his pattern back to him.</p></div>
+    <div class="k"><div class="c">Six of Pentacles reversed</div><p>The imbalance in give and take, still healing.</p></div>
+  </div>
+  <div class="scale card" style="margin-top:16px">
+    <h3>Which side is heavier?</h3>
+    <div class="bar"><i></i></div>
+    <div class="scale-l"><span>Karmic cycle still running</span><span>Karmic cycle largely complete</span></div>
+    <p style="margin:12px 0 0;font-size:15.5px">A really positive spread: so much of the karmic cycle is finished. What remains is on his side, maturing emotionally and learning to give freely. Your guides are saying <i>"Yes, yes, yes, yes, yes."</i></p>
+  </div>
+</section>
+
+<!-- FORECAST -->
+<section id="forecast">
+  <div class="eyebrow">Visual forecast · Sep 2026 to Sep 2029</div>
+  <h2>Your three-year pathway</h2><div class="rule"></div>
+  <p class="lead">Bottom of the deck: Page of Swords. Look at this forecast with curiosity. It shows themes of energy, not fixed outcomes. It's a buffet: you have a lot of choices.</p>
+
+  <div class="fc-wrap">
+    <svg viewBox="0 0 900 360" role="img" aria-label="Three-year forecast timeline with a fork in Year 2">
+      <defs>
+        <linearGradient id="gp" gradientUnits="userSpaceOnUse" x1="40" y1="0" x2="400" y2="0"><stop offset="0" stop-color="#5B3A73"/><stop offset="1" stop-color="#B08A4A"/></linearGradient>
+      </defs>
+      <!-- year bands -->
+      <g font-family="Poppins, sans-serif">
+        <rect x="30" y="20" width="270" height="30" rx="8" fill="#F1EAF5"/>
+        <rect x="310" y="20" width="270" height="30" rx="8" fill="#F1EAF5"/>
+        <rect x="590" y="20" width="280" height="30" rx="8" fill="#F1EAF5"/>
+        <text x="165" y="40" text-anchor="middle" font-size="13" font-weight="500" fill="#3E2450">YEAR 1 · The Hermit</text>
+        <text x="445" y="40" text-anchor="middle" font-size="13" font-weight="500" fill="#3E2450">YEAR 2 · Death · The Fork</text>
+        <text x="730" y="40" text-anchor="middle" font-size="13" font-weight="500" fill="#3E2450">YEAR 3 · Ten of Pentacles</text>
+      </g>
+      <!-- main path -->
+      <path d="M40 180 L400 180" stroke="url(#gp)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- upper: your highest path -->
+      <path d="M400 180 C 460 180, 470 110, 540 110 L 860 110" stroke="#B08A4A" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- lower: union with Mathijs as he is -->
+      <path d="M400 180 C 460 180, 470 260, 540 260 L 860 260" stroke="#B9AFC0" stroke-width="4" fill="none" stroke-dasharray="3 9" stroke-linecap="round"/>
+      <!-- checkpoint early 2028 -->
+      <line x1="505" y1="70" x2="505" y2="300" stroke="#C98F88" stroke-width="1.2" stroke-dasharray="4 4"/>
+      <text x="505" y="318" text-anchor="middle" font-family="Poppins, sans-serif" font-size="11" fill="#9a5d52">~ early 2028</text>
+      <text x="505" y="333" text-anchor="middle" font-family="Poppins, sans-serif" font-size="11" fill="#9a5d52">his 2-year cycle checkpoint</text>
+      <!-- nodes -->
+      <g font-family="Poppins, sans-serif">
+        <circle cx="40" cy="180" r="9" fill="#3E2450"/>
+        <text x="40" y="208" text-anchor="middle" font-size="11" fill="#7A6E80">Sep 2026</text>
+        <circle cx="165" cy="180" r="7" fill="#fff" stroke="#5B3A73" stroke-width="2"/>
+        <text x="165" y="160" text-anchor="middle" font-size="12" fill="#3E2450">Going within</text>
+        <text x="165" y="206" text-anchor="middle" font-size="11" fill="#7A6E80">You: Chariot rev.</text>
+        <text x="165" y="221" text-anchor="middle" font-size="11" fill="#7A6E80">Him: Judgement</text>
+        <circle cx="300" cy="180" r="7" fill="#fff" stroke="#5B3A73" stroke-width="2"/>
+        <text x="300" y="206" text-anchor="middle" font-size="11" fill="#7A6E80">Sep 2027</text>
+        <!-- fork -->
+        <circle cx="400" cy="180" r="13" fill="#3E2450"/>
+        <text x="400" y="185" text-anchor="middle" font-size="12" fill="#fff">✦</text>
+        <text x="400" y="214" text-anchor="middle" font-size="11.5" font-weight="500" fill="#3E2450">The Fork</text>
+        <text x="400" y="229" text-anchor="middle" font-size="11" fill="#7A6E80">Knight of Cups rev.</text>
+        <!-- upper labels -->
+        <text x="560" y="95" font-size="12.5" font-weight="500" fill="#8a6a33">Your highest path</text>
+        <circle cx="620" cy="110" r="7" fill="#B08A4A"/>
+        <text x="620" y="135" text-anchor="middle" font-size="11" fill="#7A6E80">Queen of Pentacles</text>
+        <circle cx="730" cy="110" r="7" fill="#B08A4A"/>
+        <text x="730" y="135" text-anchor="middle" font-size="11" fill="#7A6E80">Ten of Pentacles</text>
+        <circle cx="850" cy="110" r="10" fill="#B08A4A"/>
+        <text x="850" y="80" text-anchor="end" font-size="11" fill="#8a6a33">King of Swords</text>
+        <text x="850" y="135" text-anchor="end" font-size="11" fill="#7A6E80">Sep 2029</text>
+        <!-- lower labels -->
+        <text x="560" y="290" font-size="12.5" font-weight="500" fill="#8e8497">Union with Mathijs, as he is</text>
+        <circle cx="620" cy="260" r="6" fill="#fff" stroke="#B9AFC0" stroke-width="2"/>
+        <text x="620" y="245" text-anchor="middle" font-size="11" fill="#8e8497">High Priestess rev.</text>
+        <circle cx="850" cy="260" r="7" fill="#fff" stroke="#B9AFC0" stroke-width="2"/>
+        <text x="850" y="245" text-anchor="end" font-size="11" fill="#8e8497">Nine of Swords</text>
+      </g>
+      <!-- you are here -->
+      <g id="here" font-family="Poppins, sans-serif">
+        <line id="hereLine" x1="40" y1="60" x2="40" y2="150" stroke="#B08A4A" stroke-width="1.5"/>
+        <rect id="hereBox" x="0" y="56" width="80" height="20" rx="10" fill="#B08A4A"/>
+        <text id="hereText" x="40" y="70" text-anchor="middle" font-size="11" fill="#fff">You are here</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="grid years g3">
+    <div class="year" id="y1"><div class="band"><b>Year 1</b><span>Sep 2026 to Sep 2027</span></div><div class="bd">
+      <span class="chip">The Hermit</span><span class="chip">You: Chariot reversed</span><span class="chip">Him: Judgement</span>
+      <p><b>Going within.</b> A year of spiritual up-levels for you, lighting your own way like the Hermit's lantern. It's okay if it's quieter and more internal.</p>
+      <p>For him, the universe is showing him where he's stuck. It isn't a strong energy for union this year, so don't wait on him.</p>
+    </div></div>
+    <div class="year" id="y2"><div class="band"><b>Year 2 · The Fork</b><span>Sep 2027 to Sep 2028</span></div><div class="bd">
+      <span class="chip">Death</span><span class="chip">Union path: High Priestess rev.</span><span class="chip g">Karmic path: Queen of Pentacles</span><span class="chip">Fork: Knight of Cups rev.</span>
+      <p><b>Massive, positive change.</b> Possible moves, new jobs, a new routine. A cafe in a new area.</p>
+      <p>More distance between you two. The likely deal breaker: he doesn't fully emotionally mature in time. Possible closure or a reconnection where you realize it isn't aligned.</p>
+    </div></div>
+    <div class="year" id="y3"><div class="band"><b>Year 3</b><span>Sep 2028 to Sep 2029</span></div><div class="bd">
+      <span class="chip g">Ten of Pentacles</span><span class="chip">With Mathijs: Nine of Swords</span><span class="chip g">You: King of Swords</span>
+      <p><b>Stability and abundance.</b> Strong finances, vacations, flowing dresses, possibly looking toward family. Happy, stable, glowing.</p>
+      <p>You become someone no karmic can mess with: level-headed, clear, strong boundaries, divinely protected.</p>
+    </div></div>
+  </div>
+</section>
+
+<!-- MESSAGES -->
+<section id="messages">
+  <div class="eyebrow">Messages to return to</div>
+  <h2>What spirit wants you to remember</h2><div class="rule"></div>
+  <div class="grid g2">
+    <blockquote class="quote card"><p>"I really see you in such a beautiful divine feminine Empress energy. You are glowing. You're radiant."</p><cite>Mathijs's higher self · The Empress</cite></blockquote>
+    <blockquote class="quote card"><p>You are absolutely embodying union and self-union. Let that soak in.</p><cite>Your spirit guides</cite></blockquote>
+    <blockquote class="quote card"><p>Put the suitcases down. You can feel bad for someone without picking up their bags.</p><cite>Your guides · Nine of Wands reversed</cite></blockquote>
+    <blockquote class="quote card"><p>You should never have to wait for Mathijs to heal. It's not really your problem, and he needs to step up.</p><cite>Your accelerator path</cite></blockquote>
+    <blockquote class="quote card"><p>No one can mess with you. No karmics can mess with you.</p><cite>One of your guides · King of Swords</cite></blockquote>
+    <blockquote class="quote card"><p>Make the decision you know would be better for you in the long term, even if in the short term it's harder.</p><cite>Final advice</cite></blockquote>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>How you might recognize him</h3>
+      <p style="margin:0 0 6px;font-size:15px;color:var(--muted)">The King of Cups came out three separate times.</p>
+      <ul class="stars">
+        <li>You'd notice his <b>patience</b> first.</li>
+        <li>Emotionally mature, steady, giving, wise, calm, level-headed.</li>
+        <li>Holds space for other people's emotions. Has done a lot of healing.</li>
+        <li>May be a bit older, and may have kids or a previous marriage that ended simply because it wasn't working.</li>
+        <li>Look out for <b>Pisces</b> in his top three.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Checking in with past readings</h3>
+      <ul class="stars">
+        <li><b>Feb (Blueprint):</b> twin flame, mirrored lessons. Still true.</li>
+        <li><b>Feb:</b> a 2-year healing cycle for him. His healing does happen, but it may not be enough, and that's a long time to wait.</li>
+        <li><b>May:</b> vet emotional maturity before letting anyone into your castle. This reading echoes it.</li>
+        <li><b>Now:</b> he's more aware than before, a bit panicked, and going through a Tower moment.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE -->
+<section id="practice">
+  <div class="eyebrow">Your daily practice</div>
+  <h2>Three small moments a day</h2><div class="rule"></div>
+  <p class="lead">Built from your reading: receive like the Empress, check in like Justice, go within like the Hermit. Tick them off each day. Your progress is saved in this browser.</p>
+  <div class="card">
+    <div class="steps">
+      <label class="step"><input type="checkbox" data-k="am"><div><div class="t">Morning · 2 minutes</div><b>Empress breath</b><p>Hand on your heart. Breathe in slowly and say, "I receive love freely. I don't have to earn it." Let yourself feel radiant before the day asks anything of you.</p></div></label>
+      <label class="step"><input type="checkbox" data-k="mid"><div><div class="t">Midday · 1 minute</div><b>The Justice check</b><p>Pause once and ask: "Is what I'm giving right now fair to me? Am I carrying anyone else's suitcase?" If yes, put it down.</p></div></label>
+      <label class="step"><input type="checkbox" data-k="pm"><div><div class="t">Evening · 5 minutes</div><b>Lantern line</b><p>Write one line in your journal below: "Today I lit my own way by..." This is your Year 1 Hermit practice.</p></div></label>
+    </div>
+    <div class="week" id="week" aria-label="This week's practice"></div>
+  </div>
+</section>
+
+<!-- EXERCISES -->
+<section id="exercises">
+  <div class="eyebrow">Guided exercises</div>
+  <h2>Tools for this chapter</h2><div class="rule"></div>
+  <p class="lead">Open one when you need it. Each one comes straight from something that came through in your reading.</p>
+
+  <details class="ex"><summary><div><h3>Put the Suitcases Down</h3><small>For when you catch yourself carrying someone else's weight</small></div></summary><div class="bd">
+    <div class="src">From: Nine of Wands reversed, your side of the block</div>
+    <ol>
+      <li>Close your eyes and picture yourself holding suitcases. Notice how many there are and whose they are.</li>
+      <li>For each one, ask: "Is this mine?"</li>
+      <li>If it isn't, imagine setting it gently on the ground and saying, "I can care about you without carrying this for you."</li>
+      <li>Shake out your hands and arms. Notice how much lighter your body feels.</li>
+      <li>Write down one thing you're releasing responsibility for today.</li>
+    </ol>
+  </div></details>
+
+  <details class="ex"><summary><div><h3>The 90-Second Feel-Through</h3><small>For little disappointments and triggers along the way</small></div></summary><div class="bd">
+    <div class="src">From: Page of Cups reversed in your final message, and the natural evolution of an emotion</div>
+    <ol>
+      <li>When a trigger hits, name it out loud: "I'm feeling disappointed" (or hurt, sad, anxious).</li>
+      <li>Set a 90-second timer. Let the feeling move through your body without fixing it or forcing it positive.</li>
+      <li>Breathe into wherever you feel it most.</li>
+      <li>When the timer ends, notice what's left. Often it's relief, and then a natural inspiration toward a new way of feeling.</li>
+    </ol>
+    <p style="font-size:15px;margin:8px 0 0">This is the opposite of "fake it till you make it." You clean the tank by actually feeling it.</p>
+  </div></details>
+
+  <details class="ex"><summary><div><h3>Hermit's Lantern Walk</h3><small>A weekly walking meditation for Year 1</small></div></summary><div class="bd">
+    <div class="src">From: The Hermit (Year 1), and walking meditation from your Blueprint reading</div>
+    <ol>
+      <li>Walk for 15 to 30 minutes with no goal: not productive, not fixing, not healing anything.</li>
+      <li>Imagine carrying the Hermit's lantern at your heart, lighting just the next few steps.</li>
+      <li>Ask one question as you walk: "What is true for me right now?"</li>
+      <li>Don't chase the answer. Notice what comes up and write it down when you get home.</li>
+    </ol>
+  </div></details>
+
+  <details class="ex"><summary><div><h3>The Forgiveness Release</h3><small>Letting go of past life and present life pain</small></div></summary><div class="bd">
+    <div class="src">From: Justice, Three of Swords, and Five of Pentacles reversed in your soul contract</div>
+    <ol>
+      <li>Write a letter you will never send. Begin with, "I release the pain of..."</li>
+      <li>Write everything, including what feels like it belongs to another lifetime.</li>
+      <li>End with: "I forgive from love. I choose a new beginning from self-love."</li>
+      <li>Safely burn it, tear it up, or bury it. Forgiveness here is for your freedom, not an invitation back in.</li>
+    </ol>
+  </div></details>
+
+  <details class="ex"><summary><div><h3>Calling in the King of Cups</h3><small>Getting clear on the love you're lining up with</small></div></summary><div class="bd">
+    <div class="src">From: King of Cups, Ace of Cups, The World, The Lovers</div>
+    <ol>
+      <li>List how you want to feel in a partnership (for example: safe, received, calm, cherished).</li>
+      <li>List the qualities that came through: patient, emotionally mature, giving, wise, holds space.</li>
+      <li>Next to each one, write how you'd recognize it in real life. What does patience actually look like on a hard day?</li>
+      <li>Keep this list. When someone new shows up, let it be your castle gate: vet emotional maturity before you let anyone in.</li>
+    </ol>
+  </div></details>
+
+  <details class="ex"><summary><div><h3>The Long-Term Decision Check</h3><small>For whenever you're weighing the connection</small></div></summary><div class="bd">
+    <div class="src">From: your final advice and the Year 2 fork</div>
+    <ol>
+      <li>Write the choice in front of you.</li>
+      <li>Ask: "Which option would the Laura of Year 3, the King of Swords version of me, choose?"</li>
+      <li>Ask: "What does this person actually have the emotional capacity to give right now?" Look at actions, not feelings.</li>
+      <li>Choose what's better for you in the long term, even if it's harder in the short term. Don't rush it. Sit with it first.</li>
+    </ol>
+  </div></details>
+</section>
+
+<!-- JOURNAL -->
+<section id="journal">
+  <div class="eyebrow">Your private journal</div>
+  <h2>Journal prompts from your reading</h2><div class="rule"></div>
+  <p class="note">Your entries save automatically in this browser on this device only. They aren't sent anywhere. Use <b>Download my journal</b> to keep a copy, especially before clearing your browser or switching devices.</p>
+  <div class="jtools"><button class="pri" id="dl">Download my journal</button><button id="clr">Clear all entries</button></div>
+  <div id="prompts"></div>
+</section>
+
+<!-- CARDS -->
+<section id="cards">
+  <div class="eyebrow">Card library</div>
+  <h2>Every card from your reading</h2><div class="rule"></div>
+  <div class="filter" id="filter"></div>
+  <div class="grid g3" id="cardgrid"></div>
+</section>
+
+<p class="fw">Every timeline in this reading is a projection of current energies. You always have free will to shift, change, and choose.</p>
+</main>
+
+<footer>
+  <b>With love, Luana Spirits 💜</b>
+  Twin Flame Guide, Psychic Medium &amp; Energy Healer<br>
+  <a href="https://stan.store/luanaspirits">stan.store/luanaspirits</a> · luana@luanaspirits.com · @luanaspirits
+</footer>
+
+<script>
+(function(){
+  var store = {
+    get:function(k){try{return localStorage.getItem('lp_laura_'+k)}catch(e){return null}},
+    set:function(k,v){try{localStorage.setItem('lp_laura_'+k,v);return true}catch(e){return false}},
+    del:function(k){try{localStorage.removeItem('lp_laura_'+k)}catch(e){}}
+  };
+
+  /* ---------- journal ---------- */
+  var prompts = [
+    ["Soul contract","The Three of Swords says heartbreak comes when the mind and ego get too involved in matters of the heart. Where in love have I led with my head instead of my heart?"],
+    ["Soul contract","What does a real do-over look like for me, in this connection or in how I love from here?"],
+    ["What it came to teach","Where do I still feel left out in the cold? What would coming back into the warmth of love look like this week?"],
+    ["Forgiveness","What am I ready to forgive, in him or in myself, simply so I can be free?"],
+    ["His heart","When I read that he held back and regrets it, what did I feel in my body? What does that feeling want me to know?"],
+    ["Your energy","The Empress is how he sees me, and how I show up in life. Where do I feel most radiant and youthful? How can I do more of that?"],
+    ["Boundaries","My guides gave my boundaries a double thumbs up. Which boundary am I most proud of? Which one wants reinforcing?"],
+    ["The suitcases","Whose suitcases have I been carrying? What would it feel like to set them down?"],
+    ["Year 1 · The Hermit","What truth am I searching for within this year? What lights my way?"],
+    ["Year 2 · Death","What in my life is ready for change: a location, a routine, an old identity?"],
+    ["The fork","If I imagine the King of Cups energy, patient, giving, and emotionally mature, what does my body say? What does it say when I imagine another two years of waiting?"],
+    ["Year 3 · King of Swords","Who is the Laura of 2029? Describe her day, her boundaries, her home, and how she feels."],
+    ["Final message","Where can I take this one step at a time instead of trying to solve all three years at once?"],
+    ["Lantern lines","Today I lit my own way by..."]
+  ];
+  var box = document.getElementById('prompts');
+  prompts.forEach(function(p,i){
+    var d=document.createElement('div');d.className='jp';
+    d.innerHTML='<div class="tag">'+p[0]+'</div><p>'+p[1]+'</p><textarea aria-label="Journal entry" placeholder="Write freely..."></textarea><div class="saved"></div>';
+    var ta=d.querySelector('textarea'), sv=d.querySelector('.saved'), t;
+    ta.value = store.get('j'+i) || '';
+    ta.addEventListener('input',function(){
+      clearTimeout(t);
+      t=setTimeout(function(){ sv.textContent = store.set('j'+i,ta.value) ? 'Saved in this browser' : 'Saving is unavailable here. Download to keep your words.'; },500);
+    });
+    box.appendChild(d);
+  });
+  document.getElementById('dl').onclick=function(){
+    var out='The Union Pathway · Laura · Journal\nDownloaded '+new Date().toLocaleDateString()+'\n\n';
+    document.querySelectorAll('.jp').forEach(function(d,i){
+      out+='['+prompts[i][0]+'] '+prompts[i][1]+'\n'+(d.querySelector('textarea').value||'(no entry yet)')+'\n\n';
+    });
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([out],{type:'text/plain'}));
+    a.download='union-pathway-journal.txt';document.body.appendChild(a);a.click();a.remove();
+  };
+  document.getElementById('clr').onclick=function(){
+    if(!confirm('Clear all journal entries? Download a copy first if you want to keep them.'))return;
+    document.querySelectorAll('.jp').forEach(function(d,i){d.querySelector('textarea').value='';store.del('j'+i)});
+  };
+
+  /* ---------- daily practice ---------- */
+  function key(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+  var today=key(new Date());
+  var boxes=document.querySelectorAll('.step input');
+  var done={}; try{done=JSON.parse(store.get('practice')||'{}')}catch(e){done={}}
+  boxes.forEach(function(b){
+    b.checked = !!(done[today] && done[today][b.dataset.k]);
+    b.addEventListener('change',function(){
+      done[today]=done[today]||{}; done[today][b.dataset.k]=b.checked;
+      store.set('practice',JSON.stringify(done)); drawWeek();
+    });
+  });
+  function drawWeek(){
+    var w=document.getElementById('week'); w.innerHTML='';
+    var names=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    for(var i=6;i>=0;i--){
+      var d=new Date(); d.setDate(d.getDate()-i);
+      var r=done[key(d)]||{}, n=['am','mid','pm'].filter(function(k){return r[k]}).length;
+      var el=document.createElement('div');
+      el.innerHTML='<i class="'+(n===3?'f':n>0?'p':'')+'"></i>'+(i===0?'Today':names[d.getDay()]);
+      el.title=n+' of 3 practices';
+      w.appendChild(el);
+    }
+  }
+  drawWeek();
+
+  /* ---------- you are here on forecast ---------- */
+  var start=new Date(2026,8,1), end=new Date(2029,8,1), now=new Date();
+  var f=Math.max(0,Math.min(1,(now-start)/(end-start)));
+  var x=40+f*(850-40);
+  document.getElementById('hereLine').setAttribute('x1',x);document.getElementById('hereLine').setAttribute('x2',x);
+  document.getElementById('hereBox').setAttribute('x',x-40);document.getElementById('hereText').setAttribute('x',x);
+  var yr = now<new Date(2027,8,1)?'y1':now<new Date(2028,8,1)?'y2':'y3';
+  var b=document.querySelector('#'+yr+' .band b'); if(b) b.insertAdjacentHTML('beforeend','<span class="now-pill">Now</span>');
+
+  /* ---------- card library ---------- */
+  var cards=[
+    ["Soul Contract","Justice","Bottom of the deck","The contract is meant to rebalance the connection. Fairness, and a huge theme of forgiveness."],
+    ["Soul Contract","Three of Swords","The contract","Learning to lead with the heart in love, not the ego and the mind."],
+    ["Soul Contract","The Star reversed","Soul history","Past lives where you strayed from the heart bond. A car spinning off the road."],
+    ["Soul Contract","Knight of Wands reversed","The verdict","An immature, impulsive, ego-driven pattern you both wanted to evolve beyond. Twin flame mirroring."],
+    ["Soul Contract","Five of Pentacles reversed","What it came to teach you","Healing out of lack, in love and in self-worth. Karma righting itself."],
+    ["Soul Contract","Two of Wands","Still alive or complete","Still playing out, in a healthier chapter. He feels they got off on the wrong foot."],
+    ["His Heart","Ace of Pentacles","Bottom of the deck","Real potential for a physical 3D reconnection."],
+    ["His Heart","Knight of Swords","Under the Ace","A desire to rush forward and communicate, with panic and a time crunch."],
+    ["His Heart","Six of Pentacles reversed","True feelings","He held back his love. A life pattern of holding back, then regretting it."],
+    ["His Heart","Three of Cups","His fears","Fear of a third party. “Moving on without me.”"],
+    ["His Heart","Four of Cups reversed","What he won't say","Regret that he wasn't open to what you offered."],
+    ["His Heart","Wheel of Fortune reversed","Current focus","Out of control of his cycle. Aware, and considering therapy."],
+    ["His Heart","The Sun","Wound in play","Toxic positivity. Fake it till you make it."],
+    ["His Heart","Nine of Wands reversed","Readiness for union","Wants it, lacks the capacity. Nine suitcases to unpack."],
+    ["His Heart","The Empress","His higher self's message","You are glowing and radiant. Your heart stays young."],
+    ["His Heart","Ten of Cups · Sun rev. · Ace of Swords","What's changed","You're embodying union. His positivity is catching up with him."],
+    ["His Heart","The Tower · Three of Swords","What's changed","He's going through a Tower moment, with grief rising to be released."],
+    ["The Ledger","Death","Union","Change, endings, and rebirth for you both."],
+    ["The Ledger","The World","Karmic","A huge part of the karmic cycle is complete."],
+    ["The Ledger","Knight of Cups reversed","Union","Strong desire, without the emotional maturity to sustain it yet."],
+    ["The Ledger","Justice","Karmic","Your boundaries have been fair to you. You've taken the right steps."],
+    ["The Ledger","Four of Pentacles","Union","Pulling your energy back mirrors his pattern back to him."],
+    ["The Ledger","Six of Pentacles reversed","Karmic","The imbalance in give and take, still healing."],
+    ["The Block","The Devil","Bottom of the deck","Married to his patterns. Patriarchal programming to unlearn."],
+    ["The Block","Nine of Wands reversed","Your side","Watch for micromanaging and carrying others' burdens."],
+    ["The Block","Ten of Pentacles","The core block","Long-standing family entanglement. A mother wound."],
+    ["The Block","Nine of Swords","His side","Anxious dwelling and self-attacking thoughts."],
+    ["The Block","Three of Wands","The root","A life vision his family set up for him."],
+    ["Accelerator","King of Cups","Highest union timeline","An emotionally mature, patient, giving masculine. Came out three times."],
+    ["Accelerator","Ace of Cups","Highest union timeline","A new beginning, a new connection, romance offered."],
+    ["Accelerator","The World","Highest union timeline","He comes in because you've completed the cycle."],
+    ["Accelerator","The Lovers","Highest union timeline","Soul recognition, a soul contract."],
+    ["Forecast","Page of Swords","Bottom of the deck","Look at your forecast with curiosity."],
+    ["Forecast","The Hermit","Year 1 theme","Going within. Spiritual up-levels."],
+    ["Forecast","Chariot reversed","Year 1 · you","A quieter, more internal year."],
+    ["Forecast","Judgement","Year 1 · him","His awakening, and more triggers showing him where he's stuck."],
+    ["Forecast","Death","Year 2 theme","Massive, positive change. Location, routine, jobs."],
+    ["Forecast","High Priestess reversed","Year 2 · union path","He isn't aligning with your energy. Choosing it could bring self-doubt."],
+    ["Forecast","Queen of Pentacles","Year 2 · karmic path","Independence, high self-worth, everything you've built."],
+    ["Forecast","Knight of Cups reversed","The fork","He doesn't fully emotionally mature in time. The deal breaker."],
+    ["Forecast","Ten of Pentacles","Year 3 theme","Financial stability, legacy, family, vacations."],
+    ["Forecast","Nine of Swords","Year 3 · with Mathijs","Anxious and imbalanced if chosen as he is."],
+    ["Forecast","King of Swords","Year 3 · who you become","Clear, powerful, protected. No karmics can mess with you."],
+    ["Final Message","Two of Wands","Final message","Take it one step at a time."],
+    ["Final Message","Page of Cups reversed","Final message","Tend to your emotions through little disappointments."],
+    ["Final Message","Knight of Swords","Bottom of the deck","His energy may be strong over the next year or two, but rash."]
+  ];
+  var groups=['All'];cards.forEach(function(c){if(groups.indexOf(c[0])<0)groups.push(c[0])});
+  var fl=document.getElementById('filter'), grid=document.getElementById('cardgrid');
+  function show(g){
+    grid.innerHTML='';
+    cards.filter(function(c){return g==='All'||c[0]===g}).forEach(function(c){
+      var d=document.createElement('div');d.className='tc';
+      d.innerHTML='<div class="pos">'+c[0]+' · '+c[2]+'</div><b>'+c[1]+'</b><p>'+c[3]+'</p>';
+      grid.appendChild(d);
+    });
+    fl.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',b.textContent===g)});
+  }
+  groups.forEach(function(g){var b=document.createElement('button');b.textContent=g;b.onclick=function(){show(g)};fl.appendChild(b)});
+  show('All');
+
+  /* ---------- nav highlight ---------- */
+  var links=document.querySelectorAll('nav a');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-40% 0px -55% 0px'});
+    document.querySelectorAll('main section').forEach(function(s){io.observe(s)});
+  }
+})();
+</script>
+</body>
+</html>
