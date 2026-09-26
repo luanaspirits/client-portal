@@ -1,1 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Angie's Union Pathway · Luana Spirits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a0a20; --plum: #2a1233; --plum2: #3d1f47; --plum3: #5b2f6b; --violet: #8b5fa8; --lav: #c9b3d9;
+    --gold: #c9a55f; --gold2: #e3c27f; --text: #efe4f3; --soft: #bfaec8; --line: rgba(227,194,127,.22);
+    --card: rgba(255,255,255,.045);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: 'Jost', sans-serif; font-weight: 300; color: var(--text); background: radial-gradient(ellipse at 20% 0%, #4a2458 0%, var(--plum) 40%, var(--bg) 100%) fixed; min-height: 100vh; line-height: 1.65; font-size: 16px; }
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star { position: absolute; border-radius: 50%; background: #fff; animation: tw 4s infinite ease-in-out; }
+  @keyframes tw { 0%,100% { opacity: .15 } 50% { opacity: .9 } }
+  @media (prefers-reduced-motion: reduce) { .star { animation: none; opacity: .5 } }
+  .wrap { position: relative; z-index: 1; max-width: 920px; margin: 0 auto; padding: 36px 20px 80px; }
+  b, strong { font-weight: 500; color: var(--gold2); }
+  em { font-family: 'Playfair Display', serif; }
 
+  header { text-align: center; padding: 20px 0 10px; }
+  .eyebrow { font-family: 'DM Mono', monospace; letter-spacing: 4px; font-size: 12px; color: var(--gold2); text-transform: uppercase; }
+  h1 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: clamp(34px, 7vw, 56px); line-height: 1.05; margin: 14px 0 8px; }
+  h1 em { color: var(--gold2); }
+  .for { font-family: 'Playfair Display', serif; font-style: italic; color: var(--lav); font-size: 19px; }
+  .meta { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--soft); letter-spacing: 1.5px; margin-top: 10px; }
+
+  nav { position: sticky; top: 0; z-index: 5; margin: 26px -20px 26px; padding: 10px 20px; background: rgba(26,10,32,.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: 0 0 auto; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--soft); background: transparent; border: 1px solid var(--line); border-radius: 30px; padding: 8px 14px; cursor: pointer; }
+  .tab[aria-selected="true"] { background: linear-gradient(135deg, var(--gold), var(--violet)); color: #fff; border-color: transparent; }
+  .tab:focus-visible, .btn:focus-visible { outline: 2px solid var(--gold2); outline-offset: 2px; }
+
+  section.panel { display: none; }
+  section.panel.on { display: block; animation: fade .4s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+  h2 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: clamp(26px, 5vw, 34px); margin: 0 0 4px; }
+  h3 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: 21px; color: var(--gold2); margin: 26px 0 8px; }
+  .sub { font-family: 'Playfair Display', serif; font-style: italic; color: var(--soft); margin: 0 0 20px; }
+  .rule { height: 2px; background: linear-gradient(90deg, var(--gold), var(--violet) 60%, transparent); margin: 12px 0 22px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .card .t { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold2); }
+  .card .v { font-family: 'Playfair Display', serif; font-size: 21px; color: #fff; margin: 4px 0 6px; line-height: 1.25; }
+  .card .d { font-size: 14.5px; color: var(--soft); }
+  .card.wide { grid-column: 1 / -1; }
+  .pill { display: inline-block; font-family: 'DM Mono', monospace; font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--plum3); color: var(--gold2); margin: 2px 4px 2px 0; }
+  .pill.solid { background: var(--gold); color: var(--plum); }
+  .pill.guide { background: var(--lav); color: var(--plum); }
+
+  .quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(20px, 3.6vw, 26px); text-align: center; color: #fff; margin: 30px auto; max-width: 680px; line-height: 1.4; }
+  .quote::before, .quote::after { content: "\2726"; display: block; color: var(--gold2); font-style: normal; font-size: 14px; margin: 8px 0; }
+  .note { border-left: 3px solid var(--violet); background: rgba(139,95,168,.12); padding: 14px 18px; border-radius: 10px; margin: 18px 0; }
+  .note .t { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--lav); margin-bottom: 4px; }
+
+  /* forecast */
+  .timeline { position: relative; margin: 10px 0 10px; padding-left: 28px; }
+  .timeline::before { content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(var(--gold2), var(--violet), var(--lav)); }
+  .yr { position: relative; margin-bottom: 18px; }
+  .yr::before { content: ""; position: absolute; left: -26px; top: 22px; width: 14px; height: 14px; border-radius: 50%; background: var(--gold2); box-shadow: 0 0 14px var(--gold2); }
+  .yr.g::before { background: var(--lav); box-shadow: 0 0 14px var(--lav); }
+  .meter { height: 6px; border-radius: 6px; background: rgba(255,255,255,.08); margin: 10px 0 4px; overflow: hidden; }
+  .meter i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--violet)); border-radius: 6px; }
+  .small { font-size: 13px; color: var(--soft); }
+  ul.clean { padding-left: 18px; margin: 6px 0; }
+  ul.clean li { margin: 4px 0; }
+
+  /* practice */
+  .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin: 10px 0; }
+  .day { text-align: center; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--soft); }
+  .day button { width: 100%; aspect-ratio: 1; max-width: 46px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--soft); cursor: pointer; font-family: 'DM Mono'; font-size: 13px; }
+  .day button.done { background: linear-gradient(135deg, var(--gold), var(--violet)); color: #fff; border-color: transparent; }
+  .streak { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold2); }
+
+  .btn { font-family: 'Jost'; font-weight: 500; font-size: 14px; letter-spacing: .5px; color: #fff; background: linear-gradient(135deg, var(--gold), var(--violet)); border: none; border-radius: 30px; padding: 10px 20px; cursor: pointer; }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--gold2); }
+  textarea { width: 100%; min-height: 120px; border-radius: 12px; border: 1px solid var(--line); background: rgba(0,0,0,.25); color: var(--text); font-family: 'Jost'; font-size: 15px; padding: 12px; resize: vertical; line-height: 1.6; }
+  textarea:focus { outline: 1px solid var(--gold2); }
+  .prompt { margin-bottom: 20px; }
+  .prompt label { display: block; font-family: 'Playfair Display', serif; font-size: 18px; color: #fff; margin-bottom: 8px; }
+  .saved { font-family: 'DM Mono'; font-size: 11px; color: var(--gold2); opacity: 0; transition: opacity .3s; }
+  .saved.show { opacity: 1; }
+
+  details.ex { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px; margin-bottom: 12px; }
+  details.ex summary { cursor: pointer; font-family: 'Playfair Display', serif; font-size: 19px; color: #fff; list-style: none; }
+  details.ex summary::after { content: "+"; float: right; color: var(--gold2); }
+  details.ex[open] summary::after { content: "\2212"; }
+  details.ex ol { padding-left: 20px; }
+
+  .lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+  .lc { background: linear-gradient(160deg, var(--plum2), var(--plum)); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  .lc .n { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--gold2); }
+  .lc .w { font-family: 'DM Mono'; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--lav); margin: 2px 0 6px; }
+  .lc p { font-size: 13.5px; color: var(--soft); margin: 0; }
+  .filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+
+  footer { text-align: center; margin-top: 60px; color: var(--soft); font-size: 13px; }
+  footer .sig { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--gold2); }
+  footer a { color: var(--gold2); text-decoration: none; }
+  @media (max-width: 520px) { .wrap { padding: 24px 16px 60px; } nav { margin: 20px -16px; padding: 10px 16px; } }
+</style>
+</head>
+<body>
+<div id="stars" aria-hidden="true"></div>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">VIP Client Dashboard &nbsp;&#10022;&nbsp; The Union Pathway</div>
+  <h1>Your 3-Year<br><em>Connection Forecast</em></h1>
+  <div class="for">For Angie, with Justin</div>
+  <div class="meta">SEPTEMBER 2026 &#10022; SEPTEMBER 2029 &nbsp;&middot;&nbsp; CHANNELED SEPT 25, 2026</div>
+</header>
+
+<nav aria-label="Dashboard sections">
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-t="overview" aria-selected="true">Overview</button>
+    <button class="tab" role="tab" data-t="pattern">The Pattern</button>
+    <button class="tab" role="tab" data-t="evidence">Evidence</button>
+    <button class="tab" role="tab" data-t="forecast">Forecast</button>
+    <button class="tab" role="tab" data-t="messages">Key Messages</button>
+    <button class="tab" role="tab" data-t="practice">Daily Practice</button>
+    <button class="tab" role="tab" data-t="exercises">Exercises</button>
+    <button class="tab" role="tab" data-t="journal">Journal</button>
+    <button class="tab" role="tab" data-t="cards">Card Library</button>
+  </div>
+</nav>
+
+<!-- OVERVIEW -->
+<section class="panel on" id="overview" role="tabpanel">
+  <h2>The Heart of Your Reading</h2>
+  <p class="sub">Your verdicts, at a glance. Come back here whenever you need to remember what Spirit said.</p>
+  <div class="rule"></div>
+  <div class="grid">
+    <div class="card"><div class="t">Soul contract with Justin</div><div class="v">A conscious, sacred partnership</div><div class="d">You called this in intentionally (the Magician). Your souls agreed to partnership and union in this lifetime (the Hierophant). Verdict: the Knight of Pentacles. <i>"A ride or die energy."</i></div></div>
+    <div class="card"><div class="t">Divine union or settling?</div><div class="v">Union. A hell yes.</div><div class="d">The pros completely outweigh the cons. The tipping card is Death: a changing of seasons you go through together.</div></div>
+    <div class="card"><div class="t">Justin's heart</div><div class="v">A full body yes</div><div class="d">Three of Pentacles, Queen of Swords, Ace of Wands. You fit together like <i>"puzzle pieces,"</i> he deeply respects you, and he wants to <i>"win your favor."</i></div></div>
+    <div class="card"><div class="t">Martin</div><div class="v">A twin flame in an unhealed state</div><div class="d">A high-level soul bond with a catalyst effect on your life. What's left to release is the potential: the seed that never grew.</div></div>
+    <div class="card"><div class="t">Your highest love timeline</div><div class="v">You already know</div><div class="d">The Hermit: trust yourself. The path is the Ace of Cups, this new love. The fastest way forward is the Eight of Cups: walking away from the past.</div></div>
+    <div class="card"><div class="t">Your family</div><div class="v">Your oxygen mask first</div><div class="d"><i>"What makes you happy is what makes us happy."</i> Your children are fully included in your highest timeline.</div></div>
+    <div class="card wide"><div class="t">Your 3-year forecast</div><div class="v">Year One feels solid. Years Two and Three are guidance, not a sentence.</div><div class="d">Year One is renewal and being prioritized (the Star). Years Two and Three came through as loving warnings from your guides about home, family, finances, agreements and speaking up. You have full power to shift them. And you become the Moon reversed: a woman who sees clearly.</div></div>
+  </div>
+  <div class="quote">It's your energy, and the energy you pour into your life is what creates the outcome.</div>
+</section>
+
+<!-- PATTERN -->
+<section class="panel" id="pattern" role="tabpanel">
+  <h2>The Pattern</h2>
+  <p class="sub">The thread that runs through all three of your readings.</p>
+  <div class="rule"></div>
+  <div class="card wide" style="margin-bottom:14px"><div class="t">The anchor of your reading</div><div class="v">Four of Pentacles reversed: surrender</div><div class="d">This card came out for what Justin is here to teach you, and it fell out of the deck again to anchor the union spread. <i>"You don't have to carry everything by yourself, and you definitely don't have to guard yourself with him."</i></div></div>
+  <div class="grid">
+    <div class="card"><div class="t">The old pattern</div><div class="v">Giving more than you receive</div><div class="d">Six of Pentacles reversed, Ten of Wands, the Sun reversed. Being the life raft for everyone, until you feel depleted.</div></div>
+    <div class="card"><div class="t">The old fear</div><div class="v">"What if it sputters out?"</div><div class="d">Three of Wands reversed and Four of Cups reversed. The disappointment from Martin's false start, and the fear it will happen again.</div></div>
+    <div class="card"><div class="t">The new pattern</div><div class="v">Receiving, and saying it out loud</div><div class="d">Queen of Wands, Page of Swords, Seven of Swords. Being fully yourself, using your voice, and not biting your tongue.</div></div>
+  </div>
+  <h3>The karmic cycles I felt</h3>
+  <p>When I compared this reading with your Lion's Gate readings, I noticed that several of the cards in the heavier part of your forecast were tied to <b>Martin's energy</b> before: the Devil (his overall energy in August), the Three of Wands reversed (his card in this reading), and the Seven of Swords (his guardedness and fear of betrayal).</p>
+  <p>So the karmic cycles I felt may not be coming from Justin at all. I feel they're the <b>old cycles from the Martin chapter</b>: over-giving, bracing for disappointment, and staying quiet about your needs. Your guides are showing you these so they don't follow you into this new chapter. And you're already finishing them.</p>
+  <div class="note"><div class="t">Echoes from your Lion's Gate readings</div>
+    <ul class="clean">
+      <li>The <b>Star</b> came out five times in your second reading. It's the theme of your Year One.</li>
+      <li>The <b>Page of Wands</b> and your inner child came through in August, and anchored your soul contract with Justin now.</li>
+      <li>Your purpose is helping women trust their intuition and stop overthinking. You become the <b>Moon reversed</b>.</li>
+      <li>In August, Spirit said Justin was <i>"a healing balm"</i> and <i>"respite."</i> Now: a soul contract for partnership.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- EVIDENCE -->
+<section class="panel" id="evidence" role="tabpanel">
+  <h2>What Spirit Showed Me</h2>
+  <p class="sub">The images, words and signs that came through as I read for you.</p>
+  <div class="rule"></div>
+  <div class="grid">
+    <div class="card"><div class="t">Image</div><div class="v">A rainbow</div><div class="d">The healing quality of your connection with Justin, reaching every chakra from root to crown.</div></div>
+    <div class="card"><div class="t">Heard</div><div class="v">"Am I a good man?"</div><div class="d">Justin going within. I was shown him looking at himself in the mirror.</div></div>
+    <div class="card"><div class="t">Heard</div><div class="v">"Puzzle pieces"</div><div class="d">How he feels your lives fit together, in the simple day-to-day moments.</div></div>
+    <div class="card"><div class="t">Sign</div><div class="v">2222</div><div class="d">Appeared on my recorder as I spoke about balance and him following your intentions.</div></div>
+    <div class="card"><div class="t">Heard</div><div class="v">"Win your favor"</div><div class="d">The Knight of Pentacles coming to the Queen of Swords, offering you his pentacle.</div></div>
+    <div class="card"><div class="t">Image</div><div class="v">Dangling keys</div><div class="d">His unbridled enthusiasm. Maybe thoughts of moving or a new place together.</div></div>
+    <div class="card"><div class="t">Heard</div><div class="v">"Bittersweet"</div><div class="d">Your connection with Martin: there is love, and there is also pain.</div></div>
+    <div class="card"><div class="t">Image</div><div class="v">A seed and a tree</div><div class="d"><i>"Why would you keep watering this seed that hasn't grown, when with Justin you have a whole tree?"</i></div></div>
+    <div class="card"><div class="t">Image</div><div class="v">An engine that sputters out</div><div class="d">The false start with Martin, and the sour taste it left behind.</div></div>
+    <div class="card"><div class="t">Image</div><div class="v">The Incredibles</div><div class="d">You as Mrs. Incredible, the life raft. And your children, with their own superpowers.</div></div>
+    <div class="card"><div class="t">Image</div><div class="v">An oxygen mask</div><div class="d">Put yours on first, so you can help the people you love.</div></div>
+    <div class="card"><div class="t">Image</div><div class="v">A turtle</div><div class="d">Slow and steady wins the race. Life slowing down in Year One.</div></div>
+  </div>
+</section>
+
+<!-- FORECAST -->
+<section class="panel" id="forecast" role="tabpanel">
+  <h2>Your 3-Year Forecast</h2>
+  <p class="sub">A projection of current energy. You are never stuck in a timeline.</p>
+  <div class="rule"></div>
+  <div class="note"><div class="t">Overall energy &middot; The World reversed</div>Don't be afraid of change. Face things head on, don't be afraid to look at the truth, and don't be afraid to make the right decisions when they really matter.</div>
+  <div class="timeline">
+    <div class="yr card">
+      <div class="t">Year One &middot; Sep 2026 to Sep 2027</div>
+      <div class="v">Renewal &amp; Being Prioritized</div>
+      <span class="pill solid">Feels solid</span>
+      <div class="meter" aria-label="Energy clarity: strong"><i style="width:90%"></i></div>
+      <ul class="clean">
+        <li><b>The Star:</b> renewed, inspired, connected to the divine. <i>"I feel so blessed."</i></li>
+        <li><b>Justin and you, Five of Cups reversed:</b> healing together. <i>"A void has been filled."</i></li>
+        <li><b>Your energy, Six of Pentacles reversed:</b> balance your giving and receiving.</li>
+        <li><b>Nine of Cups, Nine of Wands rev., Eight of Wands rev.:</b> you become his priority, and life slows down. Knight of Pentacles on the bottom: his consistency.</li>
+      </ul>
+    </div>
+    <div class="yr g card">
+      <div class="t">Year Two &middot; Sep 2027 to Sep 2028</div>
+      <div class="v">Home, Family &amp; Your Voice</div>
+      <span class="pill guide">Guidance &amp; awareness</span>
+      <div class="meter" aria-label="Energy clarity: moderate"><i style="width:55%"></i></div>
+      <ul class="clean">
+        <li><b>Ten of Pentacles reversed:</b> movement in family and home. A child moving out, a move, some finances, or family members not seeing eye to eye. <i>"It doesn't feel too serious."</i></li>
+        <li><b>Knight of Swords:</b> a faster, more impulsive energy, possibly one of your kids.</li>
+        <li><b>The fork, Page of Swords:</b> using your voice and your clear mind, for you and your family.</li>
+        <li><b>The advice:</b> keep pouring into your own cup, and get your finances in order this year.</li>
+      </ul>
+    </div>
+    <div class="yr g card">
+      <div class="t">Year Three &middot; Sep 2028 to Sep 2029</div>
+      <div class="v">Clarity &amp; Discernment</div>
+      <span class="pill guide">Guidance &amp; awareness</span>
+      <div class="meter" aria-label="Energy clarity: moderate"><i style="width:50%"></i></div>
+      <ul class="clean">
+        <li><b>Seven of Cups reversed:</b> seeing clearly where there was illusion. Clarity after Year Two.</li>
+        <li><b>The Devil, where it lands if nothing changes:</b> read the fine print, be careful with contracts and agreements, and don't let fear make choices. The chains are loose. You always hold the key.</li>
+        <li><b>Who you become, the Moon reversed:</b> the illusion lifting, the truth coming to light, you trusting your intuition completely.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><div class="t">The overall verdict</div>Nine of Swords, Three of Wands reversed, Three of Pentacles, Seven of Swords. The foundation with Justin is real (Three of Pentacles). The fear that this will sputter out is a memory, not a prediction. And the reminder: <b>don't bite your tongue.</b></div>
+  <div class="quote">Every warning in this reading comes with a choice attached, and every choice is yours.</div>
+</section>
+
+<!-- MESSAGES -->
+<section class="panel" id="messages" role="tabpanel">
+  <h2>Key Messages</h2>
+  <p class="sub">Words from your reading to come back to.</p>
+  <div class="rule"></div>
+  <div class="quote">You don't have to carry everything by yourself, and you definitely don't have to guard yourself with him.</div>
+  <div class="quote">Why would you keep watering this seed that hasn't grown, when with Justin you have a whole tree?</div>
+  <div class="quote">Don't block yourself from receiving love just because in the past it hurt.</div>
+  <div class="quote">What makes you happy is what makes us happy.</div>
+  <div class="quote">The more that you can take care of yourself, the better of a mother you can be.</div>
+  <div class="quote">Nip this in the bud. Do not allow this to become a pattern.</div>
+  <div class="quote">You already have a knowing. You already have the answer.</div>
+</section>
+
+<!-- PRACTICE -->
+<section class="panel" id="practice" role="tabpanel">
+  <h2>Daily Practice</h2>
+  <p class="sub">Small, daily ways to live the guidance from your reading. Tap a day when you've done it.</p>
+  <div class="rule"></div>
+  <div id="practices"></div>
+  <p class="small">Your progress saves in this browser on this device.</p>
+</section>
+
+<!-- EXERCISES -->
+<section class="panel" id="exercises" role="tabpanel">
+  <h2>Guided Exercises</h2>
+  <p class="sub">Go slowly. There's no right way to do these.</p>
+  <div class="rule"></div>
+  <details class="ex"><summary>Releasing the sputter</summary>
+    <p>For the Three of Wands reversed and the Eight of Cups: letting go of the disappointment, not the person.</p>
+    <ol><li>Sit somewhere quiet and take three slow breaths.</li><li>Picture the engine starting up with all that firepower, and then sputtering out. Notice where you feel it in your body.</li><li>Let yourself feel it fully: the disappointment, the injustice, the sour taste. Don't rush it.</li><li>On an exhale, imagine setting down that feeling like a cup you've carried too long, and walking away, like the figure on the Eight of Cups.</li><li>Say out loud: <i>"I release the disappointment. I keep the lessons. I'm open to receiving love."</i></li></ol>
+  </details>
+  <details class="ex"><summary>The oxygen mask check-in</summary>
+    <p>For the Sun reversed and the Six of Pentacles reversed.</p>
+    <ol><li>Once a day, ask yourself: <i>"What do I need right now?"</i></li><li>Name one thing, however small: rest, water, a walk, quiet, a hug.</li><li>Give it to yourself before you give your next thing away.</li><li>Notice any guilt that comes up, and question it: <i>"I can only take care of others when I take care of me first."</i></li></ol>
+  </details>
+  <details class="ex"><summary>Say it when you feel it</summary>
+    <p>For the Two of Swords, Queen of Cups reversed and Seven of Swords.</p>
+    <ol><li>When you notice yourself biting your tongue, pause and name the need to yourself.</li><li>Share it simply and warmly: <i>"Hey, I would really like to do this. It's really important to me."</i></li><li>Invite Justin to do the same: <i>"If there's ever something you need, I want you to tell me."</i></li><li>Afterwards, write down how it felt to be heard.</li></ol>
+  </details>
+  <details class="ex"><summary>Surrender breath</summary>
+    <p>For the Four of Pentacles reversed, the anchor of your reading.</p>
+    <ol><li>Clench your hands into fists, like the man clutching his pentacles. Hold for five seconds.</li><li>Slowly open your hands, palms up, as you exhale.</li><li>Repeat three times, and on the last exhale say: <i>"I don't have to hold everything so tightly. I'm safe to receive."</i></li></ol>
+  </details>
+  <details class="ex"><summary>The Incredibles reminder</summary>
+    <p>For the Page of Pentacles and your children.</p>
+    <ol><li>Rewatch the scene from the plane crash to when the kids discover their own powers.</li><li>Write down one superpower you see in each of your four children.</li><li>Choose one place this week where you can trust them to use it, and step back.</li></ol>
+  </details>
+</section>
+
+<!-- JOURNAL -->
+<section class="panel" id="journal" role="tabpanel">
+  <h2>Your Journal</h2>
+  <p class="sub">Your answers save in this browser as you type. Download them anytime.</p>
+  <div class="rule"></div>
+  <div id="prompts"></div>
+  <button class="btn" id="dl">Download my journal</button>
+  <span class="saved" id="savedMsg">&nbsp;Saved &#10022;</span>
+</section>
+
+<!-- CARDS -->
+<section class="panel" id="cards" role="tabpanel">
+  <h2>Card Library</h2>
+  <p class="sub">Every card from your reading, and what it meant for you.</p>
+  <div class="rule"></div>
+  <div class="filter" id="filter"></div>
+  <div class="lib" id="lib"></div>
+</section>
+
+<footer>
+  <div class="sig">With love, Luana Spirits &#128156;</div>
+  <div>Twin Flame Guide, Psychic Medium &amp; Energy Healer</div>
+  <p><a href="https://stan.store/luanaspirits">stan.store/luanaspirits</a> &nbsp;&#10022;&nbsp; <a href="mailto:luana@luanaspirits.com">luana@luanaspirits.com</a></p>
+  <p class="small">Intuitive readings reflect the energy perceived at the time of the session. Timelines can shift with free will. Always use your own discernment.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  // stars
+  var s = document.getElementById('stars');
+  for (var i = 0; i < 70; i++) {
+    var d = document.createElement('div'); d.className = 'star';
+    var z = Math.random() * 2 + 1;
+    d.style.cssText = 'width:' + z + 'px;height:' + z + 'px;left:' + Math.random() * 100 + '%;top:' + Math.random() * 100 + '%;animation-delay:' + Math.random() * 4 + 's';
+    if (Math.random() < .2) d.style.background = '#e3c27f';
+    s.appendChild(d);
+  }
+
+  var KEY = 'angie-9-25-2026';
+  function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
+  var state = load(); state.j = state.j || {}; state.p = state.p || {};
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  // tabs
+  var tabs = document.querySelectorAll('.tab');
+  function show(id) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.t === id); });
+    document.querySelectorAll('.panel').forEach(function (p) { p.classList.toggle('on', p.id === id); });
+    try { localStorage.setItem(KEY + '-tab', id); } catch (e) {}
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.dataset.t); window.scrollTo({ top: document.querySelector('nav').offsetTop, behavior: 'smooth' }); }); });
+  try { var last = localStorage.getItem(KEY + '-tab'); if (last && document.getElementById(last)) show(last); } catch (e) {}
+
+  // practices
+  var practices = [
+    ['oxygen', 'Put your oxygen mask on first', 'One thing just for you, before you give your next thing away.'],
+    ['voice', 'Say it when you feel it', 'Share one need, desire or feeling in the moment. Don’t bite your tongue.'],
+    ['receive', 'Receive without deflecting', 'When Justin or anyone offers help, love or a compliment, let it land. Say thank you.'],
+    ['slow', 'Slow and steady', 'Do one thing at a time today. Remember the turtle.'],
+    ['trust', 'Trust your knowing', 'Before asking anyone else, ask yourself first, and trust the answer.']
+  ];
+  var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  function weekKey() { var d = new Date(); var day = (d.getDay() + 6) % 7; d.setDate(d.getDate() - day); return d.toISOString().slice(0, 10); }
+  var wk = weekKey(); state.p[wk] = state.p[wk] || {};
+  var box = document.getElementById('practices');
+  practices.forEach(function (p) {
+    var c = document.createElement('div'); c.className = 'card'; c.style.marginBottom = '12px';
+    c.innerHTML = '<div class="t">This week</div><div class="v">' + p[1] + '</div><div class="d">' + p[2] + '</div><div class="days"></div><div class="streak"></div>';
+    var row = c.querySelector('.days'), st = c.querySelector('.streak');
+    var arr = state.p[wk][p[0]] = state.p[wk][p[0]] || [0, 0, 0, 0, 0, 0, 0];
+    function upd() { var n = arr.reduce(function (a, b) { return a + b; }, 0); st.textContent = n ? n + ' of 7 days this week ✦' : ''; }
+    days.forEach(function (d, i) {
+      var w = document.createElement('div'); w.className = 'day';
+      var b = document.createElement('button'); b.textContent = d; b.setAttribute('aria-label', p[1] + ', day ' + (i + 1));
+      b.setAttribute('aria-pressed', !!arr[i]); if (arr[i]) b.classList.add('done');
+      b.onclick = function () { arr[i] = arr[i] ? 0 : 1; b.classList.toggle('done'); b.setAttribute('aria-pressed', !!arr[i]); save(); upd(); };
+      w.appendChild(b); row.appendChild(w);
+    });
+    upd(); box.appendChild(c);
+  });
+
+  // journal
+  var prompts = [
+    'Where in my life am I still holding on too tightly, like the Four of Pentacles? What would it feel like to loosen my grip?',
+    'What did I intentionally call in when I manifested Justin? What did I script, envision and dream of?',
+    'What passions or parts of myself did I lose along the way of life that this connection is bringing back?',
+    'When I ask "am I settling?", whose voice is that? Is it my intuition, or an old fear of the other shoe dropping?',
+    'What is the "sputter" from Martin’s chapter that I’m ready to release? What lesson do I get to keep?',
+    'What is one need I’ve been biting my tongue about? How could I say it simply and warmly?',
+    'What superpower do I see in each of my children? Where can I trust them more?',
+    'What does putting my oxygen mask on first look like for me this week?',
+    'Who am I becoming as the Moon reversed? What does it feel like to trust my intuition completely?'
+  ];
+  var pbox = document.getElementById('prompts'), msg = document.getElementById('savedMsg'), timer;
+  prompts.forEach(function (q, i) {
+    var w = document.createElement('div'); w.className = 'prompt';
+    var id = 'p' + i;
+    w.innerHTML = '<label for="' + id + '">' + q + '</label><textarea id="' + id + '" placeholder="Write freely..."></textarea>';
+    var ta = w.querySelector('textarea'); ta.value = state.j[i] || '';
+    ta.addEventListener('input', function () { state.j[i] = ta.value; save(); msg.classList.add('show'); clearTimeout(timer); timer = setTimeout(function () { msg.classList.remove('show'); }, 1200); });
+    pbox.appendChild(w);
+  });
+  document.getElementById('dl').onclick = function () {
+    var out = "Angie's Union Pathway Journal\nLuana Spirits\n\n";
+    prompts.forEach(function (q, i) { out += q + '\n\n' + (state.j[i] || '') + '\n\n---\n\n'; });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([out], { type: 'text/plain' }));
+    a.download = 'angie-union-pathway-journal.txt'; document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  // card library
+  var C = [
+    ['Page of Wands', 'Soul contract', 'Your inner children reconnecting, both of you. The passions and the things you lost along the way of life.'],
+    ['The Magician', 'Soul contract', 'Why he came in now: you manifested this, consciously and intentionally.'],
+    ['The Hierophant', 'Soul contract', 'What your souls agreed to: partnership and union. A very good omen for marriage. Spiritual teachers to each other.'],
+    ['Four of Pentacles rev.', 'Soul contract', 'What he teaches you: loosen your grip, emotional surrender. The anchor of your whole reading.'],
+    ['The Hermit', 'Soul contract', 'What you teach him: going within. "Am I a good man?" Also your highest love timeline: self-trust.'],
+    ['Ten of Wands', 'Soul contract', 'What it heals: taking the weight off each other’s shoulders. Sharing the load.'],
+    ['Knight of Pentacles', 'Soul contract', 'The verdict: consistency, loyalty, a giving provider energy. A ride or die.'],
+    ['Five of Cups rev.', 'Justin', 'A past connection he’s mostly healed from. Maturity. Also Year One: healing together.'],
+    ['The Tower', 'Justin', 'A past situation that ended suddenly.'],
+    ['Three of Pentacles', 'Justin', 'His true feelings: building a life together, puzzle pieces. Returned in the final verdict: the foundation is real.'],
+    ['Queen of Swords', 'Justin', 'His intentions: deep respect. He wants to win your favor.'],
+    ['The Emperor rev.', 'Justin', 'His fears: "Am I man enough for her?" Pressure around masculinity.'],
+    ['Temperance rev.', 'Justin & Martin', 'Justin: something about his health he may want to share. Martin: the lesson of pouring love back into yourself.'],
+    ['Seven of Pentacles rev.', 'Justin', 'His wound: fear that what he invests won’t pay off.'],
+    ['Ace of Wands', 'Justin', 'His readiness for commitment: a full body yes.'],
+    ['Queen of Wands', 'Union', 'Union marker: your confident, sensual, creative self. The black cat.'],
+    ['Eight of Wands rev.', 'Union', 'Union marker: no rush, take your time. Also Year One: life slowing down.'],
+    ['Page of Swords', 'Union', 'Union marker: your voice and your bright mind, uninhibited. Also the fork in Year Two.'],
+    ['Two of Swords', 'Union', 'Comfort marker: pulling back to decide. Nip it in the bud.'],
+    ['Queen of Cups rev.', 'Union', 'Comfort marker: needs not being met. Communicate early.'],
+    ['Death', 'Union', 'The tipping card: transformation, a new season together. A hell yes.'],
+    ['Two of Cups', 'Martin', 'The romantic energy and attraction you felt with Martin.'],
+    ['Three of Wands rev.', 'Martin', 'Blocked energy, a false start, the engine that sputtered out. What to release.'],
+    ['Five of Wands', 'Martin', 'The chapter isn’t fully closed on his end: inner conflict.'],
+    ['Ace of Pentacles', 'Martin', 'What’s left to release: the seed of potential that hasn’t grown.'],
+    ['Three of Cups', 'Martin', 'A possible friendship, if you choose.'],
+    ['Page of Pentacles', 'Timeline', 'Your children: "What makes you happy is what makes us happy."'],
+    ['Ace of Cups', 'Timeline', 'The path to your highest timeline: this new love.'],
+    ['Four of Cups rev.', 'Timeline', 'What’s blocking you: past disappointment.'],
+    ['Eight of Cups', 'Timeline', 'What speeds it up: walking away from the past.'],
+    ['The Sun rev.', 'Timeline', 'Home and family: depletion. Oxygen mask first.'],
+    ['The World rev.', 'Forecast', 'Overall energy: don’t be afraid of change.'],
+    ['The Star', 'Forecast', 'Year One: renewal and feeling blessed.'],
+    ['Six of Pentacles rev.', 'Forecast', 'Year One: giving more than you receive. Find balance.'],
+    ['Nine of Cups', 'Forecast', 'Year One: being his priority. "Yes, I got what I want."'],
+    ['Nine of Wands rev.', 'Forecast', 'Year One: relaxing, not having to watch your back.'],
+    ['Ten of Pentacles rev.', 'Forecast', 'Year Two: movement in home and family. Prepare your finances.'],
+    ['Knight of Swords', 'Forecast', 'Year Two: a faster, more impulsive energy.'],
+    ['Seven of Cups rev.', 'Forecast', 'Year Three: clarity where there was illusion.'],
+    ['The Devil', 'Forecast', 'Year Three, if nothing changes: read the fine print, protect your freedom. The chains are loose.'],
+    ['The Moon rev.', 'Forecast', 'Who you become: the truth coming to light, trusting your intuition completely.'],
+    ['Nine of Swords', 'Verdict', 'The worry you’ve been carrying, ready to be set down.'],
+    ['Seven of Swords', 'Verdict', 'Don’t bite your tongue.']
+  ];
+  var groups = ['All'].concat(C.map(function (c) { return c[1]; }).filter(function (v, i, a) { return a.indexOf(v) === i; }));
+  var fl = document.getElementById('filter'), lib = document.getElementById('lib');
+  function render(g) {
+    lib.innerHTML = '';
+    C.filter(function (c) { return g === 'All' || c[1] === g; }).forEach(function (c) {
+      var d = document.createElement('div'); d.className = 'lc';
+      d.innerHTML = '<div class="n">' + c[0] + '</div><div class="w">' + c[1] + '</div><p>' + c[2] + '</p>';
+      lib.appendChild(d);
+    });
+    fl.querySelectorAll('button').forEach(function (b) { b.setAttribute('aria-selected', b.textContent === g); });
+  }
+  groups.forEach(function (g) { var b = document.createElement('button'); b.className = 'tab'; b.textContent = g; b.onclick = function () { render(g); }; fl.appendChild(b); });
+  render('All');
+})();
+</script>
+</body>
+</html>
