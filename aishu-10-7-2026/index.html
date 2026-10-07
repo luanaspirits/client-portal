@@ -1,1 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aishwarya · Love, Rewired Dashboard</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1a0a20; --plum:#2a1233; --plum2:#341843; --violet:#8b5fa8; --lav:#c9b3d9;
+  --gold:#c9a55f; --gold-soft:#e3c27f; --text:#efe4f3; --soft:#bfaec8; --line:rgba(201,179,217,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Jost',sans-serif;font-weight:300;line-height:1.65}
+body{background:radial-gradient(ellipse at top,#3a1748 0%,var(--bg) 60%) fixed;min-height:100vh}
+.sparkles{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:
+ radial-gradient(1.5px 1.5px at 12% 18%,rgba(227,194,127,.8),transparent),
+ radial-gradient(1px 1px at 78% 12%,rgba(255,255,255,.7),transparent),
+ radial-gradient(1.5px 1.5px at 62% 44%,rgba(201,179,217,.7),transparent),
+ radial-gradient(1px 1px at 28% 72%,rgba(255,255,255,.6),transparent),
+ radial-gradient(1.5px 1.5px at 88% 80%,rgba(227,194,127,.7),transparent),
+ radial-gradient(1px 1px at 45% 90%,rgba(255,255,255,.5),transparent),
+ radial-gradient(1px 1px at 5% 50%,rgba(201,179,217,.6),transparent)}
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:40px 16px 80px}
+header{text-align:center;margin-bottom:28px}
+.eyebrow{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft)}
+h1{font-family:'Playfair Display',serif;font-weight:400;font-size:clamp(30px,6vw,46px);margin:10px 0 6px;line-height:1.15}
+h1 em{color:var(--lav)}
+.sub{color:var(--soft);font-size:15px}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:26px 0 30px}
+nav button{font-family:'Jost',sans-serif;font-size:14px;background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+nav button.active{background:linear-gradient(90deg,var(--gold),var(--violet));color:#1a0a20;border-color:transparent;font-weight:500}
+section{display:none}
+section.active{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-family:'Playfair Display',serif;font-weight:400;font-size:28px;margin:0 0 14px;color:var(--gold-soft)}
+h3{font-family:'Playfair Display',serif;font-weight:400;font-size:20px;margin:26px 0 8px;color:var(--lav)}
+.card{background:linear-gradient(160deg,rgba(52,24,67,.85),rgba(42,18,51,.85));border:1px solid var(--line);border-radius:18px;padding:22px 22px;margin:14px 0}
+.quote{font-family:'Playfair Display',serif;font-style:italic;font-size:18px;line-height:1.55;color:var(--text)}
+.quote small{display:block;font-family:'Jost';font-style:normal;font-size:13px;color:var(--soft);margin-top:8px}
+.gold{color:var(--gold-soft)}
+.pill{display:inline-block;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-soft);border:1px solid rgba(201,165,95,.4);border-radius:999px;padding:3px 10px;margin-bottom:10px}
+ul{padding-left:20px;margin:8px 0}
+li{margin:5px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.mini{background:rgba(26,10,32,.55);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mini b{font-weight:500;color:var(--gold-soft)}
+.phase{position:relative;padding-left:22px;border-left:2px solid rgba(201,165,95,.45);margin:0 0 22px 6px}
+.phase:before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--violet))}
+.phase .when{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;color:var(--gold-soft);text-transform:uppercase}
+.check{display:flex;gap:10px;align-items:flex-start;margin:8px 0;cursor:pointer}
+.check input{accent-color:var(--gold);width:18px;height:18px;margin-top:4px;flex:0 0 auto}
+.check.done span{color:var(--soft);text-decoration:line-through}
+textarea{width:100%;min-height:110px;background:rgba(26,10,32,.7);border:1px solid var(--line);border-radius:12px;color:var(--text);font-family:'Jost',sans-serif;font-size:15px;padding:12px;resize:vertical}
+textarea:focus{outline:1px solid var(--gold)}
+label.q{display:block;margin:16px 0 6px;color:var(--lav)}
+.btn{display:inline-block;font-family:'Jost',sans-serif;font-weight:500;font-size:14px;background:linear-gradient(90deg,var(--gold),var(--violet));color:#1a0a20;border:0;border-radius:999px;padding:10px 20px;cursor:pointer;text-decoration:none;margin:6px 6px 0 0}
+.btn.ghost{background:transparent;color:var(--gold-soft);border:1px solid rgba(201,165,95,.5)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.cols{grid-template-columns:1fr}.card{padding:18px 16px}}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 6px;border-bottom:1px solid var(--line)}
+td.n{font-family:'DM Mono',monospace;color:var(--gold-soft);width:44px}
+.step{display:flex;gap:12px;margin:12px 0}
+.step .num{flex:0 0 30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--violet));color:#1a0a20;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px}
+.note{font-size:13px;color:var(--soft)}
+footer{text-align:center;margin-top:40px;color:var(--soft);font-size:13px}
+a{color:var(--gold-soft)}
+</style>
+</head>
+<body>
+<div class="sparkles"></div>
+<div class="wrap">
 
+<header>
+  <div class="eyebrow">Love, Rewired · Your private dashboard</div>
+  <h1>Aishwarya, <em>the floodgates are open</em></h1>
+  <div class="sub">Soul Clarity Session · October 7, 2026 · with Luana</div>
+</header>
+
+<nav id="tabs">
+  <button data-tab="overview" class="active">Overview</button>
+  <button data-tab="breakthrough">Your Breakthrough</button>
+  <button data-tab="plan">90-Day Plan</button>
+  <button data-tab="tools">Practices</button>
+  <button data-tab="journal">Journal</button>
+  <button data-tab="sessions">Sessions</button>
+</nav>
+
+<!-- OVERVIEW -->
+<section id="overview" class="active">
+  <div class="card">
+    <span class="pill">Your North Star</span>
+    <p class="quote">"I'm thriving in my life: fulfilling my soul purpose, executing my mission, helping people, and being fully &amp; unapologetically myself. I'm able to face my fears and take that first step. I trust my instinct, my gut, whenever a decision needs to be made. I have unwavering trust that the universe will play all the right pieces in the background as I pursue my dreams. I'm able to rest without feeling like I'm falling behind."</p>
+    <p class="gold" style="font-family:'Playfair Display',serif;font-style:italic;font-size:18px;margin:6px 0 0">…doing this all while letting it be messy.</p>
+    <p class="note">Come back here whenever you feel confused or want to burn it all down. Your North Star is a feeling of peace and direction, not a standard of perfection.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">The breakthrough</span>
+    <p class="quote">Your voice is your gift. Your voice is your purpose.</p>
+    <p>The confusion you've been feeling about your purpose, and the constriction in front of the camera, come from warring parts inside you. One part wants the stage, the mic, the visibility. Another part judges her as "vain" and "too much" and pushes her down. When the part with the most fire is being judged, of course it's hard to trust yourself.</p>
+    <p>Today you gave her permission to want what she wants. That's where self-trust starts.</p>
+  </div>
+
+  <div class="grid">
+    <div class="mini"><b>Intuitive message</b><br>"Floodgates are open." You're not holding anything back anymore.</div>
+    <div class="mini"><b>The word from spirit</b><br>"Impact." You don't yet realize the power your voice has.</div>
+    <div class="mini"><b>Your next step</b><br>Research 5 Bay Area open mics this week. Clarity comes from doing.</div>
+  </div>
+</section>
+
+<!-- BREAKTHROUGH -->
+<section id="breakthrough">
+  <h2>What we uncovered</h2>
+
+  <div class="card">
+    <span class="pill">Is it my dream or my wound?</span>
+    <p>Both, and they were never separate. Think of a trampoline: the further down it presses, the higher it launches you. What you've been through, and the urge it gives you to go in the opposite direction, <b>is</b> your purpose.</p>
+    <p class="quote">"Whatever is paining you, and you have the urge to go in the opposite direction, that's your purpose."</p>
+    <p>So yes, it's okay to dream of the stage. It fires you up, gives you ideas faster and helps you heal faster.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">Meet "The Fame Seeker"</span>
+    <p>The part of you that you were afraid to call vain, attention-seeking or "narcissistic." When we looked at what she actually gives you, she sounds pretty badass:</p>
+    <div class="cols">
+      <div class="mini"><b>Expression</b><br>Not holding back. Saying what you mean.</div>
+      <div class="mini"><b>Freedom</b><br>Not giving a sh*t what people think.</div>
+      <div class="mini"><b>Boundaries</b><br>Not taking on other people's baggage.</div>
+      <div class="mini"><b>Charisma</b><br>Making people enjoy your presence. Changing the energy of a room. Uplifting.</div>
+    </div>
+    <h3>The protector underneath</h3>
+    <p>There's also a protector part that pushes her down. She's trying to keep you kind and safe: making sure no one feels unheard or shrinks around you, that you don't take up too much space, get so caught up in being right that you dismiss others, or manipulate anyone. She learned this from being told you laugh too loud, talk too much, talk too fast.</p>
+    <p>She can rest now. You can be the kind of charismatic that lifts other people up, <i>and</i> take up space.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">Reframes to keep</span>
+    <h3>"Is something wrong with me?"</h3>
+    <p>Ask instead: <b>"Is there something wrong with me, or is their energy incompatible with mine?"</b> Are they expanded enough to be in my space, or still working through things that make it hard for them to see me shine?</p>
+    <h3>Your soul tribe wants to hear you</h3>
+    <p>The right people make the whole room feel like a stage. Anyone who asks you to shrink for them isn't your soul tribe.</p>
+    <h3>Pass the hot potato</h3>
+    <p>You don't have to be hypervigilant about how everyone feels. With friends you can say: <i>"If you ever feel like I'm talking too much or want to shift the focus, just tell me, no hard feelings."</i> Then it's their responsibility to bring it up, and you can let the heaviness go.</p>
+    <h3>You're allowed to want it</h3>
+    <p>Spiritual people often carry old programming (like a past-life vow of poverty) that says we must be pure, unattached and never want fame, money or visibility. Suppressing those wants doesn't make you more spiritual. It just splits you in two. Want it because you want it.</p>
+    <h3>Don't judge the outside yet</h3>
+    <p>Not judging your client numbers or your views right now. When you're integrating inner conflict it can feel like inching along, and then once the resistance resolves, you shoot forward.</p>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section id="plan">
+  <h2>Your 90-day plan</h2>
+  <p class="note">Tap to check things off. Your progress saves on this device.</p>
+
+  <div class="card">
+    <div class="phase">
+      <div class="when">This week · by Oct 14</div>
+      <h3 style="margin-top:4px">Find your stage</h3>
+      <p class="note">Social media feels easier for you. Being live in front of people is your healthy stretch, so that's where we start.</p>
+      <label class="check"><input type="checkbox" data-k="w1"><span>Research 5 Bay Area open mics (storytelling, comedy or teaching-friendly)</span></label>
+      <label class="check"><input type="checkbox" data-k="w2"><span>Pick your favourites and sketch a plan for signing up</span></label>
+    </div>
+
+    <div class="phase">
+      <div class="when">Day 30 · by early November</div>
+      <h3 style="margin-top:4px">Sign up and start writing</h3>
+      <label class="check"><input type="checkbox" data-k="m1a"><span>Sign up for at least 1 open mic (by Oct 31)</span></label>
+      <label class="check"><input type="checkbox" data-k="m1b"><span>Start writing your set: not comedy exactly, more storytelling and teaching. Share your wisdom and experiences so people feel seen, the way Hasan Minhaj's stories grew into Homecoming King</span></label>
+      <p class="note">Our calls this month: 40 to 45 minutes of parts work on love and soul purpose, then your micro goals for the next two weeks. Plus your 20-minute reading on whatever is coming up.</p>
+    </div>
+
+    <div class="phase">
+      <div class="when">Day 60 · by early December</div>
+      <h3 style="margin-top:4px">Massive visibility</h3>
+      <label class="check"><input type="checkbox" data-k="m2a"><span>A 5-minute set ready to go (by Dec 7) and on stage</span></label>
+      <label class="check"><input type="checkbox" data-k="m2b"><span>All three in your weekly rhythm: talking to clients, posting on social media, the stage</span></label>
+      <label class="check"><input type="checkbox" data-k="m2c"><span>Use email support and EFT tapping before stage nights or when Arnav thoughts loop</span></label>
+    </div>
+
+    <div class="phase" style="margin-bottom:0">
+      <div class="when">Day 90 · by early January</div>
+      <h3 style="margin-top:4px">Your full identity and brand</h3>
+      <label class="check"><input type="checkbox" data-k="m3a"><span>Your offer suite, fleshed out</span></label>
+      <label class="check"><input type="checkbox" data-k="m3b"><span>Your content pillars: embody the woo-woo, the talkative, the whole you</span></label>
+      <label class="check"><input type="checkbox" data-k="m3c"><span>A recurring open mic schedule you look forward to, and days that feel more fluid and moving than the same coffee-shop routine (maybe even a podcast guest spot)</span></label>
+      <label class="check"><input type="checkbox" data-k="m3d"><span>Your first paid coaching client (by day 60 to 90)</span></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="pill">Remember</span>
+    <p class="quote">"Clarity will always come from doing."</p>
+    <p>You don't need to know if stand-up is your medium yet. Treat it as fun experimentation. After you do it, you'll know what you liked, what you didn't, and what new ideas came. Your pull toward Hasan Minhaj's path is your intuition showing you a pathway.</p>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <h2>Your practices</h2>
+
+  <div class="card">
+    <span class="pill">When you freeze in front of the camera</span>
+    <p>Don't try to talk yourself into it. Get curious instead. Bulldozing a scared part pushes her down further.</p>
+    <div class="step"><div class="num">1</div><div>Set up to film. Notice the constriction and name it out loud: <i>"I see that I'm feeling constricted. I see that I'm tense."</i></div></div>
+    <div class="step"><div class="num">2</div><div>Ask the part: <i>"How are you feeling? What's scary to you about this? What do you want to say to me?"</i> Keep the back-and-forth going.</div></div>
+    <div class="step"><div class="num">3</div><div>Don't push for "we're posting no matter what." Listen to understand and offer safety.</div></div>
+    <div class="step"><div class="num">4</div><div>Imagine the little one holding onto your leg. Pick her up, hold her close, reassure her. Then you, the adult, walk forward.</div></div>
+    <div class="step"><div class="num">5</div><div>Make the video. Shaky voice, retakes, imperfect: all welcome. <b>Publishing is the accomplishment. Content is a practice.</b></div></div>
+  </div>
+
+  <div class="card">
+    <span class="pill">The soul connection mirror</span>
+    <p>For the confusion around Arnav. Make two lists. Everything that <b>attracts</b> you is a quality you're meant to embody more. Everything that <b>repels</b> you may be a part of your shadow you've disowned. It's mirror work, parts work and shadow work in one.</p>
+    <div class="cols">
+      <div><label class="q">What attracts me to him</label><textarea data-j="attract" placeholder="List everything…"></textarea></div>
+      <div><label class="q">What repels me</label><textarea data-j="repel" placeholder="List everything…"></textarea></div>
+    </div>
+    <label class="q">Looking at column one: where are these qualities wanting to come alive in me?</label>
+    <textarea data-j="embody"></textarea>
+    <label class="q">Looking at column two: where might I be judging or hiding this in myself?</label>
+    <textarea data-j="shadow"></textarea>
+    <p class="note">Feeling deep soul love for someone while getting the ick from their 3D self is normal, and so is the fear of "what will people think?" Notice how much of the confusion is your gut and how much is other people's voices. We'll work through it together.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">EFT tapping · before the stage or camera</span>
+    <p>Tap about 7 times on each point while you say the phrase out loud. Rate your anxiety 0 to 10 before and after.</p>
+    <h3>Setup · side of the hand (say 3 times)</h3>
+    <p><i>"Even though my throat tightens when I think about being seen, I deeply and completely love and accept myself."</i></p>
+    <h3>Round 1 · let it be true</h3>
+    <table>
+      <tr><td class="n">Brow</td><td>This tightness in my throat</td></tr>
+      <tr><td class="n">Side eye</td><td>Afraid I'll stumble over my words</td></tr>
+      <tr><td class="n">Under eye</td><td>Afraid I'll say the wrong thing</td></tr>
+      <tr><td class="n">Nose</td><td>Afraid I'm too much</td></tr>
+      <tr><td class="n">Chin</td><td>Part of me wants to hide</td></tr>
+      <tr><td class="n">Collar</td><td>And part of me wants the mic so badly</td></tr>
+      <tr><td class="n">Under arm</td><td>All these parts, all this fear</td></tr>
+      <tr><td class="n">Head</td><td>I'm letting myself feel it</td></tr>
+    </table>
+    <h3>Round 2 · choose again</h3>
+    <table>
+      <tr><td class="n">Brow</td><td>What if my voice is a gift?</td></tr>
+      <tr><td class="n">Side eye</td><td>I've always loved speaking</td></tr>
+      <tr><td class="n">Under eye</td><td>The right people want to hear me</td></tr>
+      <tr><td class="n">Nose</td><td>I'm allowed to take up space</td></tr>
+      <tr><td class="n">Chin</td><td>I can be messy and still be powerful</td></tr>
+      <tr><td class="n">Collar</td><td>I'm holding my little one close</td></tr>
+      <tr><td class="n">Under arm</td><td>We're walking forward together</td></tr>
+      <tr><td class="n">Head</td><td>The floodgates are open</td></tr>
+    </table>
+    <p class="note">Repeat until you feel a shift. You can swap the words for whatever is looping, including Arnav.</p>
+  </div>
+</section>
+
+<!-- JOURNAL -->
+<section id="journal">
+  <h2>Integration journal</h2>
+  <p class="note">Your answers save on this device. Download a copy anytime.</p>
+  <div class="card">
+    <label class="q">How did it feel to give The Fame Seeker permission to want what she wants?</label>
+    <textarea data-j="j1"></textarea>
+    <label class="q">Where in my life am I still shrinking my voice? Who do I shrink around?</label>
+    <textarea data-j="j2"></textarea>
+    <label class="q">Who makes me feel like the whole room is a stage? How can I spend more time with them?</label>
+    <textarea data-j="j3"></textarea>
+    <label class="q">What story do I want to tell first? What experience would make someone feel seen?</label>
+    <textarea data-j="j4"></textarea>
+    <label class="q">What came up for me after our session? Anything to bring to our next call?</label>
+    <textarea data-j="j5"></textarea>
+    <button class="btn" id="dl">Download my journal</button>
+  </div>
+</section>
+
+<!-- SESSIONS -->
+<section id="sessions">
+  <h2>Your sessions</h2>
+  <div class="card">
+    <span class="pill">Every second Thursday · 9:00 AM Pacific · Google Meet</span>
+    <table>
+      <tr><td class="n">01</td><td>Thursday, October 8</td></tr>
+      <tr><td class="n">02</td><td>Thursday, October 22</td></tr>
+      <tr><td class="n">03</td><td>Thursday, November 5</td></tr>
+      <tr><td class="n">04</td><td>Thursday, November 19</td></tr>
+      <tr><td class="n">05</td><td>Thursday, December 3</td></tr>
+      <tr><td class="n">06</td><td>Thursday, December 17</td></tr>
+      <tr><td class="n">✨</td><td>Thursday, January 7 · Bonus integration call <span class="note">(its own link: <a href="https://meet.google.com/bnp-vmes-oet" target="_blank" rel="noopener">meet.google.com/bnp-vmes-oet</a>)</span></td></tr>
+    </table>
+    <a class="btn" href="https://meet.google.com/nnc-aahr-vhr" target="_blank" rel="noopener">Join our Google Meet</a>
+    <a class="btn ghost" href="https://fathom.video/share/EbKmhU4At1jDTJeU1Le3bL8Zsdinn9eE" target="_blank" rel="noopener">Watch today's replay</a>
+  </div>
+  <div class="card">
+    <span class="pill">What's included</span>
+    <ul>
+      <li>Two 60-minute calls a month: parts work on love and soul purpose, then your micro goals for the next two weeks</li>
+      <li>A 20-minute reading each month, on whatever is coming up or open to spirit</li>
+      <li>Email support Monday to Friday between calls, for the intense moments</li>
+      <li>EFT tapping scripts for stage nights and anything looping</li>
+      <li>Business support for your first clients</li>
+      <li>A bonus integration call at the end, for paying in full</li>
+    </ul>
+    <p>Email Luana anytime: <a href="mailto:luana@luanaspirits.com">luana@luanaspirits.com</a></p>
+  </div>
+</section>
+
+<footer>Made with love for Aishwarya · Luana Spirits 🤍</footer>
+</div>
+
+<script>
+(function(){
+  var KEY='aish-lr-2026';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+  function save(s){try{localStorage.setItem(KEY,JSON.stringify(s))}catch(e){}}
+  var state=load();
+  document.querySelectorAll('#tabs button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#tabs button').forEach(function(x){x.classList.remove('active')});
+      document.querySelectorAll('section').forEach(function(s){s.classList.remove('active')});
+      b.classList.add('active');
+      document.getElementById(b.dataset.tab).classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+  document.querySelectorAll('input[data-k]').forEach(function(c){
+    var k='c_'+c.dataset.k;
+    c.checked=!!state[k];
+    c.parentElement.classList.toggle('done',c.checked);
+    c.addEventListener('change',function(){state[k]=c.checked;c.parentElement.classList.toggle('done',c.checked);save(state)});
+  });
+  document.querySelectorAll('textarea[data-j]').forEach(function(t){
+    var k='j_'+t.dataset.j;
+    if(state[k]) t.value=state[k];
+    t.addEventListener('input',function(){state[k]=t.value;save(state)});
+  });
+  document.getElementById('dl').addEventListener('click',function(){
+    var out='Aishwarya · Love, Rewired Journal\n\n';
+    document.querySelectorAll('textarea[data-j]').forEach(function(t){
+      var lab=t.previousElementSibling&&t.previousElementSibling.tagName==='LABEL'?t.previousElementSibling.textContent:t.dataset.j;
+      out+=lab+'\n'+(t.value||'')+'\n\n';
+    });
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([out],{type:'text/plain'}));
+    a.download='aishwarya-journal.txt';a.click();
+  });
+})();
+</script>
+</body>
+</html>
