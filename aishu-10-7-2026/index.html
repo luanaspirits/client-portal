@@ -61,11 +61,47 @@ label.q{display:block;margin:16px 0 6px;color:var(--lav)}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:600px){.cols{grid-template-columns:1fr}.card{padding:18px 16px}}
 table{width:100%;border-collapse:collapse;font-size:15px}
-td{padding:9px 6px;border-bottom:1px solid var(--line)}
+td{padding:9px 6px;border-bottom:1px solid var(--line);vertical-align:top}
 td.n{font-family:'DM Mono',monospace;color:var(--gold-soft);width:44px}
+td.v{font-family:'DM Mono',monospace;color:var(--gold-soft);text-align:right;white-space:nowrap}
+tr.total td{border-bottom:0;font-weight:500}
 .step{display:flex;gap:12px;margin:12px 0}
 .step .num{flex:0 0 30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--violet));color:#1a0a20;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px}
 .note{font-size:13px;color:var(--soft)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}
+.flow span{background:rgba(26,10,32,.6);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:14px}
+.flow span.hi{border-color:rgba(201,165,95,.6);color:var(--gold-soft)}
+.flow i{color:var(--gold-soft);font-style:normal}
+.qz{margin:14px 0}
+.qz b{font-weight:500;color:var(--lav)}
+.qz div{font-size:15px;padding-left:4px}
+.prompt{background:rgba(26,10,32,.7);border:1px dashed rgba(201,165,95,.45);border-radius:12px;padding:14px 16px;font-size:14.5px;white-space:pre-wrap;margin:10px 0 4px}
+.goal{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-soft);margin:34px 0 4px}
+.done-when{border-top:1px solid var(--line);margin-top:14px;padding-top:10px}
+.bar{height:10px;background:rgba(26,10,32,.7);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+#fbar{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--violet));transition:width .4s ease}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.tile{display:flex;gap:10px;align-items:flex-start;text-decoration:none;color:var(--text);background:rgba(26,10,32,.55);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.tile b,details.gbox>summary b{font-weight:500}
+.tile.complete{border-color:var(--gold)}
+.tn{flex:0 0 30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--violet));color:#1a0a20;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:14px}
+details.gbox{margin:22px 0}
+details.gbox>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;background:linear-gradient(90deg,rgba(201,165,95,.18),rgba(139,95,168,.18));border:1px solid rgba(201,165,95,.4);border-radius:16px;padding:14px 18px;font-size:17px}
+details.gbox>summary::-webkit-details-marker{display:none}
+details.gbox>summary::after{content:"+";margin-left:auto;color:var(--gold-soft);font-size:24px;line-height:1}
+details.gbox[open]>summary::after{content:"\2212"}
+.choices{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.choices.col{flex-direction:column}
+.choice{display:flex;gap:10px;align-items:center;cursor:pointer;background:rgba(26,10,32,.55);border:1px solid var(--line);border-radius:12px;padding:9px 14px}
+.choice input{accent-color:var(--gold);width:17px;height:17px;flex:0 0 auto}
+.choice.sel{border-color:var(--gold);color:var(--gold-soft)}
+.pricegrid{margin:6px 0 14px 42px}
+@media(max-width:600px){.pricegrid{margin-left:0}}
+.prow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:7px 0}
+.prow b{width:56px;font-family:'DM Mono',monospace;color:var(--gold-soft);font-weight:400}
+.prow button{font-family:'Jost',sans-serif;font-size:13px;background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.prow button.on{border-color:var(--lav);color:var(--text)}
+.prow button.on[data-feel="eq"]{background:linear-gradient(90deg,var(--gold),var(--violet));color:#1a0a20;border-color:transparent;font-weight:500}
 footer{text-align:center;margin-top:40px;color:var(--soft);font-size:13px}
 a{color:var(--gold-soft)}
 </style>
@@ -83,6 +119,7 @@ a{color:var(--gold-soft)}
 <nav id="tabs">
   <button data-tab="overview" class="active">Overview</button>
   <button data-tab="s1">Session 1 · Oct 8</button>
+  <button data-tab="funnel">Your Funnel</button>
   <button data-tab="breakthrough">Your Breakthrough</button>
   <button data-tab="plan">90-Day Plan</button>
   <button data-tab="tools">Practices</button>
@@ -109,7 +146,7 @@ a{color:var(--gold-soft)}
   <div class="grid">
     <div class="mini"><b>Intuitive message</b><br>"Floodgates are open." You're not holding anything back anymore.</div>
     <div class="mini"><b>The word from spirit</b><br>"Impact." You don't yet realize the power your voice has.</div>
-    <div class="mini"><b>Your next step</b><br>Your 2-week plan is in the <b>Session 1</b> tab. Next call: Thursday, October 22.</div>
+    <div class="mini"><b>Your next step</b><br>Your 2-week plan is in the <b>Session 1</b> tab, and your business homework is in <b>Your Funnel</b>. Next call: Thursday, October 22.</div>
   </div>
 </section>
 
@@ -172,7 +209,7 @@ a{color:var(--gold-soft)}
     <label class="check"><input type="checkbox" data-k="s1d"><span>Use the 2-hour pause at least once, with a person or a comment</span></label>
     <label class="check"><input type="checkbox" data-k="s1e"><span>Research Bay Area open mics and pick your 1 or 2 favourites by October 14</span></label>
     <label class="check"><input type="checkbox" data-k="s1f"><span>Publish your nurturing affirmations playlist and promo video, then send it to Luana</span></label>
-    <label class="check"><input type="checkbox" data-k="s1g"><span>Start on the business pieces: your new freebie and email capture</span></label>
+    <label class="check"><input type="checkbox" data-k="s1g"><span>Start on the business pieces: your new freebie and email capture (step by step in the <b>Your Funnel</b> tab)</span></label>
     <label class="check"><input type="checkbox" data-k="s1h"><span>Keep logging ear ringings, downloads and dreams</span></label>
   </div>
 
@@ -195,6 +232,428 @@ a{color:var(--gold-soft)}
     <label class="q">What do I want to bring to our October 22 call?</label>
     <textarea data-j="s1_next"></textarea>
     <p class="note">These save on this device and are included in "Download my journal" in the Journal tab.</p>
+  </div>
+</section>
+
+<!-- FUNNEL -->
+<section id="funnel">
+  <h2>Your first funnel</h2>
+  <p class="note">Your business homework before our October 22 call. Work through the 4 steps in order. Everything you check, choose and write saves on this device, and your answers are included in "Download my journal".</p>
+
+  <div class="card">
+    <span class="pill">Your progress</span>
+    <div class="bar"><div id="fbar"></div></div>
+    <p class="note" id="fcount" style="margin:8px 0 14px">0 done</p>
+    <div class="tiles">
+      <a class="tile" href="#g1" data-open="g1"><span class="tn">1</span><span><b>Name &amp; price your session</b><br><span class="note tc" data-count="g1"></span></span></a>
+      <a class="tile" href="#g2" data-open="g2"><span class="tn">2</span><span><b>Build your bundle</b><br><span class="note tc" data-count="g2"></span></span></a>
+      <a class="tile" href="#g3" data-open="g3"><span class="tn">3</span><span><b>Create your quiz</b><br><span class="note tc" data-count="g3"></span></span></a>
+      <a class="tile" href="#g4" data-open="g4"><span class="tn">4</span><span><b>Sales pages</b><br><span class="note tc" data-count="g4"></span></span></a>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="pill">The big picture</span>
+    <p>This is the path someone takes from watching your video to working with you:</p>
+    <div class="flow">
+      <span>Video</span><i>→</i><span class="hi">Comment CLUE</span><i>→</i><span>Automatic DM</span><i>→</i><span class="hi">Quiz</span><i>→</i><span>Result + email</span><i>→</i><span>Welcome emails</span><i>→</i><span class="hi">The bundle · $47</span><i>→</i><span class="hi">Your 1:1 session</span><i>→</i><span>3-month coaching</span>
+    </div>
+    <div class="grid" style="margin-top:14px">
+      <div class="mini"><b>The quiz</b><br>Opens the door. Free, fast, and it gives them one real win.</div>
+      <div class="mini"><b>The bundle</b><br>Both your guides together. They get to live inside your method.</div>
+      <div class="mini"><b>The 1:1 session</b><br>Starts the real conversation.</div>
+    </div>
+    <p class="note" style="margin-top:12px">Why this order: your session name and price go into the guides, the quiz and the sales pages. So we settle those first, then build everything else around them.</p>
+  </div>
+
+  <!-- STEP 1 -->
+  <details class="gbox" id="g1" open>
+    <summary><span class="tn">1</span><span><b>Name &amp; price your 1:1 session</b><br><span class="note tc" data-count="g1"></span></span></summary>
+
+    <div class="card">
+      <span class="pill">First, check</span>
+      <p>Your session is currently <b class="gold">$222</b>. Is that in:</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="f_cur" value="USD"><span>USD</span></label>
+        <label class="choice"><input type="radio" name="f_cur" value="CAD"><span>CAD</span></label>
+      </div>
+      <p><b>The floor is $100.</b> Don't go below it. Above it, there's no wrong answer. Right now, momentum matters more than the perfect number.</p>
+    </div>
+
+    <div class="card">
+      <span class="pill">What the session is</span>
+      <p>A 60-minute 1:1 where you:</p>
+      <ul>
+        <li>Decode their top daydream or rumination pattern, and where they feel it in their body</li>
+        <li>Meet the part behind it, and give it a new job</li>
+        <li>Send them away with a personal script and a 30-day plan</li>
+      </ul>
+      <p>If they join your 3-month program within 7 days, the session is credited toward it.</p>
+      <h3>Pick a name</h3>
+      <p class="note">Say each one out loud. Notice which one makes your body say yes.</p>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="f_sname" value="The Escape Room Session"><span>The Escape Room Session</span></label>
+        <label class="choice"><input type="radio" name="f_sname" value="The Clue Session"><span>The Clue Session</span></label>
+        <label class="choice"><input type="radio" name="f_sname" value="The Loop Breaker Session"><span>The Loop Breaker Session</span></label>
+        <label class="choice"><input type="radio" name="f_sname" value="The Come Home Session"><span>The Come Home Session</span></label>
+        <label class="choice"><input type="radio" name="f_sname" value="My own idea"><span>My own idea (write it below)</span></label>
+      </div>
+      <label class="q">My session name:</label>
+      <textarea data-j="f3_name" style="min-height:60px"></textarea>
+    </div>
+
+    <div class="card">
+      <span class="pill">The energetic price check</span>
+      <p>This is not about what's technically right or wrong. It's about what feels <b>equal</b>.</p>
+      <div class="step"><div class="num">1</div><div>Sit somewhere quiet. Hand on your heart. Three slow breaths. (The 4-7-8 breath from your rumination guide works beautifully here.)</div></div>
+      <div class="step"><div class="num">2</div><div>Imagine giving a full session to your ideal client. Your attention, your insight, your care. Feel that energy leaving your body for the whole hour, plus the prep and the follow-up.</div></div>
+      <div class="step"><div class="num">3</div><div>Now imagine the money coming back to you. Start at $100. Notice what your body does. Use your own body map: where do you feel it?</div></div>
+      <div class="step"><div class="num">4</div><div>Move up slowly through each price below. Tap how each one feels.</div></div>
+      <div class="pricegrid">
+        <div class="prow" data-price="100"><b>$100</b><button data-feel="low">Too little</button><button data-feel="eq">Equal</button><button data-feel="high">Too much</button></div>
+        <div class="prow" data-price="150"><b>$150</b><button data-feel="low">Too little</button><button data-feel="eq">Equal</button><button data-feel="high">Too much</button></div>
+        <div class="prow" data-price="222"><b>$222</b><button data-feel="low">Too little</button><button data-feel="eq">Equal</button><button data-feel="high">Too much</button></div>
+        <div class="prow" data-price="277"><b>$277</b><button data-feel="low">Too little</button><button data-feel="eq">Equal</button><button data-feel="high">Too much</button></div>
+        <div class="prow" data-price="333"><b>$333</b><button data-feel="low">Too little</button><button data-feel="eq">Equal</button><button data-feel="high">Too much</button></div>
+        <div class="prow" data-price="444"><b>$444</b><button data-feel="low">Too little</button><button data-feel="eq">Equal</button><button data-feel="high">Too much</button></div>
+      </div>
+      <div class="step"><div class="num">5</div><div>Find the number where it feels <b>completely even.</b> Not grabby. Not giving yourself away. An equal exchange.</div></div>
+      <div class="step"><div class="num">6</div><div>Notice who speaks up. If a part says "who are you to charge that?" or "what if someone gets upset?", that's the same part we're already working with. <b>Letting someone be upset about your price isn't wrong.</b> A price is a boundary.</div></div>
+      <div class="step"><div class="num">7</div><div>Write the number down. If it still feels clear tomorrow, that's your price.</div></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Journal · Step 1</span>
+      <label class="q">What number felt equal? What did my body do at that number?</label>
+      <textarea data-j="f3_number"></textarea>
+      <label class="q">Which number did my mind want to pick so nobody could be upset?</label>
+      <textarea data-j="f3_mind"></textarea>
+      <label class="q">If someone told me "that's too expensive," what would my grounded self say back?</label>
+      <textarea data-j="f3_expensive"></textarea>
+      <label class="q">What do I want to receive from each session, beyond the money?</label>
+      <textarea data-j="f3_receive"></textarea>
+      <div class="done-when">
+        <p class="note">Done when:</p>
+        <label class="check"><input type="checkbox" data-k="f3a"><span>Currency confirmed (USD or CAD)</span></label>
+        <label class="check"><input type="checkbox" data-k="f3b"><span>Session named</span></label>
+        <label class="check"><input type="checkbox" data-k="f3c"><span>Price chosen, $100 or more</span></label>
+        <label class="check"><input type="checkbox" data-k="f3d"><span>Session bookable on Stan</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- STEP 2 -->
+  <details class="gbox" id="g2">
+    <summary><span class="tn">2</span><span><b>Build your bundle · $47</b><br><span class="note tc" data-count="g2"></span></span></summary>
+
+    <div class="card">
+      <span class="pill">Your two guides are one method</span>
+      <p>Your rumination guide finds <b>where</b> the feeling lives in your body. Your daydream guide finds <b>what</b> it's craving. Put together, they're one signature flow:</p>
+      <div class="step"><div class="num">1</div><div><b>Catch it, gently.</b> "That's okay, I'm ruminating." Or: "Oh hey Carl."</div></div>
+      <div class="step"><div class="num">2</div><div><b>Breathe.</b> 4-7-8 when anxious, box breathing to recenter.</div></div>
+      <div class="step"><div class="num">3</div><div><b>Feel it.</b> Find the sensation and place it on the body map.</div></div>
+      <div class="step"><div class="num">4</div><div><b>Find the clue.</b> What is the loop or daydream craving? Use the quick-match table.</div></div>
+      <div class="step"><div class="num">5</div><div><b>Give it.</b> Talk to your inner child with the script for that feeling.</div></div>
+      <p class="note">This flow is what your bundle sells, and what your bundle name should capture.</p>
+    </div>
+
+    <div class="card">
+      <span class="pill">What's inside</span>
+      <table>
+        <tr><td><b>Escaping the Daydream</b> · 34 pages<br><span class="note">The Escape Room Method, the 10 daydream themes and their scripts, and the meditation habit</span></td><td class="v">$37</td></tr>
+        <tr><td><b>How to Break Rumination and Focus Again</b><br><span class="note">The 4 steps (catch, find, map, talk), the body map, breathwork and the worked example. Currently $11 on its own, it moves into the bundle</span></td><td class="v">$27</td></tr>
+        <tr><td><b>Meditation 1: "Hi Carl"</b> · 5 to 10 min<br><span class="note">The 5-step flow above, guided in your voice, for the moment it happens</span></td><td class="v">$27</td></tr>
+        <tr><td><b>Meditation 2: "Pour It Back In"</b> · 10 to 15 min<br><span class="note">Daily. Give your inner child what you've been craving</span></td><td class="v">$27</td></tr>
+        <tr><td><b>Interactive companion</b><br><span class="note">Both guides made clickable, with a body map, breathing timer and 30-day tracker</span></td><td class="v">$47</td></tr>
+        <tr><td><b>Total value</b></td><td class="v">$165</td></tr>
+        <tr class="total"><td><b class="gold">Your price</b></td><td class="v">$47</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <span class="pill">Pick a bundle name</span>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="f_bname" value="Come Back to Yourself"><span>Come Back to Yourself</span></label>
+        <label class="choice"><input type="radio" name="f_bname" value="Reclaim Your Mind"><span>Reclaim Your Mind</span></label>
+        <label class="choice"><input type="radio" name="f_bname" value="The Loop Breaker Kit"><span>The Loop Breaker Kit</span></label>
+        <label class="choice"><input type="radio" name="f_bname" value="Out of Your Head, Into Your Life"><span>Out of Your Head, Into Your Life</span></label>
+        <label class="choice"><input type="radio" name="f_bname" value="The Escape Room Collection"><span>The Escape Room Collection</span></label>
+        <label class="choice"><input type="radio" name="f_bname" value="My own idea"><span>My own idea (write it below)</span></label>
+      </div>
+      <label class="q">My bundle name:</label>
+      <textarea data-j="f2_name" style="min-height:60px"></textarea>
+    </div>
+
+    <div class="card">
+      <span class="pill">Record your two meditations</span>
+      <p class="note">Your voice is your superpower. People say watching you feels like FaceTime with a friend. These are where they get that.</p>
+      <div class="cols">
+        <div class="mini"><b>"Hi Carl" · in the moment</b>
+          <ol style="padding-left:18px;margin:8px 0 0">
+            <li>"That's okay. We drifted. Hi Carl."</li>
+            <li>One round of 4-7-8 breathing</li>
+            <li>"Where do I feel it in my body?" Hand on that spot</li>
+            <li>"What was I craving just now?"</li>
+            <li>Speak to her, like she's a child</li>
+            <li>"What's one small thing I can do in the next five minutes?"</li>
+          </ol></div>
+        <div class="mini"><b>"Pour It Back In" · daily</b>
+          <ol style="padding-left:18px;margin:8px 0 0">
+            <li>Settle in, breath as the anchor</li>
+            <li>Meet your younger self in a safe place</li>
+            <li>Ask her what she's been waiting for someone else to give her</li>
+            <li>Give it to her, in your own words</li>
+            <li>Hold her. Let her rest.</li>
+            <li>Come back to the room, and to today</li>
+          </ol></div>
+      </div>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="f2m1"><span>"Hi Carl" recorded</span></label>
+        <label class="check"><input type="checkbox" data-k="f2m2"><span>"Pour It Back In" recorded</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Make it interactive</span>
+      <p>People open a PDF and close it. Something they can click through gets used, and it looks amazing in a video. People see it and think "what is that? I want that."</p>
+      <div class="step"><div class="num">1</div><div><b>Open Luana's Trigger Recovery Roadmap.</b> Click through it like a client would. Write down what made you want to keep going.</div></div>
+      <div class="step"><div class="num">2</div><div><b>Upload both guides to Claude</b> and paste the prompt below.</div></div>
+      <div class="step"><div class="num">3</div><div><b>Keep the PDFs too.</b> Some people like to read. The companion is the upgrade, not a replacement.</div></div>
+      <div class="prompt" id="p_companion">Turn these two guides, Escaping the Daydream and How to Break Rumination and Focus Again, into one interactive companion called [bundle name]. Walk someone through one flow:
+1. Catch it gently ("That's okay, I'm ruminating" or "Hi Carl")
+2. A breathing timer with 4-7-8 and box breathing
+3. A tappable body map: they pick where they feel it and see the emotions from my guide
+4. A "find your clue" tool: they pick what the loop or daydream is about and get the craving
+5. The matching inner child script, to read out loud
+
+Also include: a log of each time they catch a loop, showing their most common body spot and craving after 7 days; a 30-day check-in tracker (my guide says "try it for 30 days"); a meditation tracker (5 min for weeks 1 to 2, 10 min for weeks 3 to 4, 10 to 15 min after); and journal prompts they can type into.
+
+Keep my voice, my scripts and my colors: teal, warm orange, coral, navy and cream. On the pattern screen and at the end, invite them to book [session name], or to email me.</div>
+      <button class="btn ghost copy" data-copy="p_companion">Copy prompt</button>
+      <label class="q">What made me want to keep going in the Trigger Recovery Roadmap?</label>
+      <textarea data-j="f2_roadmap"></textarea>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="f2r"><span>Clicked through the Trigger Recovery Roadmap</span></label>
+        <label class="check"><input type="checkbox" data-k="f2c"><span>Companion drafted with Claude</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Update the endings of both guides</span>
+      <p>Right now, <i>Escaping the Daydream</i> ends with a soft "Want more support?" and the rumination guide ends with only your socials, with no offer at all. Make it so easy to contact you that it feels silly not to. Fill in the blanks after Step 1.</p>
+
+      <h3>Escaping the Daydream · replace page 34</h3>
+      <div class="prompt" id="p_cta_d">Your daydreams have been leaving you clues.
+
+If you've been using this guide, you've probably noticed the same theme showing up again and again. That repeat isn't random. It's pointing at the one need your younger self is still waiting for.
+
+In a [session name], we find it together.
+
+In 60 minutes, 1:1 with me, we'll:
+• Decode your top theme and where it started
+• Meet the part of you that keeps going back, and give it a new job
+• Leave with your own script and a 30-day plan
+
+[price] · Book at stan.store/healwithaishu
+
+Not sure yet? Email me at [email] and tell me which theme keeps showing up for you. I read every message, and I'll tell you honestly whether a session is right for you.
+
+If you decide to keep going with me in my 3-month program, your session is credited toward it.</div>
+      <button class="btn ghost copy" data-copy="p_cta_d">Copy text</button>
+      <p class="note">Plus one line after the Quick-match table (page 11): <i>"Recognized yourself in more than one row? That's exactly what we untangle in a [session name]. (See the last page.)"</i></p>
+
+      <h3>How to Break Rumination · replace the last page</h3>
+      <div class="prompt" id="p_cta_r">Your body has been trying to tell you something.
+
+If you've been practicing these 4 steps, you've probably noticed the same sensation, in the same place, coming back again and again. That's not a coincidence. It's the part of you that's still waiting to be heard.
+
+In a [session name], we listen to her together.
+
+In 60 minutes, 1:1 with me, we'll:
+• Find where your loop lives in your body, and what it's really about
+• Meet the part of you that keeps going back, and give it what it needs
+• Leave with your own script and a 30-day plan
+
+[price] · Book at stan.store/healwithaishu
+
+Not sure yet? Email me at [email] and tell me what you keep ruminating about. I read every message, and I'll tell you honestly whether a session is right for you.
+
+If you decide to keep going with me in my 3-month program, your session is credited toward it.
+
+You can also find me @healwithaishu on Instagram, TikTok and YouTube.</div>
+      <button class="btn ghost copy" data-copy="p_cta_r">Copy text</button>
+      <p class="note">Plus one line on the "So in summary" page: <i>"Doing the steps, but the same feeling keeps coming back? That's exactly what we work through in a [session name]. (See the last page.)"</i></p>
+
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="f2e1"><span>Escaping the Daydream: new last page + the line on page 11</span></label>
+        <label class="check"><input type="checkbox" data-k="f2e2"><span>Rumination guide: new last page + the line on the summary page</span></label>
+        <label class="check"><input type="checkbox" data-k="f2e3"><span>Small typo fix on the rumination intro: "think your way <b>our</b> of" → "think your way <b>out</b> of"</span></label>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="pill">Journal · Step 2</span>
+      <label class="q">What will someone be able to do after 7 days with this bundle that they couldn't do before?</label>
+      <textarea data-j="f2_7days"></textarea>
+      <label class="q">Which bundle name lit me up, and which one just felt "safe"?</label>
+      <textarea data-j="f2_safe"></textarea>
+      <label class="q">Where am I tempted to add more instead of putting it out?</label>
+      <textarea data-j="f2_more"></textarea>
+      <div class="done-when">
+        <p class="note">Done when:</p>
+        <label class="check"><input type="checkbox" data-k="f2a"><span>Bundle named</span></label>
+        <label class="check"><input type="checkbox" data-k="f2e"><span>Bundle live on Stan at $47 (and the $11 rumination listing removed or folded in)</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- STEP 3 -->
+  <details class="gbox" id="g3">
+    <summary><span class="tn">3</span><span><b>Create your quiz (the freebie)</b><br><span class="note tc" data-count="g3"></span></span></summary>
+
+    <div class="card">
+      <span class="pill">Quiz</span>
+      <h3 style="margin-top:0">"Why Can't You Stop Thinking About Them?"</h3>
+      <p>A short quiz. The result tells them what their mind is craving and where they feel it in their body, gives them one script and a 60-second practice, and points them to the bundle.</p>
+      <ul>
+        <li>It answers the most searched question in your niche</li>
+        <li>It's a taste of <b>both</b> guides: the clue from the daydream guide, the body map from the rumination guide</li>
+        <li>The result <b>is</b> the clue, so the bundle is the obvious next step</li>
+        <li>You can point to it at the end of every video about obsessing over someone</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <span class="pill">Change this before you post your video</span>
+      <p>Your caption currently says "Comment READY for the full guide." The full guide is now paid. Change it to:</p>
+      <p class="quote">"Comment CLUE and I'll send you the quiz: why you can't stop thinking about them."</p>
+      <label class="check"><input type="checkbox" data-k="f1a"><span>Caption changed to the CLUE keyword</span></label>
+    </div>
+
+    <div class="card">
+      <span class="pill">The 5 results</span>
+      <p class="note">Your 10 daydream themes, grouped into 5 so the quiz stays simple.</p>
+      <table>
+        <tr><td class="n">A</td><td><b class="gold">To Be Chosen</b><br><span class="note">To be loved, to be chosen</span></td></tr>
+        <tr><td class="n">B</td><td><b class="gold">To Feel Safe</b><br><span class="note">To feel safe, to have power and control</span></td></tr>
+        <tr><td class="n">C</td><td><b class="gold">To Be Seen</b><br><span class="note">To be seen and understood, to belong</span></td></tr>
+        <tr><td class="n">D</td><td><b class="gold">To Be Enough</b><br><span class="note">To be valued and respected, to feel competent and capable</span></td></tr>
+        <tr><td class="n">E</td><td><b class="gold">To Find Peace</b><br><span class="note">To heal the past, to experience freedom and peace</span></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <span class="pill">The questions · draft</span>
+      <p class="note">Questions 1 to 6 are scored: each answer letter matches a result above. Most answers wins. If there's a tie, use question 6. Question 7 isn't scored. It adds the body map piece from your rumination guide.</p>
+      <div class="qz"><b>1. When you drift into thinking about them, what's usually happening?</b>
+        <div>A. They tell you they love you, or choose you over everyone<br>B. They protect you, or take care of everything<br>C. They finally understand what you went through<br>D. They're impressed by you, or proud of you<br>E. They apologize, or admit they were wrong</div></div>
+      <div class="qz"><b>2. Right before the thought starts, you're usually feeling…</b>
+        <div>A. Lonely or left out<br>B. Anxious or unsettled<br>C. Misunderstood or invisible<br>D. Not good enough<br>E. Stuck on something that happened</div></div>
+      <div class="qz"><b>3. In the daydream, what do they say to you?</b>
+        <div>A. "It was always you."<br>B. "I've got you. You're safe now."<br>C. "I get it now. I see you."<br>D. "I underestimated you."<br>E. "I'm so sorry. I was wrong."</div></div>
+      <div class="qz"><b>4. When the daydream ends, you feel…</b>
+        <div>A. Empty, like you want more<br>B. Tense, waiting for something to go wrong<br>C. Heavy and sad<br>D. Motivated, then deflated<br>E. Frustrated, replaying it again</div></div>
+      <div class="qz"><b>5. What do you secretly wish people knew about you?</b>
+        <div>A. How much love I have to give<br>B. How hard it's been to hold everything together<br>C. Who I really am underneath<br>D. What I'm actually capable of<br>E. How much they hurt me</div></div>
+      <div class="qz"><b>6. If one thing changed tomorrow, you'd want to…</b>
+        <div>A. Feel wanted<br>B. Feel secure<br>C. Feel understood<br>D. Feel proud of myself<br>E. Feel at peace with the past</div></div>
+      <div class="qz"><b>7. When you can't stop thinking about them, where do you feel it most?</b> <span class="note">(not scored)</span>
+        <div>My head: racing thoughts → <i>overwhelm script</i><br>My throat: a lump → <i>sadness script</i><br>My chest: tight or aching → <i>anxiety script</i><br>My stomach: sinking or knotted → <i>shame or fear script</i><br>My lower belly: longing → <i>"wanting to feel chosen" script</i></div></div>
+    </div>
+
+    <div class="card">
+      <span class="pill">What each result page includes</span>
+      <div class="step"><div class="num">1</div><div><b>The result:</b> "Your mind is craving: To Be Chosen"</div></div>
+      <div class="step"><div class="num">2</div><div><b>Why your brain keeps going back</b>, in 2 or 3 lines</div></div>
+      <div class="step"><div class="num">3</div><div><b>Where you feel it:</b> their body spot from question 7, with the matching script from your rumination guide</div></div>
+      <div class="step"><div class="num">4</div><div><b>A 60-second practice:</b> catch it → hand on that spot → say the script</div></div>
+      <div class="step"><div class="num">5</div><div><b>The next step:</b> "This is 1 of 10 clues and 1 of 7 body spots. The full method is in [bundle name]."</div></div>
+      <h3>Email capture</h3>
+      <p>Show a short result on screen. Send the full result, the scripts and the meditation by email. That's how they join your list.</p>
+      <h3>Optional: a freebie meditation</h3>
+      <p>A 3-minute version of "Hi Carl," sent with the result email. This is where they first hear your voice.</p>
+    </div>
+
+    <div class="card">
+      <span class="pill">How to build it</span>
+      <p>Upload <b>both</b> guides to Claude and paste this:</p>
+      <div class="prompt" id="p_quiz">Using my two guides, Escaping the Daydream and How to Break Rumination and Focus Again, build an interactive quiz called "Why Can't You Stop Thinking About Them?"
+
+Use these 6 scored questions and 5 results: [paste the questions and results from my dashboard]. Add a 7th question, "Where do you feel it most?", that isn't scored but adds the matching body map line and inner child script from my rumination guide to their result.
+
+Each result shows the craving, why the brain keeps going back, where they feel it with its script, a 60-second practice, and a button to [bundle link]. Before showing the full result, ask for their email. Make it warm, gentle and playful, like my guides. Use my colors: teal, warm orange, coral, navy and cream.</div>
+      <button class="btn ghost copy" data-copy="p_quiz">Copy prompt</button>
+    </div>
+
+    <div class="card">
+      <span class="pill">Journal · Step 3</span>
+      <label class="q">Look at my top 5 videos. What are people asking in the comments, in their exact words?</label>
+      <textarea data-j="f1_comments"></textarea>
+      <label class="q">Which result do I think most of my audience will get? Why?</label>
+      <textarea data-j="f1_result"></textarea>
+      <label class="q">What's the ONE feeling I want someone to have 5 minutes after taking this quiz?</label>
+      <textarea data-j="f1_feeling"></textarea>
+      <label class="q">Am I tempted to make this longer or more perfect? What am I afraid will happen if it's simple?</label>
+      <textarea data-j="f1_simple"></textarea>
+      <div class="done-when">
+        <p class="note">Done when:</p>
+        <label class="check"><input type="checkbox" data-k="f1b"><span>Quiz built with Claude</span></label>
+        <label class="check"><input type="checkbox" data-k="f1e"><span>Email capture connected</span></label>
+        <label class="check"><input type="checkbox" data-k="f1c"><span>Commenting CLUE sends the DM automatically</span></label>
+        <label class="check"><input type="checkbox" data-k="f1d"><span>3 friends have tested it</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- STEP 4 -->
+  <details class="gbox" id="g4">
+    <summary><span class="tn">4</span><span><b>Create or refresh your sales pages</b><br><span class="note tc" data-count="g4"></span></span></summary>
+
+    <div class="card">
+      <span class="pill">Two pages: the bundle and the session</span>
+      <h3 style="margin-top:4px">What every sales page needs</h3>
+      <ul>
+        <li>A headline in your followers' words, straight from your comments</li>
+        <li>The problem: losing hours of your day, can't stop thinking about them</li>
+        <li>What's inside, and what each piece does</li>
+        <li>What they'll be able to do in the first 7 days</li>
+        <li>The value stack and the price</li>
+        <li>Who it's for, and who it's not for</li>
+        <li>Your story: why you made this</li>
+        <li>A few FAQs</li>
+        <li>One clear button, plus an easy way to contact you</li>
+      </ul>
+      <h3>Prompt for Claude</h3>
+      <p>Upload both guides, paste your current Stan page, and paste this:</p>
+      <div class="prompt" id="p_sales">Here's my current Stan sales page for [product] and the guides it's based on. Rewrite it to sell more while sounding exactly like me: warm, honest, a little playful. Use these real comments from my followers as headline ideas: [paste 5]. Include what's inside, the value stack, who it's for and not for, my story, FAQs, and one clear call to action. Make it easy to contact me with questions. Then give me 3 headline options to choose from.</div>
+      <button class="btn ghost copy" data-copy="p_sales">Copy prompt</button>
+    </div>
+
+    <div class="card">
+      <span class="pill">Journal · Step 4</span>
+      <label class="q">Copy 5 comments from my videos, word for word. These are my headline ideas.</label>
+      <textarea data-j="f4_comments"></textarea>
+      <label class="q">When did I personally lose hours to daydreaming or rumination? What changed?</label>
+      <textarea data-j="f4_story"></textarea>
+      <label class="q">What's one result someone could feel in their first week?</label>
+      <textarea data-j="f4_week"></textarea>
+      <div class="done-when">
+        <p class="note">Done when:</p>
+        <label class="check"><input type="checkbox" data-k="f4a"><span>Bundle sales page live</span></label>
+        <label class="check"><input type="checkbox" data-k="f4b"><span>Session sales page live</span></label>
+        <label class="check"><input type="checkbox" data-k="f4c"><span>Both linked from the quiz results and the end of both guides</span></label>
+      </div>
+    </div>
+  </details>
+
+  <div class="card">
+    <span class="pill">Bring to our call · October 22</span>
+    <label class="check"><input type="checkbox" data-k="fb1"><span>Your session name and price</span></label>
+    <label class="check"><input type="checkbox" data-k="fb2"><span>Your bundle name</span></label>
+    <label class="check"><input type="checkbox" data-k="fb3"><span>A draft of the quiz, even a rough one</span></label>
+    <label class="check"><input type="checkbox" data-k="fb4"><span>One sales page draft</span></label>
+    <label class="check"><input type="checkbox" data-k="fb5"><span>Your journal answers for Step 1</span></label>
+    <p class="quote" style="margin-top:14px">Done is better than perfect. Bring whatever you have, and we'll shape it together.</p>
   </div>
 </section>
 
@@ -257,6 +716,7 @@ a{color:var(--gold-soft)}
       <h3 style="margin-top:4px">Sign up and start writing</h3>
       <label class="check"><input type="checkbox" data-k="m1a"><span>Sign up for at least 1 open mic (by Oct 31)</span></label>
       <label class="check"><input type="checkbox" data-k="m1b"><span>Start writing your set: not comedy exactly, more storytelling and teaching. Share your wisdom and experiences so people feel seen, the way Hasan Minhaj's stories grew into Homecoming King</span></label>
+      <label class="check"><input type="checkbox" data-k="m1c"><span>Your funnel is live: quiz, bundle and 1:1 session (see the <b>Your Funnel</b> tab)</span></label>
       <p class="note">Our calls this month: 40 to 45 minutes of parts work on love and soul purpose, then your micro goals for the next two weeks. Plus your 20-minute reading on whatever is coming up.</p>
     </div>
 
@@ -423,12 +883,74 @@ a{color:var(--gold-soft)}
     if(state[k]) t.value=state[k];
     t.addEventListener('input',function(){state[k]=t.value;save(state)});
   });
+  document.querySelectorAll('.copy').forEach(function(b){
+    var label=b.textContent;
+    b.addEventListener('click',function(){
+      var el=document.getElementById(b.dataset.copy);
+      if(!el) return;
+      var text=el.innerText;
+      function ok(){b.textContent='Copied';setTimeout(function(){b.textContent=label},1500)}
+      try{
+        navigator.clipboard.writeText(text).then(ok,function(){fallback()});
+      }catch(e){fallback()}
+      function fallback(){
+        try{var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);ok()}catch(e){}
+      }
+    });
+  });
+  var fun=document.getElementById('funnel');
+  function syncChoice(name){fun.querySelectorAll('input[name="'+name+'"]').forEach(function(r){r.parentElement.classList.toggle('sel',r.checked)})}
+  fun.querySelectorAll('input[type=radio]').forEach(function(r){
+    var k='r_'+r.name;
+    if(state[k]===r.value) r.checked=true;
+    r.addEventListener('change',function(){state[k]=r.value;save(state);syncChoice(r.name)});
+  });
+  ['f_cur','f_sname','f_bname'].forEach(syncChoice);
+  fun.querySelectorAll('.prow').forEach(function(row){
+    var k='p_'+row.dataset.price;
+    function paint(){row.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',state[k]===b.dataset.feel)})}
+    paint();
+    row.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){state[k]=(state[k]===b.dataset.feel)?null:b.dataset.feel;save(state);paint()});
+    });
+  });
+  function progress(){
+    var all=fun.querySelectorAll('input[data-k]'),d=0;
+    all.forEach(function(c){if(c.checked)d++});
+    var pct=all.length?Math.round(d/all.length*100):0;
+    document.getElementById('fbar').style.width=pct+'%';
+    document.getElementById('fcount').textContent=d+' of '+all.length+' done ('+pct+'%)';
+    ['g1','g2','g3','g4'].forEach(function(g){
+      var box=document.getElementById(g),cs=box.querySelectorAll('input[data-k]'),n=0;
+      cs.forEach(function(c){if(c.checked)n++});
+      var txt=(n===cs.length&&cs.length)?'All done \u2713':n+' of '+cs.length+' done';
+      fun.querySelectorAll('[data-count="'+g+'"]').forEach(function(el){el.textContent=txt});
+      var tile=fun.querySelector('.tile[data-open="'+g+'"]');
+      if(tile) tile.classList.toggle('complete',n===cs.length&&cs.length>0);
+    });
+  }
+  fun.querySelectorAll('input[data-k]').forEach(function(c){c.addEventListener('change',progress)});
+  progress();
+  fun.querySelectorAll('.tile').forEach(function(t){
+    t.addEventListener('click',function(e){
+      e.preventDefault();
+      var box=document.getElementById(t.dataset.open);
+      box.open=true;
+      box.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
   document.getElementById('dl').addEventListener('click',function(){
     var out='Aishwarya · Love, Rewired Journal\n\n';
     document.querySelectorAll('textarea[data-j]').forEach(function(t){
       var lab=t.previousElementSibling&&t.previousElementSibling.tagName==='LABEL'?t.previousElementSibling.textContent:t.dataset.j;
       out+=lab+'\n'+(t.value||'')+'\n\n';
     });
+    out+='--- Your funnel choices ---\n';
+    out+='Session price currency: '+(state.r_f_cur||'')+'\n';
+    out+='Session name pick: '+(state.r_f_sname||'')+'\n';
+    out+='Bundle name pick: '+(state.r_f_bname||'')+'\n';
+    var feel={low:'Too little',eq:'Equal',high:'Too much'};
+    ['100','150','222','277','333','444'].forEach(function(p){if(state['p_'+p]) out+='$'+p+': '+feel[state['p_'+p]]+'\n'});
     var a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([out],{type:'text/plain'}));
     a.download='aishwarya-journal.txt';a.click();
