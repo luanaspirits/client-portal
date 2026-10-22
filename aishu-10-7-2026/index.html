@@ -102,6 +102,8 @@ details.gbox[open]>summary::after{content:"\2212"}
 .prow button{font-family:'Jost',sans-serif;font-size:13px;background:transparent;color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
 .prow button.on{border-color:var(--lav);color:var(--text)}
 .prow button.on[data-feel="eq"]{background:linear-gradient(90deg,var(--gold),var(--violet));color:#1a0a20;border-color:transparent;font-weight:500}
+#skbar{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--violet));transition:width .4s ease}
+.prompt .blank{color:var(--gold-soft);font-style:italic}
 footer{text-align:center;margin-top:40px;color:var(--soft);font-size:13px}
 a{color:var(--gold-soft)}
 </style>
@@ -119,6 +121,8 @@ a{color:var(--gold-soft)}
 <nav id="tabs">
   <button data-tab="overview" class="active">Overview</button>
   <button data-tab="s1">Session 1 · Oct 8</button>
+  <button data-tab="s2">Session 2 · Oct 22</button>
+  <button data-tab="skool">Skool Checklist</button>
   <button data-tab="funnel">Your Funnel</button>
   <button data-tab="breakthrough">Your Breakthrough</button>
   <button data-tab="plan">90-Day Plan</button>
@@ -146,7 +150,7 @@ a{color:var(--gold-soft)}
   <div class="grid">
     <div class="mini"><b>Intuitive message</b><br>"Floodgates are open." You're not holding anything back anymore.</div>
     <div class="mini"><b>The word from spirit</b><br>"Impact." You don't yet realize the power your voice has.</div>
-    <div class="mini"><b>Your next step</b><br>Your 2-week plan is in the <b>Session 1</b> tab, and your business homework is in <b>Your Funnel</b>. Next call: Thursday, October 22.</div>
+    <div class="mini"><b>Your next step</b><br>Your 2-week plan is in the <b>Session 2</b> tab, and opening your community is in <b>Skool Checklist</b>. Next call: Thursday, November 5.</div>
   </div>
 </section>
 
@@ -235,10 +239,343 @@ a{color:var(--gold-soft)}
   </div>
 </section>
 
+<!-- SESSION 2 -->
+<section id="s2">
+  <h2>Session 2 · October 22</h2>
+  <p class="note">Inner union, DM sales, and opening your community. Next call Thursday, November 5 at 9:00 AM Pacific.</p>
+  <a class="btn" href="https://fathom.video/share/vWsyQnu8vjE3m56obN65UBmtsAVgLZm1" target="_blank" rel="noopener">Watch the replay</a>
+
+  <div class="card">
+    <span class="pill">What you did these two weeks</span>
+    <ul>
+      <li><b>You stopped hiding.</b> You unblocked him on Instagram: "See everything you want to see."</li>
+      <li><b>You spoke your vision out loud,</b> to your most powerful mirror. Cringe and all, that's step one of manifesting.</li>
+      <li><b>You chose your peace</b> with your family, felt all of it, and were proud of yourself after.</li>
+      <li><b>You talked to yourself with love</b> when you felt embarrassed. "You were brave, you were vulnerable, you did great."</li>
+    </ul>
+    <p class="quote">"You're not afraid, but you're also still afraid." Both can be true. You walked forward anyway.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">What inner union actually is</span>
+    <p>It isn't floating on a rainbow and never being triggered again. Crying on the floor for 20 minutes doesn't mean you're failing. Messy is part of it.</p>
+    <div class="cols">
+      <div class="mini"><b>1 · A daily choice</b><br>Union is an energy you choose every day, not a finish line. The moment it clicks and you choose self-love and awareness, that's union energy.</div>
+      <div class="mini"><b>2 · Parts that cooperate</b><br>You understand your protectors and inner children well enough that they mostly work together. Not perfect. Aware and cooperating.</div>
+    </div>
+    <p style="margin-top:12px">Deep love for yourself, plus the awareness that we all come from the same source, plus boundaries. Saying no is often the most loving thing you can do. Maybe we just call it <b>alignment</b>.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">So many paths. Pick one.</span>
+    <p>Stand-up, coaching, content, the app. They're all real. But clarity comes from feedback, and feedback comes from doing <b>one</b> thing until you get a tangible result. Then look back: what did I love? What didn't I? What new ideas came?</p>
+    <p class="quote">Your business already exists. Your job is to discover it. Put people in front of you who need your help, and help them as best you can.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">Selling in the DMs · your new process</span>
+    <p>You're not trying to get someone to buy. You're finding out if they're the right person for you to work with. That's a different energy.</p>
+    <div class="step"><div class="num">1</div><div><b>Always end with a question.</b> A link with no question closes the door. A question opens a conversation.</div></div>
+    <div class="step"><div class="num">2</div><div><b>Qualify early.</b> Ask one big question before you pour more energy in: <i>"How long has this been going on, and what have you tried so far?"</i> Seven months and three programs is high commitment. "I just kind of thought about it" is not.</div></div>
+    <div class="step"><div class="num">3</div><div><b>Be kind, not free coaching.</b> Validate, share a free resource, and save the real coaching for when they book. That's a loving boundary, for you and for them.</div></div>
+    <div class="step"><div class="num">4</div><div><b>Give one path.</b> They're already overwhelmed. Don't hand them options. Say: <i>"Based on everything you told me, here's what I'd recommend."</i></div></div>
+    <div class="step"><div class="num">5</div><div><b>Automate freebies, not 1:1s.</b> ManyChat is perfect for sending the quiz or your community link. Anyone asking about 1:1 gets a real conversation with you.</div></div>
+
+    <h3>When someone asks "Do you offer 1:1 sessions?"</h3>
+    <div class="prompt" id="s2_dm1">Yes, I absolutely do! Would you feel comfortable telling me a little about what's going on for you right now? That way I can recommend what would actually help you most.</div>
+    <button class="btn ghost copy" data-copy="s2_dm1">Copy</button>
+
+    <h3>Qualifying questions to pick from</h3>
+    <ul>
+      <li>What's been happening that made you reach out?</li>
+      <li>How long has this been going on?</li>
+      <li>What have you already tried?</li>
+      <li>Have you ever worked with a coach or therapist, or invested in support like this before?</li>
+      <li>If this was solved, what would be different in your life?</li>
+    </ul>
+
+    <h3>Once you know their story</h3>
+    <div class="prompt" id="s2_dm2">Thank you for sharing all of that with me. Based on what you told me about [their situation], I'd recommend we start with a [session name]. In that hour we'll [what you'll do for them], make a plan, and see if it feels good to keep working together. Would you like the link?</div>
+    <button class="btn ghost copy" data-copy="s2_dm2">Copy</button>
+
+    <h3>Following up with people you've already helped</h3>
+    <p>Only the ones who felt receptive and ready to do the work:</p>
+    <div class="prompt" id="s2_dm3">Hi [name], I was thinking about you! How has [what they told you about] been going lately? Have you tried anything new since we talked?</div>
+    <button class="btn ghost copy" data-copy="s2_dm3">Copy</button>
+    <p class="note">All the DMs where you gave too much weren't wasted. That's your market research and your next 50 content ideas.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">Your 2-week checklist · until Nov 5</span>
+    <label class="check"><input type="checkbox" data-k="s2a"><span>Open Reclaim Your Mind on Skool's Hobby plan (step by step in the <b>Skool Checklist</b> tab)</span></label>
+    <label class="check"><input type="checkbox" data-k="s2b"><span>Upload your freebies and guides to the classroom</span></label>
+    <label class="check"><input type="checkbox" data-k="s2c"><span>Write your community's name and intention (mission statement)</span></label>
+    <label class="check"><input type="checkbox" data-k="s2d"><span>Send Luana your invite link</span></label>
+    <label class="check"><input type="checkbox" data-k="s2e"><span>Release your first weekly meditation inside the community</span></label>
+    <label class="check"><input type="checkbox" data-k="s2f"><span>Schedule your first group call</span></label>
+    <label class="check"><input type="checkbox" data-k="s2g"><span>Use the new DM process: end with a question, qualify early, one path</span></label>
+    <label class="check"><input type="checkbox" data-k="s2h"><span>Follow up with a few receptive past DMs</span></label>
+    <label class="check"><input type="checkbox" data-k="s2i"><span>Keep posting. New videos get the new call to action. Don't go back and redo old ones.</span></label>
+  </div>
+
+  <div class="card">
+    <span class="pill">Session 2 journal</span>
+    <label class="q">What did it feel like to say my dream out loud to him? What part of me spoke up?</label>
+    <textarea data-j="s2_voice"></textarea>
+    <label class="q">Where have I been over-giving in my DMs? What was I afraid would happen if I gave less?</label>
+    <textarea data-j="s2_overgive"></textarea>
+    <label class="q">If I choose union energy today, what does that look like in one small action?</label>
+    <textarea data-j="s2_union"></textarea>
+    <label class="q">My ONE focus until I get a tangible result:</label>
+    <textarea data-j="s2_focus" style="min-height:60px"></textarea>
+  </div>
+</section>
+
+<!-- SKOOL -->
+<section id="skool">
+  <h2>Skool Checklist · Reclaim Your Mind</h2>
+  <p class="note">Your community replaces the $47 bundle as the first paid step. Answer the questions, and each Claude prompt fills itself in with your answers, ready to copy. Everything saves on this device.</p>
+
+  <div class="card">
+    <span class="pill">Your progress</span>
+    <div class="bar"><div id="skbar"></div></div>
+    <p class="note" id="skcount" style="margin:8px 0 0">0 done</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">Why Skool, why now</span>
+    <div class="flow">
+      <span>Video</span><i>→</i><span class="hi">Comment CLUE</span><i>→</i><span>Quiz + email</span><i>→</i><span class="hi">Reclaim Your Mind · Skool</span><i>→</i><span class="hi">1:1 session</span><i>→</i><span>3-month coaching</span>
+    </div>
+    <ul>
+      <li><b>It's a filter.</b> Hundreds of DMs, all kinds of people. The ones who join and show up are the ones ready to do the work.</li>
+      <li><b>It's a home.</b> All these people resonate with you, but there's nowhere for them to go.</li>
+      <li><b>It's your practice room.</b> Group calls give you experience, confidence, testimonials, and endless content ideas.</li>
+      <li><b>It shows you your offer.</b> You'll find out what people come to you for by helping them.</li>
+    </ul>
+    <p class="quote">People don't show up to an empty party. They come for the food and drinks: your weekly meditations and guides.</p>
+  </div>
+
+  <!-- PHASE 1 -->
+  <details class="gbox" id="sk1" open>
+    <summary><span class="tn">1</span><span><b>Open it today</b><br><span class="note tc" data-skcount="sk1"></span></span></summary>
+    <div class="card">
+      <p>Ride the momentum. It doesn't need to be finished. It needs to exist.</p>
+      <label class="check"><input type="checkbox" data-k="sk1a"><span>Create your group on Skool's <b>Hobby plan</b> ($9/month)</span></label>
+      <label class="check"><input type="checkbox" data-k="sk1b"><span>Name it <b>Reclaim Your Mind</b></span></label>
+      <label class="check"><input type="checkbox" data-k="sk1c"><span>Pick your URL (try something like reclaimyourmind, and pick the closest one available)</span></label>
+      <label class="check"><input type="checkbox" data-k="sk1d"><span>Add a cover image and your photo, even a simple one for now</span></label>
+      <label class="check"><input type="checkbox" data-k="sk1e"><span>Upload <i>Escaping the Daydream</i> to the classroom</span></label>
+      <label class="check"><input type="checkbox" data-k="sk1f"><span>Upload <i>How to Break Rumination and Focus Again</i></span></label>
+      <label class="check"><input type="checkbox" data-k="sk1g"><span>Upload the meditation you've already recorded</span></label>
+      <label class="check"><input type="checkbox" data-k="sk1h"><span>Send Luana your invite link</span></label>
+      <label class="q">My community link:</label>
+      <textarea data-j="sk_link" style="min-height:50px" placeholder="skool.com/..."></textarea>
+    </div>
+  </details>
+
+  <!-- PHASE 2 -->
+  <details class="gbox" id="sk2">
+    <summary><span class="tn">2</span><span><b>Your mission statement</b><br><span class="note tc" data-skcount="sk2"></span></span></summary>
+    <div class="card">
+      <span class="pill">Answer in your own words</span>
+      <p class="note">Messy is perfect. Claude will shape it. Your words are what make it sound like you.</p>
+      <label class="q">Who is this community for? Describe her (or them) the way you'd describe a friend.</label>
+      <textarea data-j="sk_who"></textarea>
+      <label class="q">What are they struggling with? Use their exact words from your comments and DMs.</label>
+      <textarea data-j="sk_pain"></textarea>
+      <label class="q">What changes for them inside? How do they feel after a few months?</label>
+      <textarea data-j="sk_change"></textarea>
+      <label class="q">Why you? What have you lived through that lets you hold this space?</label>
+      <textarea data-j="sk_why"></textarea>
+      <label class="q">How do you want the room to feel when someone walks in?</label>
+      <textarea data-j="sk_feel"></textarea>
+      <label class="q">What is this community NOT? (For example: not therapy, not a place for judgment)</label>
+      <textarea data-j="sk_not"></textarea>
+    </div>
+    <div class="card">
+      <span class="pill">Prompt · fills in from your answers</span>
+      <div class="prompt" id="skp_mission"></div>
+      <button class="btn ghost copy" data-copy="skp_mission">Copy prompt</button>
+      <label class="q">My final mission statement:</label>
+      <textarea data-j="sk_mission"></textarea>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="sk2a"><span>Answered the 6 questions</span></label>
+        <label class="check"><input type="checkbox" data-k="sk2b"><span>Mission statement chosen and pasted above</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 3 -->
+  <details class="gbox" id="sk3">
+    <summary><span class="tn">3</span><span><b>Your About page &amp; join questions</b><br><span class="note tc" data-skcount="sk3"></span></span></summary>
+    <div class="card">
+      <span class="pill">Your About page</span>
+      <p>This is your community's sales page. People read it before they join.</p>
+      <label class="q">What will members get inside? (Guides, weekly meditations, group calls, anything else)</label>
+      <textarea data-j="sk_inside"></textarea>
+      <label class="q">Why did you start this? One or two sentences of your story.</label>
+      <textarea data-j="sk_story"></textarea>
+      <div class="prompt" id="skp_about"></div>
+      <button class="btn ghost copy" data-copy="skp_about">Copy prompt</button>
+    </div>
+    <div class="card">
+      <span class="pill">Join questions = your filter</span>
+      <p>Skool lets you ask questions when someone requests to join. Use them the same way you'll use the DMs: to understand where people are, and spot who's ready for 1:1.</p>
+      <div class="prompt" id="skp_qs"></div>
+      <button class="btn ghost copy" data-copy="skp_qs">Copy prompt</button>
+      <label class="q">My join questions:</label>
+      <textarea data-j="sk_joinqs"></textarea>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="sk3a"><span>About page written and live</span></label>
+        <label class="check"><input type="checkbox" data-k="sk3b"><span>Join questions added</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 4 -->
+  <details class="gbox" id="sk4">
+    <summary><span class="tn">4</span><span><b>Your classroom</b><br><span class="note tc" data-skcount="sk4"></span></span></summary>
+    <div class="card">
+      <span class="pill">Start simple: 4 modules</span>
+      <label class="check"><input type="checkbox" data-k="sk4a"><span><b>Start Here.</b> A short welcome video: who you are, how to use the community, where to begin</span></label>
+      <label class="check"><input type="checkbox" data-k="sk4b"><span><b>Reclaim Your Mind guides.</b> Both PDFs (and the interactive companion when it's ready)</span></label>
+      <label class="check"><input type="checkbox" data-k="sk4c"><span><b>Meditation library.</b> One new meditation every week</span></label>
+      <label class="check"><input type="checkbox" data-k="sk4d"><span><b>Call replays.</b> Every group call, recorded</span></label>
+      <p class="note">The classroom can keep growing. You don't need Luana's modules. You need the next one.</p>
+    </div>
+    <div class="card">
+      <span class="pill">Your first 4 weekly meditations</span>
+      <label class="q">What are people asking for most in your DMs and comments? List the themes.</label>
+      <textarea data-j="sk_themes"></textarea>
+      <div class="prompt" id="skp_med"></div>
+      <button class="btn ghost copy" data-copy="skp_med">Copy prompt</button>
+      <label class="q">My first 4 meditation topics:</label>
+      <textarea data-j="sk_meds"></textarea>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="sk4e"><span>Week 1 meditation released</span></label>
+        <label class="check"><input type="checkbox" data-k="sk4f"><span>Week 2 meditation released</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 5 -->
+  <details class="gbox" id="sk5">
+    <summary><span class="tn">5</span><span><b>A rhythm that won't fizzle out</b><br><span class="note tc" data-skcount="sk5"></span></span></summary>
+    <div class="card">
+      <span class="pill">Small and steady beats big and burnt out</span>
+      <p>Past groups died before. This one can be different, because it's built around a rhythm you can actually keep.</p>
+      <label class="q">What made past groups fizzle out?</label>
+      <textarea data-j="sk_fizzle"></textarea>
+      <label class="q">What's the smallest weekly rhythm I could keep even on a hard week?</label>
+      <textarea data-j="sk_small"></textarea>
+
+      <h3>Group calls</h3>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="sk_calls" value="Weekly"><span>Weekly</span></label>
+        <label class="choice"><input type="radio" name="sk_calls" value="Every 2 weeks"><span>Every 2 weeks</span></label>
+        <label class="choice"><input type="radio" name="sk_calls" value="Monthly to start"><span>Monthly to start</span></label>
+      </div>
+      <h3>New meditation drops on</h3>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="sk_day" value="Monday"><span>Mon</span></label>
+        <label class="choice"><input type="radio" name="sk_day" value="Tuesday"><span>Tue</span></label>
+        <label class="choice"><input type="radio" name="sk_day" value="Wednesday"><span>Wed</span></label>
+        <label class="choice"><input type="radio" name="sk_day" value="Thursday"><span>Thu</span></label>
+        <label class="choice"><input type="radio" name="sk_day" value="Friday"><span>Fri</span></label>
+        <label class="choice"><input type="radio" name="sk_day" value="Saturday"><span>Sat</span></label>
+        <label class="choice"><input type="radio" name="sk_day" value="Sunday"><span>Sun</span></label>
+      </div>
+      <label class="q">How much time can I give the community each week?</label>
+      <textarea data-j="sk_time" style="min-height:50px"></textarea>
+      <div class="prompt" id="skp_rhythm"></div>
+      <button class="btn ghost copy" data-copy="skp_rhythm">Copy prompt</button>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="sk5a"><span>Rhythm chosen</span></label>
+        <label class="check"><input type="checkbox" data-k="sk5b"><span>First group call on the Skool calendar</span></label>
+        <label class="check"><input type="checkbox" data-k="sk5c"><span>Promote each new meditation on social media the day it drops</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 6 -->
+  <details class="gbox" id="sk6">
+    <summary><span class="tn">6</span><span><b>Pricing &amp; your 1:1 bonus</b><br><span class="note tc" data-skcount="sk6"></span></span></summary>
+    <div class="card">
+      <span class="pill">Membership price</span>
+      <p>Low ticket on the front, high ticket on the back. That's the engine. You have the reach for a lower price to work. Luana will help you finalize the number.</p>
+      <div class="choices col">
+        <label class="choice"><input type="radio" name="sk_price" value="Free to start, paid later"><span>Free to start, paid later</span></label>
+        <label class="choice"><input type="radio" name="sk_price" value="Low monthly (around $9 to $17)"><span>Low monthly (around $9 to $17)</span></label>
+        <label class="choice"><input type="radio" name="sk_price" value="Mid monthly (around $27 to $37)"><span>Mid monthly (around $27 to $37)</span></label>
+        <label class="choice"><input type="radio" name="sk_price" value="Not sure yet"><span>Not sure yet. Talk it through with Luana.</span></label>
+      </div>
+      <label class="q">When I imagine giving a month of meditations, calls and support, what number comes back as equal?</label>
+      <textarea data-j="sk_equal" style="min-height:60px"></textarea>
+      <label class="q">What would make someone feel the price was a no-brainer?</label>
+      <textarea data-j="sk_value"></textarea>
+    </div>
+    <div class="card">
+      <span class="pill">Limited bonus: your custom meditation</span>
+      <p>The first few people who book your 1:1 session get a personalized meditation in your voice, made for the exact part you worked on together. Limited, because there's only so many you can make.</p>
+      <h3>How many spots?</h3>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="sk_spots" value="3"><span>First 3</span></label>
+        <label class="choice"><input type="radio" name="sk_spots" value="5"><span>First 5</span></label>
+        <label class="choice"><input type="radio" name="sk_spots" value="10"><span>First 10</span></label>
+      </div>
+      <div class="done-when">
+        <label class="check"><input type="checkbox" data-k="sk6a"><span>Membership price chosen (with Luana)</span></label>
+        <label class="check"><input type="checkbox" data-k="sk6b"><span>Custom meditation bonus added to your 1:1 offer</span></label>
+      </div>
+    </div>
+  </details>
+
+  <!-- PHASE 7 -->
+  <details class="gbox" id="sk7">
+    <summary><span class="tn">7</span><span><b>Welcome members &amp; send people in</b><br><span class="note tc" data-skcount="sk7"></span></span></summary>
+    <div class="card">
+      <span class="pill">Your first posts</span>
+      <div class="prompt" id="skp_welcome"></div>
+      <button class="btn ghost copy" data-copy="skp_welcome">Copy prompt</button>
+      <label class="check"><input type="checkbox" data-k="sk7a"><span>Pinned welcome post</span></label>
+      <label class="check"><input type="checkbox" data-k="sk7b"><span>An "introduce yourself" post</span></label>
+      <label class="check"><input type="checkbox" data-k="sk7c"><span>Welcome every new member by name for the first month</span></label>
+    </div>
+    <div class="card">
+      <span class="pill">Point everything here</span>
+      <label class="check"><input type="checkbox" data-k="sk7d"><span>Quiz result page invites people to join Reclaim Your Mind</span></label>
+      <label class="check"><input type="checkbox" data-k="sk7e"><span>ManyChat keyword sends the quiz or the community link</span></label>
+      <label class="check"><input type="checkbox" data-k="sk7f"><span>Community link in your Instagram and TikTok bio</span></label>
+      <label class="check"><input type="checkbox" data-k="sk7g"><span>Every new video ends with one call to action: the quiz or the community</span></label>
+      <label class="q">The one line I'll say at the end of my videos:</label>
+      <textarea data-j="sk_cta" style="min-height:60px"></textarea>
+    </div>
+  </details>
+
+  <div class="card">
+    <span class="pill">If you feel like an imposter</span>
+    <p>You don't need readings or 12 modules to start. People in pain don't care about your credentials. They need you to show up and help as best you can. Luana started with $3 Etsy readings. Your offer will reveal itself once people are in the room.</p>
+  </div>
+
+  <div class="card">
+    <span class="pill">Bring to our call · November 5</span>
+    <label class="check"><input type="checkbox" data-k="skb1"><span>Your community link (already sent to Luana)</span></label>
+    <label class="check"><input type="checkbox" data-k="skb2"><span>Your mission statement</span></label>
+    <label class="check"><input type="checkbox" data-k="skb3"><span>Your price idea and rhythm</span></label>
+    <label class="check"><input type="checkbox" data-k="skb4"><span>What came up in your first group call or first DMs</span></label>
+    <p class="quote" style="margin-top:14px">It doesn't need to be finished. It needs to exist.</p>
+  </div>
+</section>
+
 <!-- FUNNEL -->
 <section id="funnel">
   <h2>Your first funnel</h2>
-  <p class="note">Your business homework before our October 22 call. Work through the 4 steps in order. Everything you check, choose and write saves on this device, and your answers are included in "Download my journal".</p>
+  <div class="card" style="border-color:var(--gold)">
+    <span class="pill">Update from October 22</span>
+    <p>Your $47 bundle is now your <b>Reclaim Your Mind</b> Skool community. The guides and meditations live in your classroom instead. Step 1 (your 1:1 session), Step 3 (the quiz) and the new guide endings still stand. Just point them to your community instead of the bundle. Your new checklist is in the <b>Skool Checklist</b> tab.</p>
+  </div>
+  <p class="note">Your business homework from our October 8 call. Work through the 4 steps in order. Everything you check, choose and write saves on this device, and your answers are included in "Download my journal".</p>
 
   <div class="card">
     <span class="pill">Your progress</span>
@@ -256,7 +593,7 @@ a{color:var(--gold-soft)}
     <span class="pill">The big picture</span>
     <p>This is the path someone takes from watching your video to working with you:</p>
     <div class="flow">
-      <span>Video</span><i>→</i><span class="hi">Comment CLUE</span><i>→</i><span>Automatic DM</span><i>→</i><span class="hi">Quiz</span><i>→</i><span>Result + email</span><i>→</i><span>Welcome emails</span><i>→</i><span class="hi">The bundle · $47</span><i>→</i><span class="hi">Your 1:1 session</span><i>→</i><span>3-month coaching</span>
+      <span>Video</span><i>→</i><span class="hi">Comment CLUE</span><i>→</i><span>Automatic DM</span><i>→</i><span class="hi">Quiz</span><i>→</i><span>Result + email</span><i>→</i><span>Welcome emails</span><i>→</i><span class="hi">Reclaim Your Mind · Skool</span><i>→</i><span class="hi">Your 1:1 session</span><i>→</i><span>3-month coaching</span>
     </div>
     <div class="grid" style="margin-top:14px">
       <div class="mini"><b>The quiz</b><br>Opens the door. Free, fast, and it gives them one real win.</div>
@@ -716,7 +1053,8 @@ Each result shows the craving, why the brain keeps going back, where they feel i
       <h3 style="margin-top:4px">Sign up and start writing</h3>
       <label class="check"><input type="checkbox" data-k="m1a"><span>Sign up for at least 1 open mic (by Oct 31)</span></label>
       <label class="check"><input type="checkbox" data-k="m1b"><span>Start writing your set: not comedy exactly, more storytelling and teaching. Share your wisdom and experiences so people feel seen, the way Hasan Minhaj's stories grew into Homecoming King</span></label>
-      <label class="check"><input type="checkbox" data-k="m1c"><span>Your funnel is live: quiz, bundle and 1:1 session (see the <b>Your Funnel</b> tab)</span></label>
+      <label class="check"><input type="checkbox" data-k="m1c"><span>Your funnel is live: quiz, Reclaim Your Mind community and 1:1 session</span></label>
+      <label class="check"><input type="checkbox" data-k="m1d"><span>Reclaim Your Mind is open, with weekly meditations and your first group calls</span></label>
       <p class="note">Our calls this month: 40 to 45 minutes of parts work on love and soul purpose, then your micro goals for the next two weeks. Plus your 20-minute reading on whatever is coming up.</p>
     </div>
 
@@ -831,7 +1169,7 @@ Each result shows the craving, why the brain keeps going back, where they feel i
     <table>
       <tr><td class="n">✓</td><td>Soul Clarity Session · Wednesday, October 7 · <a href="https://fathom.video/share/EbKmhU4At1jDTJeU1Le3bL8Zsdinn9eE" target="_blank" rel="noopener">replay</a></td></tr>
       <tr><td class="n">01</td><td>Thursday, October 8 · <a href="https://fathom.video/share/EpLxDtP85Wq8dssbuwknzhTcUbSVyGZ9" target="_blank" rel="noopener">replay</a></td></tr>
-      <tr><td class="n">02</td><td>Thursday, October 22</td></tr>
+      <tr><td class="n">02</td><td>Thursday, October 22 · <a href="https://fathom.video/share/vWsyQnu8vjE3m56obN65UBmtsAVgLZm1" target="_blank" rel="noopener">replay</a></td></tr>
       <tr><td class="n">03</td><td>Thursday, November 5</td></tr>
       <tr><td class="n">04</td><td>Thursday, November 19</td></tr>
       <tr><td class="n">05</td><td>Thursday, December 3</td></tr>
@@ -939,6 +1277,52 @@ Each result shows the craving, why the brain keeps going back, where they feel i
       box.scrollIntoView({behavior:'smooth',block:'start'});
     });
   });
+  var sk=document.getElementById('skool');
+  function skSync(name){sk.querySelectorAll('input[name="'+name+'"]').forEach(function(r){r.parentElement.classList.toggle('sel',r.checked)})}
+  var skNames={};
+  sk.querySelectorAll('input[type=radio]').forEach(function(r){
+    skNames[r.name]=1;
+    var k='r_'+r.name;
+    if(state[k]===r.value) r.checked=true;
+    r.addEventListener('change',function(){state[k]=r.value;save(state);skSync(r.name);skRender()});
+  });
+  Object.keys(skNames).forEach(skSync);
+  var T={
+    skp_mission:"I'm opening a Skool community called Reclaim Your Mind. Help me write its mission statement. Here's what I know:\n\nWho it's for: {{sk_who}}\n\nWhat they're struggling with, in their words: {{sk_pain}}\n\nWhat changes for them inside: {{sk_change}}\n\nWhy me: {{sk_why}}\n\nHow I want the room to feel: {{sk_feel}}\n\nWhat it is not: {{sk_not}}\n\nWrite 3 versions: one sentence, one short paragraph, and a longer version for my Skool About page. Keep my voice: warm, nurturing, honest and a little playful. I'm not a therapist, so avoid clinical or therapy language. Then ask me which one feels most like me, and help me refine it.",
+    skp_about:"Write the About page for my Skool community, Reclaim Your Mind.\n\nMy mission statement: {{sk_mission}}\n\nWho it's for: {{sk_who}}\n\nWhat they're struggling with: {{sk_pain}}\n\nWhat members get inside: {{sk_inside}}\n\nWhy I started it: {{sk_story}}\n\nMembership price: {{r:sk_price}}\n\nInclude a headline in my followers' words, who it's for and who it's not for, what's inside, what they'll feel in the first month, and one clear invitation to join. Keep it short enough to read on a phone. Sound like me: warm, nurturing, a little playful.",
+    skp_qs:"Write 3 join questions for my Skool community, Reclaim Your Mind. It's for: {{sk_who}}. They're struggling with: {{sk_pain}}.\n\nThe questions should feel warm, not like an application. They should help me understand: what they're going through right now, how long it's been going on and what they've tried, and whether they'd be open to deeper 1:1 support. Give me 2 options for each question.",
+    skp_med:"I release one new meditation every week inside my Skool community, Reclaim Your Mind. My meditations speak to the inner child underneath, in a nurturing voice, because brute-force affirmations bounce off the protectors.\n\nHere's what people ask me about most: {{sk_themes}}\n\nSuggest 8 weekly meditation topics. For each one, give a title, who it's for, and a 5-step outline I can record from in my own words. Then tell me which 4 to release first and why.",
+    skp_rhythm:"Help me build a weekly rhythm for my Skool community, Reclaim Your Mind, that won't fizzle out.\n\nWhat made my past groups die: {{sk_fizzle}}\n\nThe smallest rhythm I could keep on a hard week: {{sk_small}}\n\nGroup calls: {{r:sk_calls}}\nNew meditation drops on: {{r:sk_day}}\nTime I can give each week: {{sk_time}}\n\nGive me a simple weekly schedule (what I do each day, and how long it takes), a 'hard week' minimum version, and 3 easy ways to keep members engaged between calls. Keep it gentle and realistic.",
+    skp_welcome:"Write a pinned welcome post and an 'introduce yourself' post for my Skool community, Reclaim Your Mind.\n\nMy mission: {{sk_mission}}\nWhat's inside: {{sk_inside}}\nGroup calls: {{r:sk_calls}}\nNew meditation every: {{r:sk_day}}\n\nThe welcome post should tell new members where to start (the Start Here module), when calls and new meditations happen, and invite them to introduce themselves. The intro post should ask 3 easy, warm questions. Sound like me: like a FaceTime with a friend."
+  };
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function skRender(){
+    Object.keys(T).forEach(function(id){
+      var el=document.getElementById(id); if(!el) return;
+      var out=esc(T[id]).replace(/\{\{(r:)?([a-z_]+)\}\}/g,function(m,r,key){
+        var v=r?state['r_'+key]:state['j_'+key];
+        return (v&&String(v).trim())?esc(String(v).trim()):'<span class="blank">[answer above]</span>';
+      });
+      el.innerHTML=out;
+    });
+  }
+  sk.querySelectorAll('textarea[data-j]').forEach(function(t){t.addEventListener('input',skRender)});
+  skRender();
+  function skProgress(){
+    var all=sk.querySelectorAll('input[data-k]'),d=0;
+    all.forEach(function(c){if(c.checked)d++});
+    var pct=all.length?Math.round(d/all.length*100):0;
+    document.getElementById('skbar').style.width=pct+'%';
+    document.getElementById('skcount').textContent=d+' of '+all.length+' done ('+pct+'%)';
+    ['sk1','sk2','sk3','sk4','sk5','sk6','sk7'].forEach(function(g){
+      var cs=document.getElementById(g).querySelectorAll('input[data-k]'),n=0;
+      cs.forEach(function(c){if(c.checked)n++});
+      var txt=(n===cs.length&&cs.length)?'All done ✓':n+' of '+cs.length+' done';
+      sk.querySelectorAll('[data-skcount="'+g+'"]').forEach(function(el){el.textContent=txt});
+    });
+  }
+  sk.querySelectorAll('input[data-k]').forEach(function(c){c.addEventListener('change',skProgress)});
+  skProgress();
   document.getElementById('dl').addEventListener('click',function(){
     var out='Aishwarya · Love, Rewired Journal\n\n';
     document.querySelectorAll('textarea[data-j]').forEach(function(t){
@@ -951,6 +1335,11 @@ Each result shows the craving, why the brain keeps going back, where they feel i
     out+='Bundle name pick: '+(state.r_f_bname||'')+'\n';
     var feel={low:'Too little',eq:'Equal',high:'Too much'};
     ['100','150','222','277','333','444'].forEach(function(p){if(state['p_'+p]) out+='$'+p+': '+feel[state['p_'+p]]+'\n'});
+    out+='\n--- Your Skool choices ---\n';
+    out+='Group calls: '+(state.r_sk_calls||'')+'\n';
+    out+='Meditation day: '+(state.r_sk_day||'')+'\n';
+    out+='Membership price: '+(state.r_sk_price||'')+'\n';
+    out+='Custom meditation spots: '+(state.r_sk_spots||'')+'\n';
     var a=document.createElement('a');
     a.href=URL.createObjectURL(new Blob([out],{type:'text/plain'}));
     a.download='aishwarya-journal.txt';a.click();
