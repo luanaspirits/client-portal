@@ -1,1 +1,867 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>The Connection Map</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('cm-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap">
+<style>
+[hidden]{display:none!important}
+:root{color-scheme:light;
+  --bg:#f8f4fb;--bg2:#efe6f6;--card:#fff;--rule:#e6daf0;
+  --ink:#2b1f38;--soft:#5f5070;--dim:#9a8bab;
+  --plum:#5b3a7c;--plum2:#7c58a3;--lav:#c9b4e2;--lav2:#f2eaf9;
+  --gold:#a8823e;--glow:#efd59d;--rose:#c4899b;
+  --side:#46305f;--side2:#33224a;--star:#f7f0fc;--mist:#d2c4e2;
+  --serif:'Playfair Display',Georgia,serif;--sans:'Jost','Helvetica Neue',Arial,sans-serif;--mono:'DM Mono',ui-monospace,Menlo,monospace;
+  --sh:0 18px 40px -22px rgba(70,48,95,.35)}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font:400 17px/1.7 var(--sans);color:var(--ink);background:var(--bg);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+textarea,input{-webkit-user-select:text;user-select:text}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--plum2);outline-offset:3px}
+p{margin:0} h2,h3{margin:0;font-family:var(--serif);font-weight:400}
+em{font-family:var(--serif);font-style:italic} strong{font-weight:500}
+a{color:var(--plum)} svg{display:block}
 
+/* shell */
+.app{display:grid;grid-template-columns:minmax(0,1fr);min-height:100vh}
+@media(min-width:1000px){.app{grid-template-columns:300px minmax(0,1fr)}}
+.side{position:fixed;inset:0 auto 0 0;z-index:30;width:min(320px,86vw);overflow-y:auto;overscroll-behavior:contain;color:var(--star);
+  background:radial-gradient(ellipse at 20% 0%,#6a4a8c,transparent 60%),linear-gradient(180deg,var(--side),var(--side2));
+  transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  padding:calc(24px + env(safe-area-inset-top,0px)) 14px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:20px;scrollbar-width:thin}
+.side.open{transform:none;box-shadow:24px 0 60px rgba(30,15,45,.4)}
+@media(min-width:1000px){.side{position:sticky;top:0;height:100vh;width:auto;transform:none}}
+.side>*{position:relative;z-index:1}
+.tw{position:absolute;z-index:0!important;border-radius:50%;background:#fff;animation:tw 5s infinite ease-in-out;pointer-events:none}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:.8}}
+.brand{display:flex;align-items:center;justify-content:space-between;padding:0 8px;font:500 10.5px var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--glow)}
+.brand span{display:flex;gap:10px;align-items:center}
+.brand svg{width:18px;height:18px}
+.x{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:none;cursor:pointer;color:var(--mist)}
+.x svg{width:16px;height:16px}
+@media(min-width:1000px){.x{display:none}}
+.who{padding:0 8px}
+.who b{display:block;font:400 32px/1.1 var(--serif);color:#fff}
+.who span{font:10.5px var(--mono);letter-spacing:1.8px;text-transform:uppercase;color:var(--mist)}
+.mini{width:100%;text-align:left;cursor:pointer;border:1px solid rgba(239,213,157,.25);border-radius:18px;padding:12px 14px 14px;background:rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px}
+.mini .row{display:flex;justify-content:space-between;font:10.5px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--mist)}
+.mini b{color:var(--glow);font-weight:500}
+.bar{height:3px;border-radius:3px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--lav),var(--glow))}
+.grp{font:10px var(--mono);letter-spacing:2.6px;text-transform:uppercase;color:var(--glow);opacity:.85;padding:14px 10px 6px}
+.grp small{display:block;font-size:9.5px;letter-spacing:1px;text-transform:none;color:var(--mist);opacity:.85;margin-top:2px}
+.mi{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;cursor:pointer;text-align:left;padding:7px 8px;border-radius:14px;color:var(--mist);transition:background .2s}
+.mi:hover{background:rgba(255,255,255,.07);color:#fff}
+.mi[aria-current]{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(239,213,157,.35)}
+.gl{position:relative;flex:0 0 38px;height:38px;border-radius:50%;display:grid;place-items:center}
+.gl svg{width:18px;height:18px}
+.own .gl{background:radial-gradient(circle at 35% 30%,#f8e7c4,#c9a25e);color:var(--side2);box-shadow:0 0 18px rgba(239,213,157,.35)}
+.part .gl{border:1px solid var(--lav);color:#efe6fa}
+.lock .gl{border:1px dashed rgba(210,196,226,.5);color:rgba(210,196,226,.75)}
+.rec .gl{border:1.5px solid var(--glow);color:var(--glow);animation:ring 3s ease-in-out infinite}
+@keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(239,213,157,.45)}50%{box-shadow:0 0 0 6px rgba(239,213,157,0)}}
+/* ladder arrows between reading icons */
+.chain .gl::after{content:"";position:absolute;left:50%;top:calc(100% + 2px);height:12px;border-left:1.5px dashed rgba(210,196,226,.5)}
+.chain .gl::before{content:"";position:absolute;left:calc(50% - 3.5px);top:calc(100% + 9px);width:6px;height:6px;border:solid rgba(210,196,226,.7);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.chain.own .gl::after{border-left-style:solid;border-color:var(--glow)} .chain.own .gl::before{border-color:var(--glow)}
+.lk{position:absolute;right:-3px;bottom:-3px;width:17px;height:17px;border-radius:50%;background:var(--side2);border:1px solid rgba(210,196,226,.4);display:grid;place-items:center}
+.lk svg{width:9px;height:9px}
+.mt{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.3}
+.mt b{font-weight:400;font-size:15px}
+.own .mt b,.rec .mt b{color:#fff}
+.mt small{font-size:12px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font:9.5px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:var(--side2);background:var(--glow);border-radius:20px;padding:2px 8px;white-space:nowrap}
+.side-foot{margin-top:auto;padding:16px 10px 0;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px;line-height:1.55;color:var(--mist)}
+.scrim{position:fixed;inset:0;background:rgba(43,31,56,.45);z-index:25;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.col{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:rgba(248,244,251,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+@media(min-width:1000px){.top{display:none}}
+.menu-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--card);border-radius:30px;padding:8px 14px 8px 12px;cursor:pointer;font-size:14px}
+.menu-btn svg{width:17px;height:17px}
+.top .t{font:18px var(--serif);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .s{font:11px var(--mono);color:var(--plum)}
+.readbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--lav),var(--plum2));z-index:40}
+.sample{font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase;text-align:center;color:var(--plum);background:var(--bg2);padding:7px 16px}
+main{width:100%;max-width:900px;margin:0 auto;padding:32px 18px 80px}
+@media(min-width:1000px){main{padding:52px 56px 100px}}
+.view{display:flex;flex-direction:column;gap:40px;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+
+/* type + buttons */
+.eyebrow{font:11px var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--plum2)}
+.h2{font-size:clamp(28px,4.6vw,42px);line-height:1.14;text-wrap:balance}
+.h2 em{color:var(--plum2)}
+.h3{font-size:23px;line-height:1.3}
+.head{display:flex;flex-direction:column;gap:12px}
+.lede{color:var(--soft);max-width:60ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font:11.5px var(--mono);letter-spacing:.8px;padding:5px 12px;border-radius:30px;background:var(--card);border:1px solid var(--rule);color:var(--soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:500;font-size:15px;color:#fff;background:var(--plum);border:0;border-radius:40px;padding:14px 24px;cursor:pointer;text-decoration:none;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-1px);background:var(--plum2)}
+.btn svg{width:16px;height:16px}
+.btn.gold{background:linear-gradient(135deg,#d2ad68,#a07a37)}
+.btn.ghost{background:var(--card);color:var(--plum);box-shadow:inset 0 0 0 1px var(--rule)}
+.btn.sm{padding:9px 16px;font-size:14px}
+.link{background:none;border:0;padding:0;cursor:pointer;color:var(--plum2);font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.row-btns{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.until{font:11.5px var(--mono);letter-spacing:.8px;color:var(--dim)}
+.box{background:var(--card);border:1px solid var(--rule);border-radius:22px;padding:24px}
+
+/* landing */
+.hero{position:relative;overflow:hidden;border-radius:28px;color:var(--star);min-height:360px;display:flex;align-items:flex-end;
+  background:linear-gradient(135deg,#7a56a2,#55387a 55%,#432b62);box-shadow:0 40px 70px -40px rgba(70,48,95,.7)}
+.hero .bg,.lockhero .bg{position:absolute;inset:0}
+.hero .bg svg,.lockhero .bg svg{width:100%;height:100%}
+.hero .in{position:relative;padding:clamp(26px,5vw,46px);display:flex;flex-direction:column;gap:16px;max-width:560px}
+.hero .eyebrow{color:var(--glow)}
+.quote{font:italic 400 clamp(27px,4.6vw,42px)/1.24 var(--serif);color:#fff;text-wrap:balance;animation:rise 1s ease}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+.qfrom{font-size:14px;color:var(--mist)}
+.again{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(239,213,157,.45);background:rgba(255,255,255,.08);color:var(--glow);border-radius:30px;padding:8px 14px;cursor:pointer;font:11px var(--mono);letter-spacing:1.4px;text-transform:uppercase}
+.again svg{width:14px;height:14px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 24px;font:11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--mist)}
+.stats b{color:var(--glow);font-weight:500;font-size:13px}
+.letter{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:24px;padding:30px 30px 26px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--sh)}
+.letter::before{content:"";position:absolute;inset:0 0 auto;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,var(--lav),var(--rose),var(--glow))}
+.letter p{font:italic 400 20px/1.6 var(--serif)}
+.letter .sig{font-size:24px;color:var(--plum)}
+.latest{display:grid;grid-template-columns:minmax(0,1fr);border-radius:24px;overflow:hidden;background:var(--card);border:1px solid var(--rule)}
+@media(min-width:720px){.latest{grid-template-columns:42% minmax(0,1fr)}}
+.latest .art{min-height:180px;aspect-ratio:auto;border-radius:0;height:100%}
+.latest .in{padding:26px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+.skybox{border-radius:28px;padding:clamp(22px,4vw,34px);background:linear-gradient(160deg,#4f3570,#3a2655);color:var(--star);display:flex;flex-direction:column;gap:14px}
+.skybox .eyebrow{color:var(--glow)} .skybox .h2{color:#fff} .skybox .h2 em{color:var(--glow)} .skybox .lede{color:var(--mist)}
+.sky-wrap{overflow-x:auto;scrollbar-width:none}
+.sky-wrap svg{min-width:540px;width:100%;height:auto}
+.swipe{display:none;font:10.5px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--mist)}
+@media(max-width:600px){.swipe{display:block}}
+.cons .ln{stroke:rgba(210,196,226,.35);stroke-dasharray:3 5}
+.cons .ln.on{stroke:var(--glow);stroke-dasharray:none;opacity:.7}
+.cons .st{cursor:pointer}
+.cons .c{fill:none;stroke:rgba(210,196,226,.7);stroke-width:1.3}
+.cons .on .c{fill:var(--glow);stroke:var(--glow)}
+.cons .h{fill:transparent}
+.cons .on .h{fill:var(--glow);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.1}50%{opacity:.28}}
+.cons .lb{font:10px var(--mono);letter-spacing:1px;text-transform:uppercase;fill:rgba(210,196,226,.7)}
+.cons .on .lb{fill:var(--glow)}
+.cons .gp{font:italic 14px var(--serif);fill:#e5dbf2;opacity:.7}
+.picture{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px}
+.pc{text-align:left;cursor:pointer;background:var(--card);border:1px solid var(--rule);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px;transition:transform .2s,box-shadow .2s}
+.pc:hover,.topic.on:hover,.banner:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--lav2);color:var(--plum)}
+.ico svg{width:19px;height:19px}
+.pc .t,.k{font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.pc .v{font:28px/1.05 var(--serif)}
+.pc .v small{font-size:15px;color:var(--dim)}
+.pc .d{font-size:14.5px;color:var(--soft);line-height:1.5}
+.pips{display:flex;gap:5px}
+.pips i{flex:1;height:3px;border-radius:3px;background:var(--rule)}
+.pips i.on{background:var(--plum2)}
+.next{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding:28px;border-radius:24px;background:linear-gradient(135deg,var(--lav2),#fbf3ea);border:1px solid var(--rule)}
+@media(min-width:700px){.next{grid-template-columns:minmax(0,1fr) auto;align-items:center}}
+.next .door{font:italic 22px/1.45 var(--serif);margin-top:8px}
+.next .fine{font-size:15px;color:var(--soft);margin-top:10px}
+.next .act{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.rung{display:flex;flex-direction:column;gap:14px}
+.rung-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px;border-bottom:1px solid var(--rule);padding-bottom:10px}
+.rung-head b{font:400 22px var(--serif)}
+.rung-head span{font:11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--dim)}
+.rung-head span.lit{color:var(--plum2)}
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.topic{text-align:left;cursor:pointer;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:6px;border:1px dashed #d9cbe6;background:none;transition:all .2s}
+.topic .k{display:flex;gap:8px;align-items:center}
+.topic .k svg{width:13px;height:13px}
+.topic .v{font:19px/1.3 var(--serif);color:var(--soft)}
+.topic .d{font-size:14.5px;color:var(--dim);line-height:1.5}
+.topic.on{border:1px solid var(--rule);background:var(--card)}
+.topic.on .k{color:var(--plum2)} .topic.on .v{color:var(--ink)} .topic.on .d{color:var(--soft)}
+.flash{box-shadow:0 0 0 2px var(--plum2)!important}
+
+/* reading */
+.art{border-radius:24px;overflow:hidden;aspect-ratio:16/6;min-height:150px}
+.art svg{width:100%;height:100%}
+.contents ol{list-style:none;margin:10px 0 0;padding:0;counter-reset:c}
+.contents li{counter-increment:c;border-top:1px solid var(--rule)}
+.contents li:first-child{border:0}
+.contents button{display:flex;gap:14px;align-items:baseline;width:100%;background:none;border:0;padding:10px 0;cursor:pointer;text-align:left;font-size:16.5px}
+.contents button::before{content:counter(c,decimal-leading-zero);font:11px var(--mono);color:var(--lav);flex:0 0 22px}
+.contents button:hover{color:var(--plum2)}
+.contents,.rd{max-width:66ch}
+.rd{display:flex;flex-direction:column;gap:20px}
+.rd p{font-size:18px;line-height:1.85;color:#332742}
+.rd em{color:var(--plum2)}
+.r-h2{font-size:clamp(27px,4vw,36px);line-height:1.2;margin-top:34px;padding-top:34px;border-top:1px solid var(--rule);scroll-margin-top:84px;position:relative}
+.r-h2::before{content:"\2726";position:absolute;top:-11px;left:0;background:var(--bg);padding-right:12px;font:14px var(--sans);color:var(--lav)}
+.r-h3{font-weight:500;font-size:22px;color:var(--plum)}
+.r-label{font:11px var(--mono);letter-spacing:2.6px;text-transform:uppercase;color:var(--plum2)}
+.rd .r-sub{font:italic 19.5px/1.5 var(--serif);color:var(--plum)}
+.rd .r-pull{padding:26px 6px;font:italic clamp(22px,3.4vw,27px)/1.45 var(--serif);text-align:center;text-wrap:balance;color:var(--ink);border-block:1px solid var(--rule)}
+.rd .r-small{font-size:14px;color:var(--dim)}
+.cards{display:flex;flex-wrap:wrap;gap:8px}
+.tc{display:inline-flex;align-items:center;gap:9px;padding:6px 13px 6px 7px;border-radius:12px;border:1px solid var(--rule);background:var(--card);font-size:14.5px}
+.tc i{width:14px;height:21px;border-radius:3px;border:1px solid var(--glow);background:linear-gradient(160deg,#7a56a2,#432b62)}
+.tc small{font:9.5px var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--rose)}
+.syms{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.sym{border:1px solid var(--rule);border-radius:18px;padding:18px;background:var(--card);display:flex;flex-direction:column;gap:6px}
+.sym b{font:400 19px var(--serif)}
+.sym span{font-size:15.5px;color:var(--soft);line-height:1.6}
+.after{position:relative;overflow:hidden;border-radius:26px;padding:clamp(24px,4vw,36px);color:var(--star);background:radial-gradient(ellipse at 90% 0%,rgba(239,213,157,.28),transparent 55%),linear-gradient(150deg,#6a4790,#432b62);display:flex;flex-direction:column;gap:14px}
+.after .eyebrow{color:var(--glow)} .after .h2{color:#fff} .after p{color:var(--mist);max-width:56ch}
+.after .door{font:italic 21px/1.5 var(--serif);color:#fff}
+.after .link{color:var(--glow)}
+.pager{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding-top:30px;border-top:1px solid var(--rule)}
+.fab{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:15;display:inline-flex;align-items:center;gap:8px;font:11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:#fff;background:var(--plum);border:0;border-radius:30px;padding:12px 18px;cursor:pointer;box-shadow:var(--sh)}
+.fab svg{width:15px;height:15px;color:var(--glow)}
+
+/* locked */
+.lockhero{position:relative;border-radius:26px;overflow:hidden;min-height:220px;display:flex;align-items:flex-end;color:#fff}
+.lockhero .in{position:relative;padding:clamp(22px,4vw,36px);display:flex;flex-direction:column;gap:8px}
+.lockhero .eyebrow{color:var(--glow)}
+.promise{font:italic 19px/1.45 var(--serif);color:#efe6fa}
+.unlock{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:780px){.unlock{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ub{border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ub .t{font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase}
+.ub ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15.5px;line-height:1.5}
+.ub ul li{display:flex;gap:10px}
+.get{background:var(--card);border:1px solid var(--rule)} .get .t{color:var(--plum2)} .get li::before{content:"\2726";color:var(--gold)}
+.miss{background:#f8eef1;border:1px dashed #e5c9d1} .miss .t{color:var(--rose)} .miss li::before{content:"\25CB";color:var(--rose)}
+.how{background:linear-gradient(160deg,#5b3a7c,#432b62);color:var(--star)} .how .t{color:var(--glow)}
+.how ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px;color:var(--mist)}
+.how .link{color:var(--glow);font-size:14px}
+.price{font:30px/1.1 var(--serif);color:#fff}
+.price small{display:block;font:10.5px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--mist);margin-top:6px}
+.note{border-left:2px solid var(--lav);background:var(--lav2);padding:16px 20px;border-radius:0 14px 14px 0;font-size:15.5px;color:var(--soft)}
+
+/* vault, plan, course, questions */
+.vault{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.banner{text-align:left;border:1px solid var(--rule);border-radius:22px;overflow:hidden;background:var(--card);cursor:pointer;padding:0;transition:all .2s}
+.banner .art{position:relative;border-radius:0;aspect-ratio:16/10}
+.banner.dim svg{filter:grayscale(.6) brightness(.85)}
+.stamp{position:absolute;top:12px;left:12px;font:10px var(--mono);letter-spacing:1.4px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:rgba(51,34,74,.75);color:var(--glow)}
+.banner .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:4px}
+.banner b{font:400 21px/1.25 var(--serif)}
+.banner[aria-expanded="true"]{box-shadow:0 0 0 2px var(--plum2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px dashed #d9cbe6;border-radius:30px;padding:6px 14px;font-size:14.5px;color:var(--soft)}
+.chip.got{border:1px solid var(--lav);background:var(--lav2);color:var(--ink)}
+.phases{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:780px){.phases{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ph{display:flex;flex-direction:column;gap:10px;min-width:0;padding:20px}
+.ph .v{font:21px/1.25 var(--serif)}
+.from{font-size:14.5px;color:var(--plum2);border-left:2px solid var(--lav);padding-left:10px;line-height:1.5}
+label{font-size:14.5px;color:var(--soft)}
+textarea,input[type=text]{width:100%;border-radius:16px;border:1px solid var(--rule);background:var(--bg);color:var(--ink);font-size:16px;padding:14px 16px;line-height:1.6}
+textarea{min-height:110px;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--lav);background:#fff}
+.mods{display:flex;flex-direction:column;gap:14px}
+.mod{padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+.mod ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.mod li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--rule)}
+.mod li:first-child{border:0}
+.mod li .ck{flex:0 0 22px;height:22px;border-radius:50%;border:1px dashed #cdbbe0;display:grid;place-items:center;color:var(--dim);background:none;padding:0}
+.mod li .ck svg{width:11px;height:11px}
+.mod li button.ck{cursor:pointer;border-style:solid}
+.mod li .ck.done{background:var(--plum2);border-color:var(--plum2);color:#fff}
+.mod li b{display:block;font-weight:500;font-size:15.5px}
+.mod li span{font-size:14px;color:var(--soft);line-height:1.5}
+.reward{display:grid;gap:18px;padding:28px;border-radius:26px;color:var(--star);background:radial-gradient(ellipse at 90% 0%,rgba(239,213,157,.3),transparent 60%),linear-gradient(160deg,#5b3a7c,#3a2655)}
+@media(min-width:760px){.reward{grid-template-columns:100px minmax(0,1fr);align-items:center}}
+.seal{width:92px;height:92px;border-radius:50%;border:1.5px solid var(--glow);display:grid;place-items:center;color:var(--glow);box-shadow:0 0 40px rgba(239,213,157,.3)}
+.seal svg{width:36px;height:36px}
+.reward .eyebrow{color:var(--glow)} .reward .h3{color:#fff} .reward p,.reward ol{color:var(--mist)}
+.ghost{height:9px;border-radius:6px;background:var(--rule)}
+.qa{display:flex;flex-direction:column;gap:12px}
+.qa .box{display:flex;flex-direction:column;gap:6px;text-align:left;cursor:pointer}
+.qa .q{font:20px/1.35 var(--serif)}
+.qa .a{font:italic 17px var(--serif);color:var(--plum2)}
+.held{display:flex;flex-direction:column;gap:10px}
+.held .box{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.held .q{font:italic 19px/1.4 var(--serif)}
+.held .row-btns{gap:8px 16px}
+.ask{display:flex;flex-direction:column;gap:12px;padding:28px;border-radius:24px;background:linear-gradient(135deg,var(--lav2),#fbf3ea);border:1px solid var(--rule)}
+.ask .h2{font-size:clamp(26px,4vw,34px)}
+.ask .addrow{display:flex;flex-wrap:wrap;gap:10px}
+.ask .addrow input{flex:1 1 260px}
+footer{border-top:1px solid var(--rule);text-align:center;padding:40px 20px 80px;color:var(--dim);font-size:14px;display:flex;flex-direction:column;gap:8px;align-items:center}
+footer b{font:400 26px var(--serif);color:var(--plum)}
+footer small{max-width:60ch}
+footer nav{display:flex;gap:16px}
+footer a{color:var(--soft)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;background:var(--plum);color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;z-index:50;transition:all .3s;pointer-events:none;width:max-content;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+/* first-visit save reminder */
+.modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(43,31,56,.55);backdrop-filter:blur(4px)}
+.modal .box{max-width:460px;width:100%;display:flex;flex-direction:column;gap:14px;padding:30px;box-shadow:0 40px 80px -30px rgba(30,15,45,.6);animation:rise .5s ease}
+.modal .seal{width:64px;height:64px;color:var(--plum);border-color:var(--lav);box-shadow:none}
+.modal .seal svg{width:26px;height:26px}
+.modal ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:15px;color:var(--soft)}
+/* theme toggle */
+.theme{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;cursor:pointer;background:none;border:1px solid rgba(255,255,255,.18);color:var(--glow)}
+.theme svg{width:16px;height:16px}
+.top .theme{border-color:var(--rule);color:var(--plum)}
+.brand .tools{display:flex;gap:8px}
+
+/* locked pages: whispers, sealed layers, praise, fit */
+.whispers{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.whispers span{font:italic 16px/1.4 var(--serif);color:#efe6fa;opacity:0;animation:whisper 1s ease forwards}
+.whispers span:nth-child(2){animation-delay:.5s}.whispers span:nth-child(3){animation-delay:1s}.whispers span:nth-child(4){animation-delay:1.5s}
+@keyframes whisper{from{opacity:0;transform:translateX(-8px)}to{opacity:.88;transform:none}}
+.seals{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.sealed{position:relative;overflow:hidden;border-radius:20px;padding:22px 20px 18px;background:var(--card);border:1px solid var(--rule);display:flex;flex-direction:column;gap:8px}
+.sealed::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(239,213,157,.18) 50%,transparent 70%);transform:translateX(-100%);animation:shine 6s ease-in-out infinite}
+.sealed:nth-child(2)::after{animation-delay:1.2s}.sealed:nth-child(3)::after{animation-delay:2.4s}.sealed:nth-child(4)::after{animation-delay:3.6s}
+@keyframes shine{0%,60%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.wax{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--side2);background:radial-gradient(circle at 35% 30%,#f8e7c4,#c9a25e);box-shadow:0 6px 18px -6px rgba(168,130,62,.7)}
+.wax svg{width:20px;height:20px}
+.sealed b{font:400 20px/1.25 var(--serif)}
+.sealed>span{font-size:15px;color:var(--soft);line-height:1.55}
+.sealed small{display:flex;gap:6px;align-items:center;margin-top:auto;padding-top:6px;font:10px var(--mono);letter-spacing:1.4px;text-transform:uppercase;color:var(--gold)}
+.sealed small svg{width:11px;height:11px}
+.praise{margin:0;padding:30px clamp(20px,5vw,48px);text-align:center;border-block:1px solid var(--rule);display:flex;flex-direction:column;gap:12px}
+.praise blockquote{margin:0;font:italic clamp(21px,3.2vw,26px)/1.5 var(--serif);text-wrap:balance}
+.praise figcaption{font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--plum2)}
+.fit{display:flex;flex-direction:column;gap:12px}
+.fit ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.fit li{display:flex;gap:10px;font-size:16px;line-height:1.5}
+.fit li::before{content:"\2726";color:var(--gold)}
+.fit .door{font:italic 21px/1.45 var(--serif);color:var(--plum);border-top:1px solid var(--rule);padding-top:14px}
+
+/* questions email helper */
+.helper{display:flex;flex-direction:column;gap:18px}
+.steps3{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin:0;padding:0;list-style:none;counter-reset:s}
+@media(min-width:720px){.steps3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.steps3 li{counter-increment:s;display:flex;gap:12px;font-size:15px;color:var(--soft);line-height:1.5}
+.steps3 li::before{content:counter(s);flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;font:12px var(--mono);color:#fff;background:var(--plum2)}
+.field{display:flex;flex-direction:column;gap:8px}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{border:1px solid var(--rule);background:var(--card);border-radius:30px;padding:7px 14px;font-size:14.5px;cursor:pointer;color:var(--soft)}
+.pick button[aria-pressed="true"]{background:var(--plum);border-color:var(--plum);color:#fff}
+.mailbox{border:1px solid var(--rule);border-radius:20px;background:var(--card);overflow:hidden}
+.mrow{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:10px;align-items:start;padding:12px 16px;border-top:1px solid var(--rule)}
+.mrow:first-child{border:0}
+.mrow .k{padding-top:3px}
+.mrow .v{font-size:15px;overflow-wrap:anywhere}
+.mrow pre{margin:0;font:15px/1.6 var(--sans);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.copy{border:1px solid var(--rule);background:var(--bg);border-radius:20px;padding:5px 12px;cursor:pointer;font:10.5px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:var(--plum)}
+@media(max-width:560px){.mrow{grid-template-columns:minmax(0,1fr) auto}.mrow .k{grid-column:1/-1}}
+.evid{font-size:14.5px;color:var(--dim);font-style:italic}
+
+/* dark mode: same layout, night palette */
+html[data-theme=dark]{color-scheme:dark;--bg:#1a1322;--bg2:#241a30;--card:#231a2e;--rule:#3a2d4b;--ink:#efe7f8;--soft:#c4b6d6;--dim:#8f80a4;
+  --plum:#8c63bd;--plum2:#c7a6ef;--lav:#7d64a3;--lav2:#2d2140;--gold:#d9b46e;--rose:#d9a0b2;--sh:0 18px 40px -22px rgba(0,0,0,.7)}
+html[data-theme=dark] a,html[data-theme=dark] .btn.ghost{color:var(--plum2)}
+html[data-theme=dark] a.btn:not(.ghost){color:#fff}
+html[data-theme=dark] .top{background:rgba(26,19,34,.92)}
+html[data-theme=dark] .top .theme{color:var(--glow)}
+html[data-theme=dark] .rd p{color:var(--ink)}
+html[data-theme=dark] .r-h3,html[data-theme=dark] .rd .r-sub,html[data-theme=dark] .letter .sig,html[data-theme=dark] footer b,html[data-theme=dark] .fit .door{color:var(--plum2)}
+html[data-theme=dark] .next,html[data-theme=dark] .ask{background:linear-gradient(135deg,#2b2040,#2e2230)}
+html[data-theme=dark] .miss{background:#2c1d29;border-color:#5b3b4c}
+html[data-theme=dark] .topic,html[data-theme=dark] .chip,html[data-theme=dark] .mod li .ck{border-color:#4b3a60}
+html[data-theme=dark] textarea:focus,html[data-theme=dark] input:focus{background:var(--card)}
+html[data-theme=dark] .ico{color:var(--plum2)}
+html[data-theme=dark] .copy{color:var(--plum2)}
+@media print{body *{display:none!important}body::after{content:"This portal is private. Please open it online to read.";display:block;padding:60px;font:18px Georgia,serif}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="readbar" id="readbar"></div>
+<div class="app">
+  <aside class="side" id="side" aria-label="Portal menu"></aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="col">
+    <header class="top"><button class="menu-btn" id="openMenu" type="button" aria-expanded="false"></button><span class="t" id="tbTitle"></span><span class="s" id="tbStars"></span><button class="theme" type="button" data-theme-toggle aria-label="Switch light or dark mode"></button></header>
+    <div class="sample">Example portal · sample client, sample readings</div>
+    <main id="pages"></main>
+    <footer><b>Luana Spirits</b><span class="eyebrow">Psychic medium · 4,000+ readings</span>
+      <small>Every reading is complete on its own. This portal is simply here if you ever want to see more. Readings are for guidance and reflection, and your choices are always yours.</small>
+      <nav><a href="https://luanaspirits.com/privacy/">Privacy Policy</a><a href="https://luanaspirits.com/terms/">Terms of Service</a></nav></footer>
+  </div>
+</div>
+<button class="fab" id="fab" type="button" hidden></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- READINGS: full text from extract.py, one block per reading. add_reading.py inserts new ones above the end marker. -->
+<script type="application/json" data-reading="first">[{"t":"label","h":"YOUR QUESTION"},{"t":"sub","h":"<em>“Where does my connection with J. stand right now?”</em>"},{"t":"h2","h":"Symbols and Imagery"},{"t":"cards","items":["Page of Cups","Four of Swords","The Star"]},{"t":"symbol","h":"✧ <strong>A closed door with warm light underneath</strong>"},{"t":"symdesc","h":"The warmth between you is still real, even though nothing is moving on the surface."},{"t":"symbol","h":"✧ <strong>A folded letter</strong>"},{"t":"symdesc","h":"Words written but never sent. He is still finding what he wants to say."},{"t":"symbol","h":"✧ <strong>A window at dusk</strong>"},{"t":"symdesc","h":"You, watching for movement, while your own life waits to be lived."},{"t":"h2","h":"Message From Spirit"},{"t":"body","h":"This connection is resting. The warmth between you is still real, even though nothing is moving on the surface. The Four of Swords tells me he has stepped back to process, not to leave. He is quiet because he is overwhelmed, not because he has decided."},{"t":"body","h":"The Page of Cups came through for your side of the connection. There is a tenderness in you that has been waiting to be met, and Spirit wants you to know that tenderness is not a weakness. It is the part of you that still believes in love, and it deserves to be cared for by you first."},{"t":"pull","h":"<em>She doesn’t need to knock. She needs to come home to herself while the door stays where it is.</em>"},{"t":"body","h":"The Star closed the spread. Hope is not foolish here. It simply needs to live in your own life, not in his inbox."},{"t":"h2","h":"Final Advice"},{"t":"body","h":"Stop reading the silence as rejection, and let your own life feel full. Spend this season on the things that make you feel like yourself. When he is ready to open the door, you will want to be standing in your own light."},{"t":"body","h":"With love,"},{"t":"h3","h":"Luana Spirits"}]</script>
+<script type="application/json" data-reading="halloween">[{"t":"label","h":"YOUR QUESTION"},{"t":"sub","h":"<em>“Is J. my twin flame, or a catalyst?”</em>"},{"t":"h2","h":"Confirmation"},{"t":"cards","items":["Two of Cups","The Tower reversed","Judgement"]},{"t":"body","h":"Two candles lit from the same flame, then one carried into another room. That was the first image Spirit showed me, and it answers your question with nuance. This is a real soul connection. In this chapter, it is doing catalyst work."},{"t":"body","h":"The Tower reversed tells me the upheaval has mostly passed. What is left is the slower work of rebuilding, and Judgement asks you to answer a call within yourself before anything outside you changes."},{"t":"h2","h":"Past Lives"},{"t":"body","h":"I was shown a coastal town, grey water, and a woman waiting at a window for letters that came late. You knew each other there. The waiting followed you here, and it is part of why his silence feels so loud."},{"t":"pull","h":"<em>The letter you have been waiting for is the one you write to yourself.</em>"},{"t":"h2","h":"The Soul Contract"},{"t":"body","h":"Your souls agreed that this time, she chooses herself first, and the connection has to meet her there. That is not a punishment. It is the healing the old lifetime never got."},{"t":"h2","h":"Clearing the Old Cycle"},{"t":"body","h":"Write the letter you were waiting for, to yourself, and let that past life rest. Read it aloud once, then put it somewhere you will not reread it every day."},{"t":"body","h":"With love,"},{"t":"h3","h":"Luana Spirits"}]</script>
+<!-- /READINGS -->
+
+<script>
+/* =====================================================================
+   1. CLIENT DATA: the only part that changes per client
+   ===================================================================== */
+const CLIENT = {
+  name: 'Sarah', key: 'sarah', since: 'Client since Sep 2026', etsy: true, calls: 0,
+  latest: 'halloween',
+  landing: ['hero', 'note', 'latest', 'sky', 'picture', 'next', 'rungs'], // reorder or remove to test
+  // Her 5 most needed messages, pulled from her own readings. One shows per day; she can tap for another.
+  messages: [
+    ['She doesn’t need to knock. She needs to come home to herself while the door stays where it is.', 'First Light · Sep 14'],
+    ['The letter you have been waiting for is the one you write to yourself.', 'Trick or Twin Flame? · Oct 24'],
+    ['Hope is not foolish here. It simply needs to live in your own life, not in his inbox.', 'First Light · Sep 14'],
+    ['This time, she chooses herself first, and the connection has to meet her there.', 'Trick or Twin Flame? · Oct 24'],
+    ['That tenderness is not a weakness. It is the part of you that still believes in love.', 'First Light · Sep 14']
+  ],
+  note: 'Sarah, this space is yours. Every reading we do together lives here, and each one lights a new star on your map. Come back whenever you need to hear Spirit again. Read slowly, take what resonates, and remember you are never doing this alone.',
+  // Her personal next step: the sidebar arrow, the map card and the card after each reading all point here
+  next: { go: 'heart', door: '“Your soul contract is clear now. What Spirit didn’t show yet is how he truly feels, and where this goes.”',
+    fine: 'If you feel called to see it, book the Heart Map by Nov 9 and it opens from the soul contract in your Trick or Twin Flame? reading, instead of starting fresh.', until: 'Continuity window · until Mon, Nov 9' },
+  academy: { joined: false }
+};
+
+const TOPICS = [ // by = reading that revealed it, ans = one-line answer
+  { id: 'now', name: 'The energy right now', q: 'Where does this stand today?', x: 70, y: 250, by: 'first', ans: 'Resting, not ended. He is in a processing season.' },
+  { id: 'his', name: 'His heart', q: 'How does he really feel?', x: 150, y: 150 },
+  { id: 'yours', name: 'Your energy', q: 'What is your own energy saying?', x: 205, y: 240 },
+  { id: 'block', name: 'The block', q: 'What is in the way between you?', x: 262, y: 140 },
+  { id: 'type', name: 'Connection type', q: 'Twin flame, soulmate or catalyst?', x: 338, y: 74, by: 'halloween', ans: 'A real soul connection, doing catalyst work in this chapter.' },
+  { id: 'contract', name: 'Soul contract', q: 'What did your souls agree to?', x: 392, y: 168, by: 'halloween', ans: 'This time, you choose yourself first.' },
+  { id: 'past', name: 'Past lives', q: 'Where have you known each other before?', x: 452, y: 86, by: 'halloween', ans: 'A coastal town, and a woman waiting for letters.' },
+  { id: 'lesson', name: 'Karmic lesson', q: 'What keeps repeating, and why?', x: 418, y: 258 },
+  { id: 'y1', name: 'Year one', q: 'What unfolds first?', x: 512, y: 196 },
+  { id: 'y2', name: 'Year two', q: 'Where is the turning point?', x: 560, y: 118 },
+  { id: 'y3', name: 'Year three', q: 'Where does it settle?', x: 612, y: 186 },
+  { id: 'verdict', name: 'Stay or release', q: 'Is this worth your energy?', x: 578, y: 272 }
+];
+
+/* Readings she owns, oldest first. The text lives in the READINGS blocks above. */
+const READ = {
+  first: { name: 'First Light', icon: 'sun', art: 'dawn', date: 'Sep 14', eyebrow: 'First Light · Etsy reading', title: 'The energy <em>right now</em>', pills: ['Delivered Sep 14, 2026', '1 question'],
+    q: 'Where does my connection with J. stand right now?', a: 'Resting, not ended. He is in a processing season.', blurb: 'Where your connection stands right now, and what Spirit wants you to do with this quiet season.' },
+  halloween: { name: 'Trick or Twin Flame?', icon: 'moon', art: 'halloween', date: 'Oct 24', tag: 'New', eyebrow: 'Seasonal reading · October 2026', title: 'Trick or <em>Twin Flame?</em>', pills: ['Delivered Oct 24, 2026', 'Limited edition'],
+    q: 'Is J. my twin flame, or a catalyst?', a: 'A real soul connection, with catalyst work in this chapter.', blurb: 'Twin flame or catalyst: your confirmation, a past life together, your soul contract, and how to clear the old cycle.' }
+};
+
+const PLAN = [ // 90-day plan draft, built from her readings
+  ['Days 1 to 30', 'Stop waiting at the window', 'The past-life pattern of waiting for letters, and reading his silence as rejection.', 'When I notice myself waiting on him, I will instead…'],
+  ['Days 31 to 60', 'Choose yourself first', 'Your soul contract asks you to choose yourself, and the connection has to meet you there.', 'One way I will choose myself this month is…'],
+  ['Days 61 to 90', 'Open to love in all forms', 'Catalyst work. He came to wake something up in you.', 'The woman I am becoming in love feels…']
+];
+
+/* =====================================================================
+   2. SHARED OFFERS: same for every client. Edit here when prices or links change.
+   ===================================================================== */
+const EMAIL = 'luana@luanaspirits.com';
+const OFFERS = {
+  heart: { label: 'The Heart Map', icon: 'heart', stars: ['his', 'yours', 'block'], eyebrow: 'Reading · waiting for you', promise: 'What is really moving beneath the surface, on both sides of this connection.',
+    whispers: ['What is happening beneath the silence?', 'What is keeping this connection still?', 'What is mine to carry, and what is not?'],
+    insideTitle: 'Four layers, <em>read just for you</em>',
+    inside: [['wave', 'The energy beneath the surface', 'What is actually moving in your connection right now. Not the story your mind tells at 2am, the energy Spirit sees.'],
+      ['key', 'The core block', 'The one pattern influencing movement or stillness in this phase, named clearly, and whose it is to carry.'],
+      ['compass', 'Your role in this chapter', 'What your soul is being asked to embody, and what it is ready to gently set down.'],
+      ['spark', 'Your anchor message', 'A closing message from Spirit, written to steady you whenever you come back to it.']],
+    gets: ['A channelled written reading, focused on what actually matters right now', 'Up to 3 focus areas you choose when you book', 'Direct or gentle delivery, your choice', 'Three new stars lit on your map'],
+    price: '$222 CAD', priceNote: 'Written reading · 3 to 5 business days · 24-hour rush available', steps: ['Book and choose up to 3 focus areas', 'I tune in, channel and write your reading', 'It arrives here, and your stars light up'],
+    quote: ['It feels like I can finally exhale.', 'What clients often tell me after this reading'],
+    feel: ['You feel this connection deeply, and you are ready to stop overthinking it', 'You want calm, honest guidance, not another sign to decode', 'You want one clear next step that brings you back to yourself'],
+    after: 'Clarity without noise. Insight without spiraling.',
+    cta: 'Light up my Heart Map', url: 'https://stan.store/LuanaSpirits/p/-union-alignment-snapshot-reading' },
+  blueprint: { label: 'The Union Blueprint', icon: 'eye', stars: ['type', 'contract', 'past', 'lesson'], extraMiss: ['A deeper read on the stars you already have'], eyebrow: 'Reading · my deepest offering',
+    promise: 'Your next twelve months in love, read quarter by quarter, with the soul-level story underneath.',
+    whispers: ['What does my next year in love look like?', 'Why does this connection feel so familiar?', 'What did our souls agree to?', 'When does what is blocking love finally shift?'],
+    insideTitle: 'A full roadmap, <em>not another sign</em>',
+    inside: [['calendar', 'Your year in four quarters', 'Where you stand, your turning points, what each season asks of you, and where it is all heading.'],
+      ['moon', 'Past lives and soul contracts', 'The karmic and soul-level history behind your question, and what your souls agreed to.'],
+      ['flame', 'Karmic cord clearing', 'Certified energy work to release the ties and repeating patterns that keep you looping in place.'],
+      ['eye', 'Higher Self channelling', 'If a specific connection comes through, their Higher Self may speak to their feelings, fears and desires.']],
+    gets: ['8,000 to 12,000 word written reading', 'A 12-month forecast, quarter by quarter', 'Akashic Records clearing and Alchemical Union Activation', 'Up to 5 focus areas and 4 questions of your choice', 'Your own section in this portal, to return to all year'],
+    price: '$555 CAD', priceNote: 'Written reading · 3 to 5 days', steps: ['Book your Blueprint and choose up to 5 focus areas', 'I channel your year and complete your energy work', 'Your Blueprint arrives here, and four stars light up'],
+    quote: ['Your very comprehensive and meticulous reading drew a line to all the blinking stars and I finally saw the beautiful constellation that has always been my roadmap.', '12-month forecast client · August 2026'],
+    feel: ['You keep asking the same question in different words, hoping for a new answer', 'Past readings only ever addressed one piece, never the whole picture', 'You can feel something shifting, but you cannot see its shape yet'],
+    after: 'A living document you will come back to again and again, as the year actually unfolds.',
+    cta: 'Open my Union Blueprint', url: 'https://readings.luanaspirits.com/blueprint/' },
+  pathway: { label: 'The Union Pathway', icon: 'path', stars: ['y1', 'y2', 'y3', 'verdict'], eyebrow: 'Reading · the clear answer', promise: 'A clear verdict on your connection, and where it is really heading over the next three years.',
+    whispers: ['Is this walking me toward union, or has it already given me what it came to give?', 'Is he truly capable of union right now?', 'Where does this go in three years?'],
+    insideTitle: 'Five layers, <em>read deeply</em>',
+    inside: [['spark', 'Your connection type verdict', 'Twin flame, soulmate, karmic or catalyst. A direct answer, so you know exactly what you are working with.'],
+      ['heart', 'Their heart and readiness', 'Not only whether they love you, but whether they are genuinely capable of union right now.'],
+      ['key', 'Karmic markers vs. union markers', 'The energetic evidence behind your verdict, so it never feels like just an opinion.'],
+      ['path', 'Your 3-year forecast', 'Year one, year two (your fork point) and year three. The shape of where this is heading.']],
+    gets: ['A five-topic channelled verdict, with the evidence behind it', 'What is actually blocking things, named with compassion', 'Your accelerator path, whichever way it points', 'A 3-year forecast, year by year, lit on your map'],
+    price: '$777 CAD', priceNote: 'Written PDF reading · 3 to 5 business days', steps: ['Book your Pathway', 'Share their name or initials, or let Spirit lead', 'Your verdict and forecast arrive here'],
+    quote: ['Your reading felt like one of the most full-circle healing moments of this entire year.', '12-month forecast client'],
+    feel: ['You have been quietly asking “is this actually going somewhere?”', 'You want a real answer, not another feel-good confirmation', 'You are ready to lean all the way in, or release this with peace'],
+    after: 'You will know whether to lean all the way in, or let go with peace.',
+    cta: 'See where this is heading', url: 'https://readings.luanaspirits.com/pathway/' },
+  clarity: { label: 'Soul Clarity Session', icon: 'chat', sub: 'Open to you at any step', eyebrow: 'Coaching · one-time introductory call', promise: 'Sixty minutes with me, to turn what your readings showed you into real change.',
+    whispers: ['Why do I keep living the same story?', 'How do I stop spiraling and trust myself again?', 'What is my next aligned step?'],
+    insideTitle: 'What happens <em>on our call</em>',
+    inside: [['chat', 'We talk through everything', 'We go gently into what hurts. Not therapy, but it often feels deeply therapeutic.'],
+      ['heart', 'Inner work, live', 'A guided practice to meet your protector parts and comfort the inner child underneath. My Divine Reparenting Method™ in action.'],
+      ['sun', 'Your guides and higher self', 'We invite them in to support the session. Spiritual, never religious.'],
+      ['pen', 'Your plan, mapped', 'You leave with healing and direction: your 90-day plan, finished together.']],
+    gets: ['A private 60-minute call on Google Meet', 'Video replay and transcript, saved here within 48 hours', 'Your 90-day plan, finished together', '3 healing resources hand-picked for you', 'Academy Standard access as a bonus', 'Everything is yours to keep, whatever you decide next'],
+    miss: ['Your 90-day plan is drafted, but not yet mapped with me', 'Call replays and next steps'], price: '$333 CAD', priceNote: 'One-time · new clients only',
+    steps: ['Fill in your 90-day plan draft', 'Book your call and complete the short intake', 'Your replay, transcript and plan land here'],
+    quote: ['She brings me so much peace and help with her readings. I also love how she gives guidance on how to navigate moving forward.', 'Reading client'],
+    feel: ['You have done the affirmations and the mirror work, and want your real life to move', 'You want someone to gently point out your blind spots', 'You are ready to stop walking this alone'],
+    after: 'It’s not about who you attract. It’s about who you choose.',
+    cta: 'Book my Soul Clarity Session', url: 'https://coaching.luanaspirits.com/soul-clarity-session/',
+    note: 'If you join Love, Rewired on the call or within 7 days, your $333 is credited to your first month.', extra: '<div class="row-btns"><button class="btn ghost" type="button" data-go="plan">Open my 90-day plan draft</button></div>' },
+  rewired: { label: 'Love, Rewired', icon: 'heart', sub: '3-month container', eyebrow: 'Coaching · 3 months · 5 women at a time', promise: 'A 3-month Divine Feminine coaching container, to rewire the patterns behind who you choose.',
+    whispers: ['What if I trusted myself again?', 'What if I caught the spiral before it took me?', 'What if love felt like peace?'],
+    insideTitle: 'Three layers <em>we rewire together</em>',
+    inside: [['wave', 'Your nervous system', 'Regulating your triggers, so anxiety stops drowning out your intuition.'],
+      ['moon', 'Your inner child', 'My Divine Reparenting Method™, to give her the love she has been waiting for.'],
+      ['compass', 'Your choices', 'Communicating, setting boundaries, receiving love, and choosing partners who choose you back.']],
+    gets: ['6 private coaching calls, with replay, transcript and next steps saved here', '3 monthly readings on your path', 'The full Manifest Your Union course', 'Support between calls, Monday to Friday', 'Academy Premium, with live group coaching and Q&A calls'],
+    miss: ['Every coaching page in this portal', 'Your monthly readings', 'Academy Premium'], price: '$997 CAD / month', priceNote: '3 months · or $2,991 paid in full, with a bonus integration call',
+    steps: ['Start with a Soul Clarity Session', 'Join on the call or within 7 days, and your $333 is credited', 'Your coaching pages open here'],
+    quote: ['I’ve come across many so-called guides over the years, but I’ve never met anyone as honest as her.', 'Reading client'],
+    feelLabel: 'After three months', feel: ['You trust yourself again', 'You catch the anxious spiral before it takes you', 'You feel peace and ease in your body, instead of constant searching', 'You choose love from a whole place, not from the wound'],
+    after: 'I’m your lighthouse. You’re the captain.',
+    cta: 'Discover Love, Rewired', url: 'https://coaching.luanaspirits.com/love-rewired/' },
+  academy: { label: 'Manifest Your Union', icon: 'book', sub: 'Finish it, earn a reading', eyebrow: 'Academy · Spiritual Love Healing Academy', promise: 'Love yourself into inner union, so every area of your life, including romance, can transform.',
+    whispers: ['What if the union I want starts with me?', 'Which block is mine to heal first?'],
+    insideTitle: 'Four modules, <em>one homecoming</em>',
+    inside: [['moon', 'Soul connections', 'Decode why this connection came, spot karmic patterns, and surrender what you cannot control.'],
+      ['heart', 'Rebuild with yourself', 'Triggers, inner child parts and my Divine Reparenting Method™.'],
+      ['flame', 'Clear the field', 'Map your love wounds and release old beliefs with EFT tapping.'],
+      ['spark', 'Call in your counterpart', 'Collapse old timelines and live as the version of you who already has it.']],
+    gets: ['18 lessons across 4 modules, plus the Union Block quiz to show you where to start', 'An integration activity after every lesson, about 20 to 30 minutes a week', 'Live Q&A and group coaching calls with me', 'Meditations, EFT tapping, inner child and intuition work', 'A free reading when you finish the course and send me your workbook'],
+    miss: ['Every lesson below', 'Your course reward reading'], price: '$33 USD / month', priceNote: 'Academy Premium · course + live Q&A and group coaching · or join the community on Standard for $7 USD / month',
+    steps: ['Join the Academy and choose Premium', 'Take the Union Block quiz, then one lesson a week', 'Email me your finished workbook to redeem your reading'],
+    quote: ['I highly recommend her and her coaching classes on Skool.', 'Spiritual Love Healing Academy member'],
+    cta: 'Begin Manifest Your Union', url: 'https://www.skool.com/the-union-alignment-membership-3008' }
+};
+const COURSE = [
+  ['Understanding Soul Connections & Divine Union', [['Course Intro: Welcome', 'Healing yourself and calling in union through unconditional self-love.'], ['Why You Chose This Path: Soul Connections', 'Decode your soul connections and the lessons they brought you.'], ['Karmic Patterns', 'How to spot them, heal them and break the cycle.'], ['Releasing Attachments & Surrender', 'Letting go of control and choosing love in the now.']]],
+  ['Rebuilding the Relationship with Yourself', [['Why You Feel So Bad', 'Triggers, self-sabotage and the power of awareness.'], ['Fragmentation, Parts & the Inner Child', 'You are not broken. You are made of many sacred selves.'], ['Learn & Apply the Divine Reparenting Method', 'My soul-led process to soothe triggers and return to wholeness.'], ['Daily Inner Child Ritual', 'A five-minute check-in that rewires your nervous system for love.']]],
+  ['Clearing the Field for Divine Union', [['Separation vs. Unity Consciousness', 'Why oneness feels so much better.'], ['Mapping Your Love Wounds + Beliefs', 'A road map to uncover what has been blocking your union.'], ['Healing Family & Childhood Beliefs with EFT', 'Releasing fear, abandonment and unworthiness, one tap at a time.'], ['New to Tapping? Start Here First!', 'The basics of EFT before you begin.'], ['Clearing Statements', 'Dissolving past life, spiritual and societal programming.']]],
+  ['Call In Your Divine Counterpart', [['Collapse the Old Timelines', 'Release the past and choose your new path of love.'], ['Quantum Embodiment Visualization', 'Connect with the version of you already living this love.'], ['Send the Signal to the Universe', 'Declare your desire and build your relationship container.'], ['Open to Intimacy + Practice Communication', 'Vulnerability is the portal, communication is the pathway.'], ['Live as the Version of You Who Already Has It', 'The beginning of everything you have asked for.']]]
+];
+const SEASONAL = [ // cls: owned | gift | soon | dim. needs: only shows if she owns that reading. Set url on The 2027 Forecast once its checkout is live.
+  { name: 'Trick or Twin Flame?', when: 'October 2026', cls: 'owned', art: 'halloween', stamp: '✦ In your collection', go: 'halloween', url: 'https://stan.store/LuanaSpirits/p/trick-or-treat-2026', parts: ['Confirmation', 'Past lives', 'Soul contract', 'Clearing the old cycle'], blurb: 'Twin flame or catalyst: confirmation, past lives, soul contract, and clearing the old cycle.' },
+  { name: 'Your sealed October bonus', when: 'Unsealing soon', cls: 'gift', art: 'keyhole', needs: 'halloween', stamp: '✦ Only for October clients', parts: ['Sealed', 'Sealed', 'Sealed'], blurb: 'Because you booked Trick or Twin Flame?, something no one else will receive is waiting here for you. It is sealed for now, and it unseals right here.' },
+  { name: 'The 2027 Forecast', when: 'Opens Dec 1, 2026', cls: 'soon', art: 'forecast', opens: '2026-12-01T08:00:00Z', url: '', notify: true, parts: ['Jan to Mar', 'Apr to Jun', 'Jul to Sep', 'Oct to Dec'], blurb: 'Your twelve months of 2027, read quarter by quarter. Booking opens December 1 for a limited window, and clients in the portal hear about it first.' },
+  { name: "Lion's Gate Portal Reading", when: 'August 2026', cls: 'dim', art: 'lion', stamp: 'Closed', parts: ['6-month forecast', '12-month forecast'], blurb: "6-month and 12-month forecasts opened through the Lion's Gate portal. Seasonal readings return only with their portal." }
+];
+
+/* =====================================================================
+   3. ENGINE: same for every client, no need to edit below
+   ===================================================================== */
+(function () {
+  const $ = s => document.querySelector(s), K = k => CLIENT.key + '-' + k;
+  const store = { get: k => { try { return localStorage.getItem(K(k)) || ''; } catch (e) { return ''; } }, set: (k, v) => { try { localStorage.setItem(K(k), v); } catch (e) {} } };
+  const plain = s => s.replace(/<[^>]+>/g, ''), li = a => a.map(x => `<li>${x}</li>`).join(''), esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  document.querySelectorAll('script[data-reading]').forEach(s => { if (READ[s.dataset.reading]) READ[s.dataset.reading].text = JSON.parse(s.textContent); });
+  const T = id => TOPICS.find(t => t.id === id), lit = TOPICS.filter(t => t.by).length, owned = Object.keys(READ);
+  const missing = ids => ids.filter(i => !T(i).by).map(i => T(i).name);
+  const NX = CLIENT.next, NO = OFFERS[NX.go] || {};
+
+  const P = { spark: '<path d="M12 2.5l2 7.5 7.5 2-7.5 2-2 7.5-2-7.5-7.5-2 7.5-2z" fill="currentColor" stroke="none"/>', moon: '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.4 6.4 0 0 0 10.1 10.1z"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
+    map: '<circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="8" r="1.6"/><circle cx="15" cy="14" r="1.6"/><circle cx="20" cy="5" r="1.6"/><path d="M6.2 15.6l3-6M11.3 9.1l2.5 3.7M16 12.6l3-6.2"/>',
+    heart: '<path d="M12 20s-7.5-4.6-9.2-9.3A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9.2 3.7C19.5 15.4 12 20 12 20z"/>', eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    path: '<path d="M4 20c5 0 4-6 8-6s3-6 8-6"/><circle cx="4" cy="20" r="1.4"/><circle cx="12" cy="14" r="1.4"/><circle cx="20" cy="8" r="1.4"/>', gem: '<path d="M6 4h12l3.5 5L12 20 2.5 9z"/><path d="M2.5 9h19M9 4l3 16 3-16"/>',
+    chat: '<path d="M4 5h16v11H10l-5 4v-4H4z"/>', pen: '<path d="M4 20l1-4L16 5l3 3L8 19z"/>', play: '<circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/>',
+    book: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/>', mail: '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/>',
+    lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>', menu: '<path d="M4 7h16M4 12h16M4 17h10"/>', close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>', back: '<path d="M19 12H5M11 6l-6 6 6 6"/>', list: '<path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>', bookmark: '<path d="M6 3.5h12v17l-6-4.5-6 4.5z"/>',
+    wave: '<path d="M3 9.5c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>', key: '<circle cx="8" cy="15.5" r="4"/><path d="M11 12.5l8.5-8.5M16 7l3 3"/>',
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>', calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+    flame: '<path d="M12 21c-3.9 0-6.5-2.6-6.5-6.2 0-3.6 3-5.6 3.8-9.3 2 1.2 3 3 3.2 4.8 1-.8 1.6-2 1.8-3 2.4 2 4.2 4.6 4.2 7.5 0 3.6-2.6 6.2-6.5 6.2z"/>', copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>' };
+  const ic = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+  const cta = (o, cls = 'gold') => o.url ? `<a class="btn ${cls}" href="${o.url}" target="_blank" rel="noopener">${o.cta}${ic('arrow')}</a>` : `<button class="btn ${cls}" type="button" data-go="${o.go || NX.go}">${o.cta}${ic('arrow')}</button>`;
+  const mail = (subject, body) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  /* art */
+  let uid = 0;
+  const dots = (n, w, h, s) => { let o = ''; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    for (let i = 0; i < n; i++) o += `<circle cx="${(r() * w).toFixed(0)}" cy="${(r() * h).toFixed(0)}" r="${(r() * 1.2 + .4).toFixed(1)}" fill="#fff" opacity="${(r() * .6 + .25).toFixed(2)}"/>`; return o; };
+  const sky = (u, a, b, c) => `<defs><radialGradient id="g${u}" cx="70%" cy="20%" r="95%"><stop offset="0" stop-color="${a}"/><stop offset=".6" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient></defs><rect width="640" height="260" fill="url(#g${u})"/>`;
+  const rays = (n, cx, cy, r1, r2) => Array.from({ length: n }, (_, i) => { const a = i * 2 * Math.PI / n; return `<line x1="${cx + Math.cos(a) * r1}" y1="${cy + Math.sin(a) * r1}" x2="${cx + Math.cos(a) * r2}" y2="${cy + Math.sin(a) * r2}"/>`; }).join('');
+  const ART = {
+    union: u => sky(u, '#9b77c2', '#5f4086', '#3f2860') + dots(70, 640, 260, 4) + '<g fill="none" stroke="#efd59d" stroke-width="1.2" opacity=".75"><circle cx="530" cy="110" r="52"/><circle cx="580" cy="110" r="52"/></g><path d="M555 65a52 52 0 0 1 0 90 52 52 0 0 1 0-90z" fill="#efd59d" opacity=".22"/><circle cx="555" cy="110" r="3" fill="#fff"/>',
+    dawn: u => sky(u, '#e9b48c', '#6a4a7e', '#2f2048') + dots(40, 640, 150, 7) + '<circle cx="320" cy="262" r="64" fill="#f7deb2"/><rect y="246" width="640" height="14" fill="#2a1b3a"/>',
+    halloween: u => sky(u, '#a65a52', '#4e2b54', '#22152e') + dots(30, 640, 150, 11) + '<circle cx="450" cy="76" r="40" fill="#efb070"/><circle cx="466" cy="66" r="35" fill="#5a2c55" opacity=".6"/><path d="M0 222Q160 186 320 214T640 200V260H0Z" fill="#1c1126"/><g fill="#f4cc86"><rect x="196" y="168" width="8" height="40" rx="2"/><rect x="218" y="160" width="8" height="48" rx="2"/></g>',
+    forecast: u => sky(u, '#6b6aa6', '#3f3366', '#21183a') + dots(40, 640, 260, 5) + `<g stroke="#e2dcf0" opacity=".5">${rays(12, 320, 128, 0, 72)}</g><circle cx="320" cy="128" r="80" fill="none" stroke="#efd59d" opacity=".6"/><text x="320" y="138" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-size="30" fill="#f7f0fc">2027</text>`,
+    lion: u => sky(u, '#c58a3c', '#6a3a4a', '#2a1628') + `<g stroke="#efd59d" stroke-width="2" opacity=".75">${rays(18, 320, 140, 46, 86)}</g><circle cx="320" cy="140" r="40" fill="#efd59d"/>`,
+    mystery: u => sky(u, '#5d4a7c', '#3a2a52', '#241a36') + dots(30, 640, 260, 3) + '<rect x="284" y="78" width="72" height="104" rx="8" fill="none" stroke="#d2c4e2" opacity=".6"/><text x="320" y="142" text-anchor="middle" font-family="Playfair Display,Georgia,serif" font-size="34" fill="#d2c4e2">?</text>',
+    keyhole: u => sky(u, '#8e6ab6', '#553878', '#3a2655') + dots(55, 640, 260, 9) + '<circle cx="520" cy="96" r="80" fill="#efd59d" opacity=".12"/><path d="M520 62a22 22 0 0 1 12 40l7 36h-38l7-36a22 22 0 0 1 12-40z" fill="none" stroke="#efd59d" stroke-width="1.5"/>'
+  };
+  const art = (n, al = 'xMid') => `<svg viewBox="0 0 640 260" preserveAspectRatio="${al}YMid slice" aria-hidden="true">${ART[n](++uid)}</svg>`;
+
+  /* "where your story goes next": after a reading, never inside it */
+  const after = () => `<section class="after"><span class="eyebrow">Where your story goes next</span><h2 class="h2">${NO.label || 'Your next step'}</h2><p class="door">${NX.door}</p><p>${NX.fine}</p>
+    <div class="row-btns">${cta(Object.assign({}, NO, { go: NX.go }))}<button class="link" type="button" data-go="clarity">Or work with me 1:1, at any step</button></div><span class="until" style="color:var(--mist)">${NX.until}</span></section>`;
+
+  /* full reading: renders every block, never changes the words */
+  function reading(id) {
+    const r = READ[id], b = r.text || []; let html = '', toc = [], n = 0, i = 0, words = 0;
+    const wc = s => plain(s || '').split(/\s+/).filter(Boolean).length;
+    b.forEach(x => words += wc(x.h) + wc((x.items || []).join(' ')));
+    while (i < b.length) {
+      const x = b[i];
+      if (x.t === 'h2' || x.t === 'h3') { const sid = id + '-s' + n++; if (x.t === 'h2') toc.push([sid, plain(x.h)]); html += `<${x.t} class="r-${x.t}" id="${sid}">${x.h}</${x.t}>`; }
+      else if (x.t === 'symbol' || x.t === 'symdesc') { let g = '';
+        while (i < b.length && /^sym/.test(b[i].t)) { const d = b[i + 1]; if (b[i].t === 'symbol' && d && d.t === 'symdesc') { g += `<div class="sym"><b>${b[i].h}</b><span>${d.h}</span></div>`; i++; } else g += `<div class="sym"><b>${b[i].h}</b></div>`; i++; }
+        html += `<div class="syms">${g}</div>`; continue; }
+      else if (x.t === 'cards') html += `<div class="r-label">Cards pulled</div><div class="cards">${x.items.map(c => `<span class="tc"><i></i>${c.replace(' reversed', '')}${/reversed/.test(c) ? ' <small>reversed</small>' : ''}</span>`).join('')}</div>`;
+      else if (x.t === 'label') html += `<div class="r-label">${x.h}</div>`;
+      else if (x.t === 'list') html += `<ul>${li(x.items)}</ul>`;
+      else html += `<p class="${x.t === 'body' ? '' : 'r-' + x.t}">${x.h}</p>`;
+      i++;
+    }
+    html = html.replace(/(https:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    const next = owned[owned.indexOf(id) + 1];
+    return `<div class="art">${art(r.art)}</div>
+      <div class="head"><div class="eyebrow">${r.eyebrow}</div><h2 class="h2">${r.title}</h2>
+        <div class="meta">${r.pills.map(p => `<span class="pill">${p}</span>`).join('')}<span class="pill">${words.toLocaleString()} words · ${Math.max(1, Math.round(words / 220))} min read</span></div>
+        <div class="row-btns" data-resume-box="${id}" hidden><button class="btn" type="button" data-resume="${id}">${ic('arrow')}Continue where you left off</button><span class="until"></span></div></div>
+      <nav class="contents box" id="contents-${id}"><span class="eyebrow">In this reading · ${toc.length} sections</span><ol>${toc.map(t => `<li><button type="button" data-jump="${t[0]}">${t[1]}</button></li>`).join('')}</ol></nav>
+      <div class="rd" id="text-${id}">${html}</div>
+      ${after()}
+      <div class="pager"><button class="btn ghost" type="button" data-go="map">${ic('back')}Back to your map</button>${next ? `<button class="btn ghost" type="button" data-go="${next}">Next: ${READ[next].name}${ic('arrow')}</button>` : ''}</div>`;
+  }
+
+  /* locked page: always the same three boxes */
+  const unlock = o => `<div class="lockhero"><div class="bg">${art('keyhole')}</div><div class="in"><div class="eyebrow">${o.eyebrow}</div><h2 class="h2">${o.label}</h2><p class="promise">${o.promise}</p>
+      ${o.whispers ? `<div class="whispers" aria-label="Questions this answers">${o.whispers.map(w => `<span>“${w}”</span>`).join('')}</div>` : ''}</div></div>
+    ${o.inside ? `<div class="head"><span class="eyebrow">Sealed inside</span><h2 class="h2">${o.insideTitle}</h2></div>
+      <div class="seals">${o.inside.map(([i, t, d]) => `<div class="sealed"><span class="wax">${ic(i)}</span><b>${t}</b><span>${d}</span><small>${ic('lock')}Opens when you book</small></div>`).join('')}</div>` : ''}
+    ${o.quote ? `<figure class="praise"><blockquote>“${o.quote[0]}”</blockquote><figcaption>${o.quote[1]}</figcaption></figure>` : ''}
+    <div class="unlock"><div class="ub get"><span class="t">What you get</span><ul>${li(o.gets)}</ul></div>
+      <div class="ub miss"><span class="t">What's missing from your map</span><ul>${li(o.miss || missing(o.stars).concat(o.extraMiss || []))}</ul></div>
+      <div class="ub how"><span class="t">How to unlock it</span><div class="price">${o.price}<small>${o.priceNote}</small></div><ol>${li(o.steps)}</ol>${cta(o)}
+        <a class="link" href="${mail('A question about ' + o.label, 'Hi Luana,\n\nI have a question about ' + o.label + ':\n\n\n' + CLIENT.name)}">Not sure it's right for you? Ask me first</a></div></div>
+    ${o.feel ? `<div class="fit box"><span class="eyebrow">${o.feelLabel || 'This is calling you if'}</span><ul>${li(o.feel)}</ul>${o.after ? `<p class="door">${o.after}</p>` : ''}</div>` : ''}
+    ${o.note ? `<p class="note">${o.note}</p>` : ''}${o.extra || ''}`;
+
+  /* landing sections (order set in CLIENT.landing) */
+  const day = Math.floor(Date.now() / 864e5);
+  let msgI = (day + (parseInt(store.get('msg-' + day)) || 0)) % CLIENT.messages.length;
+  const pc = (go, icon, t, v, n, on, d) => `<button class="pc" type="button" data-go="${go}"><span class="ico">${ic(icon)}</span><span class="t">${t}</span><span class="v">${v}</span><span class="pips">${'<i class="on"></i>'.repeat(on)}${'<i></i>'.repeat(n - on)}</span><span class="d">${d}</span></button>`;
+  const VAULT = SEASONAL.filter(s => !s.needs || READ[s.needs]), ownedSeason = VAULT.filter(s => s.cls === 'owned').length;
+  const hasGift = VAULT.some(s => s.cls === 'gift'), soon = VAULT.find(s => s.opens);
+  const days = d => Math.max(0, Math.ceil((Date.parse(d) - Date.now()) / 864e5));
+  const L = {
+    hero: () => `<section class="hero"><div class="bg">${art('union', 'xMax')}</div><div class="in"><div class="eyebrow">Welcome back, ${CLIENT.name}</div>
+      <p class="quote" id="quote">${CLIENT.messages[msgI][0]}</p><p class="qfrom" id="qfrom">Today's message for you · from your ${CLIENT.messages[msgI][1]} reading</p>
+      <button class="again" type="button" id="again">${ic('refresh')}Another message for me</button>
+      <div class="stats"><span><b>${lit}</b> of 12 stars lit</span><span><b>${owned.length}</b> readings</span><span><b>${CLIENT.calls}</b> coaching calls</span></div></div></section>`,
+    note: () => `<section class="letter"><span class="eyebrow">A note from Luana</span><p>${CLIENT.note}</p><p class="sig">With love, Luana</p></section>`,
+    latest: () => { const r = READ[CLIENT.latest]; return `<section class="latest"><div class="art">${art(r.art)}</div><div class="in"><span class="eyebrow">Your newest reading${r.tag ? ' · ' + r.tag : ''}</span><h2 class="h2">${r.title}</h2><p class="lede">${r.blurb}</p><div class="row-btns" id="latestBtn"></div></div></section>`; },
+    sky: () => `<section class="skybox"><span class="eyebrow">Your constellation</span><h2 class="h2">The Connection Map <em>for ${CLIENT.name}</em></h2><p class="lede">Each reading lights stars. Tap one to see what Spirit showed you there.</p><div class="sky-wrap"><svg class="cons" id="sky" viewBox="0 0 660 340" role="img" aria-label="Your constellation of twelve topics"></svg></div><span class="swipe">Swipe to see all your stars →</span></section>`,
+    picture: () => `<div class="head"><span class="eyebrow">The complete picture</span><h2 class="h2">Everything available <em>to you</em></h2></div><div class="picture">
+      ${pc(owned[0], 'spark', 'Readings', `${owned.length} <small>of 5</small>`, 5, owned.length, owned.map(o => READ[o].name).join(' and ') + ' are yours.')}
+      ${pc('vault', 'gem', 'Seasonal', `${ownedSeason} <small>of 3</small>`, 3, ownedSeason, (hasGift ? 'A sealed bonus only October clients receive is waiting. ' : '') + (soon ? soon.name + ' opens ' + soon.when.replace('Opens ', '') + '.' : ''))}
+      ${pc('clarity', 'chat', 'Coaching', `${CLIENT.calls} <small>calls</small>`, 2, 0, 'Open to you at any step. Your 90-day plan is drafted.')}
+      ${pc('academy', 'book', 'Academy', CLIENT.academy.joined ? 'Joined' : 'Not joined', 1, CLIENT.academy.joined ? 1 : 0, 'Finish Manifest Your Union, earn a free reading.')}</div>`,
+    next: () => `<div class="next"><div><span class="eyebrow">Your next star</span><p class="door">${NX.door}</p><p class="fine">${NX.fine}</p></div><div class="act">${cta(Object.assign({}, NO, { go: NX.go }))}<span class="until">${NX.until}</span></div></div>`,
+    rungs: () => [['First Light', 'first', ['now']], ['The Heart Map', 'heart', OFFERS.heart.stars], ['The Union Blueprint', 'blueprint', OFFERS.blueprint.stars], ['The Union Pathway', 'pathway', OFFERS.pathway.stars]].map(([nm, page, ids]) => {
+      const got = ids.length - missing(ids).length;
+      return `<div class="rung"><div class="rung-head"><b>${nm}</b><span class="${got ? 'lit' : ''}">${got} of ${ids.length} revealed</span></div><div class="topics">${ids.map(id => { const t = T(id);
+        return `<button type="button" class="topic ${t.by ? 'on' : ''}" id="topic-${id}" data-go="${t.by || page}"><span class="k">${ic(t.by ? 'spark' : 'lock')}${t.by ? 'From ' + READ[t.by].name : 'Not yet read'}</span><span class="v">${t.name}</span><span class="d">${t.by ? t.ans : t.q}</span></button>`; }).join('')}</div></div>`; }).join('')
+  };
+
+  /* course: locked lessons, or tick-off progress once she has joined */
+  const course = () => { const j = CLIENT.academy.joined, done = (store.get('course') || '').split(','); let n = 0;
+    return `<div class="head"><span class="eyebrow">Inside the course</span><h2 class="h2">Manifest Your Union, <em>lesson by lesson</em></h2><p class="lede">${j ? 'Tick each lesson as you finish it and its workbook page. Your progress saves on this device.' : 'Start with the Union Block quiz, then move through one lesson and one integration activity a week. Healing is not a race.'}</p></div>
+    <div class="mods">${COURSE.map(([m, ls], mi) => `<div class="mod box"><span class="eyebrow">Module ${mi + 1}</span><h3 class="h3">${m}</h3><ol>${ls.map(([t, d]) => { const k = 'L' + n++, on = done.includes(k);
+      return `<li>${j ? `<button class="ck ${on ? 'done' : ''}" type="button" data-lesson="${k}" aria-label="Mark ${t} complete">${ic('check')}</button>` : `<span class="ck">${ic('lock')}</span>`}<div><b>${t}</b><span>${d}</span></div></li>`; }).join('')}</ol></div>`).join('')}</div>
+    <div class="reward"><div class="seal">${ic('spark')}</div><div class="head"><span class="eyebrow">The course reward</span><h3 class="h3">Finish the work, receive a reading</h3><p>I want to support the women who are doing the work. When you complete every lesson of Manifest Your Union, email me your finished workbook pages and I'll send you a complimentary reading as a thank you.</p>
+      <ol style="margin:0;padding-left:20px"><li>Complete all lessons and every workbook page</li><li>Email your pages to <span style="font-family:var(--mono);color:var(--glow)">${EMAIL}</span> with the subject "Manifest Your Union complete"</li><li>I review your work and send your reading booking link</li></ol></div></div>`; };
+  OFFERS.academy.extra = course();
+
+  /* "which reading is right for me" email: short qualifying fields, all optional. Asks what she wants clarity on, never details about him. */
+  const FORM = [
+    ['clarity', 'What I most want clarity on right now', 'text', 'In a few words, for example: whether to keep waiting'],
+    ['long', 'How long I have been carrying this', ['A few weeks', 'A few months', 'Over a year', 'Several years']],
+    ['about', 'This is mostly about', ['A specific connection', 'Calling in new love', 'My own energy and healing', 'Something else']],
+    ['format', 'What feels right to me', ['A written reading', 'Working with you 1:1', 'Not sure yet']],
+    ['budget', 'A comfortable investment for me right now', ['Under $100', 'Around $222', '$555 to $777', 'Open to your suggestion']],
+    ['when', 'How soon I would love guidance', ['This week', 'This month', 'No rush']]];
+  const formHtml = () => FORM.map(([k, label, kind, ph]) => kind === 'text'
+    ? `<div class="field"><label for="f-${k}">${label}</label><input type="text" id="f-${k}" data-key="f-${k}" maxlength="200" placeholder="${ph}"></div>`
+    : `<div class="field"><label>${label}</label><div class="pick" role="group" aria-label="${label}">${kind.map(v => `<button type="button" data-pick="${k}" data-val="${v}" aria-pressed="${store.get('f-' + k) === v}">${v}</button>`).join('')}</div></div>`).join('');
+
+  const qList = () => JSON.parse(store.get('qs') || '[]');
+  const fv = k => store.get('f-' + k).trim();
+  const MAILPART = {
+    to: () => EMAIL,
+    subject: () => `Which reading is right for me? · ${CLIENT.name}`,
+    body: () => { const qs = qList();
+      return `Hi Luana,\n\nI'd love your help choosing the right reading or session for me.\n\n`
+        + FORM.map(([k, label]) => `${label}: ${fv(k)}`).join('\n')
+        + `\n\nThe questions I'm holding:\n${qs.length ? qs.map(q => '• ' + q).join('\n') : '• '}\n\nThank you,\n${CLIENT.name}\n(Sent from my Connection Map)`; },
+    all: () => `To: ${EMAIL}\nSubject: ${MAILPART.subject()}\n\n${MAILPART.body()}` };
+  /* questions she is holding: each one can be emailed to Luana */
+  const askMail = q => mail(`A question for Spirit from ${CLIENT.name}`, `Hi Luana,\n\nI'd love to ask Spirit this in a reading:\n\n"${q}"\n\nWhich reading would you recommend for me?\n\n${CLIENT.name}`);
+  const held = () => { const qs = JSON.parse(store.get('qs') || '[]');
+    return qs.length ? qs.map((q, i) => `<div class="box"><p class="q">“${esc(q)}”</p><div class="row-btns"><a class="btn sm" href="${askMail(q)}">${ic('mail')}Ask Spirit this in a reading</a><button class="link" type="button" data-delq="${i}">Remove</button></div></div>`).join('') : '<p class="lede">Your questions will appear here.</p>'; };
+
+  /* custom pages */
+  const V = {
+    map: () => CLIENT.landing.map(s => L[s]()).join(''),
+    vault: () => `<div class="head"><span class="eyebrow">The seasonal vault</span><h2 class="h2">Readings that open <em>with the portals</em></h2><p class="lede">Seasonal readings only open during their window. Tap a card to look inside.</p></div>
+      <div class="vault">${VAULT.map((s, i) => `<button type="button" class="banner ${s.cls}" data-vault="${i}" aria-expanded="false"><div class="art">${art(s.art)}<span class="stamp">${s.opens ? (days(s.opens) ? `Opens in ${days(s.opens)} days` : 'Open now') : s.stamp}</span></div><div class="body"><b>${s.name}</b><span class="k">${s.when}</span></div></button>`).join('')}</div><div id="vault-detail"></div>`,
+    plan: () => `<div class="head"><span class="eyebrow">Your 90-day plan · draft</span><h2 class="h2">From your readings <em>to real change</em></h2><p class="lede">I started this plan from what came through in your readings. Fill in the blanks in your own words. We finish it together on your Soul Clarity Session. Your answers save on this device.</p></div>
+      <div class="phases">${PLAN.map((p, i) => `<div class="ph box"><span class="eyebrow">${p[0]}</span><span class="v">${p[1]}</span><p class="from">From your readings: ${p[2]}</p><label for="p${i}">${p[3]}</label><textarea id="p${i}" data-key="p${i}"></textarea></div>`).join('')}</div>
+      <div class="head"><h3 class="h3">What we would talk about on our call</h3><label for="pcall">The one thing I most want to shift in the next 90 days is…</label><textarea id="pcall" data-key="pcall"></textarea></div>
+      <div class="next"><div><span class="eyebrow">Bring this plan to life</span><p class="door">Sixty minutes, one plan, and a clear path forward.</p></div><div class="act">${cta(OFFERS.clarity)}<span class="until">$333 · one-time introductory call</span></div></div>`,
+    calls: () => `<div class="head"><span class="eyebrow">Coaching · your call history</span><h2 class="h2">Every call, <em>kept here</em></h2><p class="lede">When we work together, each call is saved on this page: the replay, the transcript, what we uncovered, and your next steps. Here is what one looks like.</p></div>
+      <div class="box" style="display:grid;gap:12px;opacity:.7"><div class="meta"><span class="pill">Session 1</span><span class="pill">Replay</span><span class="pill">Transcript</span><span class="pill">Next steps</span></div><div class="ghost" style="width:60%"></div><div class="ghost" style="width:90%"></div><div class="ghost" style="width:75%"></div></div>
+      <div class="next"><div><span class="eyebrow">Your first call</span><p class="door">Coaching is open to you at any step of your journey.</p><p class="fine">Your first call record appears here after your Soul Clarity Session.</p></div><div class="act">${cta(OFFERS.clarity)}</div></div>`,
+    questions: () => `<section class="ask"><span class="eyebrow">What is your heart still asking?</span><h2 class="h2">Write it here. <em>Every question you hold is one Spirit can answer.</em></h2>
+        <p class="lede">The questions that keep you up at night, the ones you're almost afraid to ask. Write them down, then send any of them to me and I'll tell you which reading will answer it best.</p>
+        <div class="addrow"><input type="text" id="newq" maxlength="300" placeholder="What does he feel when he thinks of me?" aria-label="Your question"><button class="btn" type="button" id="addq">Hold this question</button></div></section>
+      <div class="held" id="held">${held()}</div>
+      <section class="ask helper"><span class="eyebrow">Ready for your answers?</span><h2 class="h2">Send them to me, <em>and I'll point you to the right reading</em></h2>
+        <p class="lede">Your email is already written. Tap what fits, skip anything you like, and I'll reply personally with the reading or session that will answer what you're holding.</p>
+        <ol class="steps3"><li><span>Tap the answers that fit below. Everything is optional.</span></li><li><span>Tap <b>Open my email</b>. Your message is ready, just press send.</span></li><li><span>Email didn't open? Tap <b>Copy</b> on each part and paste it into any email.</span></li></ol>
+        ${formHtml()}
+        <p class="evid">No need to tell me details about the other person. I'm an evidential reader, so I'd rather Spirit show me.</p>
+        <div class="mailbox" aria-label="Your email, ready to send">
+          <div class="mrow"><span class="k">To</span><span class="v">${EMAIL}</span><button class="copy" type="button" data-copy="to">Copy</button></div>
+          <div class="mrow"><span class="k">Subject</span><span class="v">${MAILPART.subject()}</span><button class="copy" type="button" data-copy="subject">Copy</button></div>
+          <div class="mrow"><span class="k">Message</span><pre id="mBody"></pre><button class="copy" type="button" data-copy="body">Copy</button></div></div>
+        <div class="row-btns"><a class="btn gold" id="sendAll" href="#">${ic('mail')}Open my email</a><button class="btn ghost sm" type="button" data-copy="all">${ic('copy')}Copy everything</button></div>
+        <span class="until">I reply personally, Monday to Friday</span></section>
+      <div class="head"><span class="eyebrow">Already answered</span><h2 class="h2">What Spirit has <em>shown you</em> so far</h2></div>
+      <div class="qa">${owned.slice().reverse().map(id => `<button type="button" class="box" data-go="${id}"><span class="eyebrow">${READ[id].name} · ${READ[id].date}</span><span class="q">${READ[id].q}</span><span class="a">${READ[id].a}</span></button>`).join('')}</div>`
+  };
+
+  /* menu: readings run as a personal ladder (owned → her next step → the rest), with arrows between */
+  const offerRow = (id, cls = 'lock') => { const o = OFFERS[id], w = o.stars ? missing(o.stars).length : 0; return [id, o.label, o.icon, id === NX.go ? 'rec' : cls, o.sub || `${w} star${w === 1 ? '' : 's'} waiting`, id === NX.go ? 'For you' : '']; };
+  const ladder = ['heart', 'blueprint', 'pathway'].sort((a, b) => (b === NX.go) - (a === NX.go));
+  const NAV = [['Your map', '', [['map', 'The full picture', 'map', 'own', 'Everything in one place']]],
+    ['Your readings', 'Your path, step by step', owned.map(id => [id, READ[id].name, READ[id].icon, 'own chain', 'Delivered ' + READ[id].date, READ[id].tag]).concat(ladder.map((id, i) => { const r = offerRow(id); if (i < ladder.length - 1) r[3] += ' chain'; return r; })).concat([['vault', 'Seasonal vault', 'gem', 'part', `${ownedSeason} of 3 collected`]])],
+    ['Coaching', 'Open to you at any step', [offerRow('clarity'), ['plan', 'My 90-day plan', 'pen', 'part', 'Drafted from your readings'], offerRow('rewired'), ['calls', 'My calls', 'play', CLIENT.calls ? 'own' : 'lock', CLIENT.calls ? CLIENT.calls + ' saved' : 'Replays and next steps']]],
+    ['Academy', '', [offerRow('academy', CLIENT.academy.joined ? 'own' : 'lock')]], ['You', '', [['questions', 'Your questions', 'mail', 'own', 'Ask Spirit anything']]]];
+
+  /* build */
+  const side = $('#side'), pages = $('#pages'), LABEL = {};
+  let nav = '';
+  NAV.forEach(([g, sub, items]) => { nav += `<div class="grp">${g}${sub ? `<small>${sub}</small>` : ''}</div>`; items.forEach(([id, label, icon, state, s, tag]) => { LABEL[id] = label;
+    nav += `<button type="button" class="mi ${state}" data-go="${id}"><span class="gl">${ic(icon)}${/lock/.test(state) ? `<span class="lk">${ic('lock')}</span>` : ''}</span><span class="mt"><b>${label}</b><small>${s}</small></span>${tag ? `<span class="tag">${tag}</span>` : ''}</button>`;
+    pages.insertAdjacentHTML('beforeend', `<section class="view" id="v-${id}" hidden>${READ[id] ? reading(id) : OFFERS[id] ? unlock(OFFERS[id]) : V[id]()}</section>`); }); });
+  side.innerHTML = `<div class="brand"><span>${ic('spark')}Luana Spirits</span><span class="tools"><button class="theme" type="button" data-theme-toggle aria-label="Switch light or dark mode"></button><button class="x" id="closeMenu" type="button" aria-label="Close menu">${ic('close')}</button></span></div>
+    <div class="who"><b>${CLIENT.name}</b><span>${CLIENT.since}</span></div>
+    <button class="mini" type="button" data-go="map" aria-label="Open your constellation"><svg class="cons" id="miniSky" viewBox="0 0 660 340" aria-hidden="true"></svg><div class="row"><span><b>${lit}</b> of 12 stars</span><span>Your map</span></div><div class="bar"><i style="width:${lit / 12 * 100}%"></i></div></button>
+    <nav>${nav}</nav><div class="side-foot">Your private space with Luana. Everything Spirit has shown you lives here, and it grows as you do.</div>`;
+  for (let i = 0; i < 40; i++) { const s = document.createElement('span'), z = Math.random() * 1.8 + .5; s.className = 'tw'; s.style.cssText = `width:${z}px;height:${z}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-delay:${Math.random() * 5}s`; side.appendChild(s); }
+  $('#openMenu').innerHTML = ic('menu') + 'Menu'; $('#tbStars').textContent = '✦ ' + lit + '/12';
+
+  /* constellations */
+  const NS = 'http://www.w3.org/2000/svg', el = (t, a, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; return e; };
+  function drawSky(svg, full) {
+    if (!svg) return; const s = full ? 1 : 1.8;
+    if (full) [['First Light', 30, 312], ['The Heart Map', 140, 102], ['The Union Blueprint', 330, 32], ['The Union Pathway', 510, 322]].forEach(([t, x, y]) => svg.appendChild(el('text', { x, y, class: 'gp' }, t)));
+    TOPICS.slice(1).forEach((b, i) => { const a = TOPICS[i]; svg.appendChild(el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, class: 'ln' + (a.by && b.by ? ' on' : ''), 'stroke-width': s })); });
+    TOPICS.forEach(t => { const g = el('g', { class: 'st' + (t.by ? ' on' : '') }), { x, y } = t, d = 9 * s, e = 2.4 * s;
+      g.appendChild(el('circle', { cx: x, cy: y, r: 16 * s, class: 'h' }));
+      g.appendChild(t.by ? el('path', { class: 'c', d: `M${x} ${y - d}L${x + e} ${y - e}L${x + d} ${y}L${x + e} ${y + e}L${x} ${y + d}L${x - e} ${y + e}L${x - d} ${y}L${x - e} ${y - e}Z` }) : el('circle', { cx: x, cy: y, r: 5 * s, class: 'c', 'stroke-width': 1.3 * s }));
+      if (full) { g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button'); g.setAttribute('aria-label', t.name); g.dataset.star = t.id; g.appendChild(el('text', { x, y: y + 28, 'text-anchor': 'middle', class: 'lb' }, t.name)); }
+      svg.appendChild(g); });
+  }
+  drawSky($('#sky'), true); drawSky($('#miniSky'), false);
+
+  /* saved notes */
+  document.querySelectorAll('textarea[data-key],input[data-key]').forEach(t => { t.value = store.get(t.dataset.key); t.addEventListener('input', () => { store.set(t.dataset.key, t.value); if (t.dataset.key.startsWith('f-')) compose(); }); });
+
+  /* light / dark */
+  function setTheme(th) { document.documentElement.dataset.theme = th; try { localStorage.setItem('cm-theme', th); } catch (e) {}
+    document.querySelectorAll('[data-theme-toggle]').forEach(b => { b.innerHTML = ic(th === 'dark' ? 'sun' : 'moon'); b.title = th === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'; }); }
+  setTheme(document.documentElement.dataset.theme || 'light');
+
+  /* daily message refresh */
+  const again = $('#again'); if (again) again.onclick = () => { const k = (parseInt(store.get('msg-' + day)) || 0) + 1; store.set('msg-' + day, k); msgI = (day + k) % CLIENT.messages.length;
+    const q = $('#quote'); q.style.animation = 'none'; q.offsetHeight; q.style.animation = ''; q.textContent = CLIENT.messages[msgI][0]; $('#qfrom').textContent = `Another message for you · from your ${CLIENT.messages[msgI][1]} reading`; };
+
+  /* questions */
+  function compose() { if (!$('#mBody')) return; $('#mBody').textContent = MAILPART.body(); $('#sendAll').href = mail(MAILPART.subject(), MAILPART.body()); }
+  function copyText(txt) { const done = () => say('Copied ✦ Paste it into a new email to ' + EMAIL);
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, () => fallback());
+    else fallback();
+    function fallback() { const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0;top:0'; document.body.appendChild(ta); ta.focus(); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { say('Press and hold the text to copy it'); } ta.remove(); } }
+  const saveQs = qs => { store.set('qs', JSON.stringify(qs)); $('#held').innerHTML = held(); compose(); };
+  $('#addq').onclick = () => { const v = $('#newq').value.trim(); if (!v) return; saveQs(qList().concat(v)); $('#newq').value = ''; };
+  $('#newq').onkeydown = e => { if (e.key === 'Enter') $('#addq').click(); };
+  compose();
+
+  /* drawer */
+  const scrim = $('#scrim'), drawer = on => { side.classList.toggle('open', on); scrim.classList.toggle('on', on); $('#openMenu').setAttribute('aria-expanded', on); };
+  $('#openMenu').onclick = () => drawer(true); $('#closeMenu').onclick = scrim.onclick = () => drawer(false);
+
+  /* reading progress + resume */
+  const bar = $('#readbar'), fab = $('#fab'); let cur = 'map', saveT;
+  fab.innerHTML = ic('list') + 'Contents';
+  const prog = id => { const t = $('#text-' + id); if (!t) return 0; return Math.min(1, Math.max(0, (innerHeight * .25 - t.getBoundingClientRect().top) / Math.max(1, t.offsetHeight - innerHeight * .6))); };
+  const pos = id => parseFloat(store.get('pos-' + id)) || 0;
+  addEventListener('scroll', () => { if (!READ[cur]) return; const p = prog(cur); bar.style.width = p * 100 + '%'; clearTimeout(saveT); saveT = setTimeout(() => p > .03 && store.set('pos-' + cur, p), 400); }, { passive: true });
+  const resumeTo = id => { const t = $('#text-' + id); scrollTo({ top: t.getBoundingClientRect().top + scrollY + pos(id) * (t.offsetHeight - innerHeight * .6) - innerHeight * .25, behavior: 'smooth' }); };
+  function refresh() {
+    document.querySelectorAll('[data-resume-box]').forEach(b => { const p = pos(b.dataset.resumeBox); b.hidden = !(p > .05 && p < .95); b.querySelector('.until').textContent = Math.round(p * 100) + '% read'; });
+    const lb = $('#latestBtn'); if (lb) { const p = pos(CLIENT.latest), mid = p > .05 && p < .95;
+      lb.innerHTML = `<button class="btn" type="button" data-go="${CLIENT.latest}"${mid ? ' data-then="resume"' : ''}>${ic('arrow')}${mid ? 'Continue reading' : p >= .95 ? 'Read it again' : 'Open your reading'}</button>${mid ? `<span class="until">${Math.round(p * 100)}% read</span>` : ''}`; }
+  }
+
+  /* navigation */
+  function show(id, resume) {
+    if (!LABEL[id]) id = 'map'; cur = id;
+    document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== 'v-' + id);
+    side.querySelectorAll('.mi').forEach(b => b.dataset.go === id ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+    $('#tbTitle').textContent = LABEL[id]; fab.hidden = !READ[id]; bar.style.width = 0; refresh(); drawer(false);
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+    resume ? setTimeout(() => resumeTo(id), 60) : scrollTo(0, 0);
+  }
+  const flashTopic = id => { const c = $('#topic-' + id); if (!c) return; c.scrollIntoView({ behavior: 'smooth', block: 'center' }); c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1500); };
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-jump],[data-resume],[data-star],[data-vault],[data-go],[data-delq],[data-lesson],[data-pick],[data-copy],[data-theme-toggle]'); if (!t) return;
+    const d = t.dataset;
+    if ('themeToggle' in d) setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+    else if (d.pick) { const on = store.get('f-' + d.pick) === d.val; store.set('f-' + d.pick, on ? '' : d.val); t.parentNode.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', !on && b === t)); compose(); }
+    else if (d.copy) copyText(MAILPART[d.copy]());
+    else if (d.jump) $('#' + d.jump).scrollIntoView({ behavior: 'smooth' });
+    else if (d.resume) resumeTo(d.resume);
+    else if (d.star) flashTopic(d.star);
+    else if (d.delq) { const qs = qList(); qs.splice(+d.delq, 1); saveQs(qs); }
+    else if (d.lesson) { const done = new Set((store.get('course') || '').split(',').filter(Boolean)); done.has(d.lesson) ? done.delete(d.lesson) : done.add(d.lesson); t.classList.toggle('done'); store.set('course', [...done].join(',')); }
+    else if (d.vault) { const s = VAULT[d.vault]; document.querySelectorAll('[data-vault]').forEach(b => b.setAttribute('aria-expanded', b === t));
+      const act = s.go ? `<button class="btn" type="button" data-go="${s.go}">Open my reading</button>`
+        : s.url && s.cls !== 'dim' && !(s.opens && days(s.opens)) ? `<a class="btn gold" href="${s.url}" target="_blank" rel="noopener">Book ${s.name}${ic('arrow')}</a>`
+        : s.notify ? `<a class="btn ghost" href="${mail('Tell me when ' + s.name + ' opens', 'Hi Luana,\n\nPlease let me know the moment ' + s.name + ' opens.\n\n' + CLIENT.name)}">${ic('mail')}Tell me the moment it opens</a>` : '';
+      $('#vault-detail').innerHTML = `<div class="box head"><span class="eyebrow">${s.when}</span><h2 class="h2">${s.name}</h2><p class="lede">${s.blurb}</p><div class="chips">${s.parts.map(p => `<span class="chip ${s.go ? 'got' : ''}">${p}</span>`).join('')}</div>${act ? `<div class="row-btns">${act}</div>` : '<span class="until">You\'ll see it here first.</span>'}</div>`;
+      $('#vault-detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    else show(d.go, d.then === 'resume');
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') drawer(false); const s = e.target.dataset && e.target.dataset.star; if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); flashTopic(s); } });
+  fab.onclick = () => $('#contents-' + cur).scrollIntoView({ behavior: 'smooth' });
+  show(location.hash.slice(1));
+
+  /* first visit: ask her to save the page */
+  if (!store.get('saved')) {
+    const m = document.createElement('div'); m.className = 'modal'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+    m.innerHTML = `<div class="box"><div class="seal">${ic('bookmark')}</div><span class="eyebrow">Before you begin</span><h2 class="h2">Save this page, ${CLIENT.name}</h2>
+      <p class="lede">This is your private portal. Every reading, message and next step will live here as your journey unfolds, so keep it somewhere you can always find it.</p>
+      <ul><li><b>iPhone:</b> tap Share, then Add to Home Screen</li><li><b>Android:</b> tap the ⋮ menu, then Add to Home screen</li><li><b>Computer:</b> press Ctrl+D (Cmd+D on Mac) to bookmark it</li></ul>
+      <button class="btn" type="button" id="savedBtn">I've saved it ✦</button></div>`;
+    document.body.appendChild(m); $('#savedBtn').onclick = () => { store.set('saved', '1'); m.remove(); };
+  }
+
+  /* keep readings in the portal: blocks select, copy, right-click, print. Her own writing stays copyable. */
+  const toast = $('#toast'), MSG = 'Your readings stay here in your portal, so they are always waiting for you ✦'; let tt;
+  const say = (m = MSG) => { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('on'), 2600); };
+  const mine = e => e.target.closest && e.target.closest('textarea,input');
+  ['copy', 'cut'].forEach(ev => document.addEventListener(ev, e => { if (mine(e)) return; e.preventDefault(); try { e.clipboardData.setData('text/plain', 'This reading lives in your private Connection Map from Luana Spirits. Open your portal to read it.'); } catch (_) {} say(); }));
+  ['selectstart', 'dragstart'].forEach(ev => document.addEventListener(ev, e => { if (!mine(e)) e.preventDefault(); }));
+  document.addEventListener('contextmenu', e => { if (!mine(e)) { e.preventDefault(); say(); } });
+  document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && 'cxaspu'.includes(e.key.toLowerCase()) && !mine(e)) { e.preventDefault(); say(); } });
+})();
+</script>
+</body>
+</html>
