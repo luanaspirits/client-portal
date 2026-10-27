@@ -1,1 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>The Connection Map · Poonam</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('cm-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){document.documentElement.dataset.theme='light'}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* ===== Tokens ===== */
+:root{color-scheme:light;
+  --bg:#f8f4fb;--bg2:#efe6f6;--card:#fff;--well:#faf6fd;--rule:#e6daf0;
+  --ink:#2b1f38;--soft:#5f5070;--dim:#9a8bab;
+  --plum:#5b3a7c;--plum2:#7c58a3;--lav:#c9b4e2;--lav2:#f2eaf9;
+  --gold:#a8823e;--glow:#efd59d;--rose:#c4899b;
+  --side:#46305f;--side2:#33224a;--star:#f7f0fc;--mist:#d2c4e2;
+  --serif:'Playfair Display',Georgia,serif;--sans:'Jost','Helvetica Neue',Arial,sans-serif;--mono:'DM Mono',ui-monospace,Menlo,monospace;
+  --sh:0 18px 40px -22px rgba(70,48,95,.35)}
+html[data-theme=dark]{color-scheme:dark;
+  --bg:#1a1322;--bg2:#241a30;--card:#231a2e;--well:#1e1628;--rule:#3a2d4b;
+  --ink:#efe7f8;--soft:#c4b6d6;--dim:#8f80a4;
+  --plum:#8c63bd;--plum2:#c7a6ef;--lav:#7d64a3;--lav2:#2d2140;--gold:#d9b46e;--rose:#d9a0b2;
+  --sh:0 18px 40px -22px rgba(0,0,0,.7)}
 
+/* ===== Base ===== */
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font:400 17px/1.7 var(--sans);color:var(--ink);background:var(--bg);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+textarea,input{-webkit-user-select:text;user-select:text}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--plum2);outline-offset:3px}
+p{margin:0} h2,h3{margin:0;font-family:var(--serif);font-weight:400}
+em{font-family:var(--serif);font-style:italic} strong,b{font-weight:500}
+a{color:var(--plum2)} svg{display:block}
+ul.dots{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+ul.dots li{display:flex;gap:10px;line-height:1.6}
+ul.dots li::before{content:"\2726";color:var(--gold);flex:0 0 auto}
+
+/* ===== Shell ===== */
+.app{display:grid;grid-template-columns:minmax(0,1fr);min-height:100vh}
+@media(min-width:1000px){.app{grid-template-columns:300px minmax(0,1fr)}}
+.side{position:fixed;inset:0 auto 0 0;z-index:30;width:min(320px,86vw);overflow-y:auto;overscroll-behavior:contain;color:var(--star);
+  background:radial-gradient(ellipse at 20% 0%,#6a4a8c,transparent 60%),linear-gradient(180deg,var(--side),var(--side2));
+  transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  padding:calc(24px + env(safe-area-inset-top,0px)) 14px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:18px;scrollbar-width:thin}
+.side.open{transform:none;box-shadow:24px 0 60px rgba(30,15,45,.4)}
+@media(min-width:1000px){.side{position:sticky;top:0;height:100vh;width:auto;transform:none}}
+.side>*{position:relative;z-index:1}
+.tw{position:absolute;z-index:0!important;border-radius:50%;background:#fff;animation:tw 5s infinite ease-in-out;pointer-events:none}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:.8}}
+.brand{display:flex;align-items:center;justify-content:space-between;padding:0 8px;font:500 10.5px var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--glow)}
+.brand>span{display:flex;gap:10px;align-items:center}
+.brand svg{width:18px;height:18px}
+.icon-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:none;cursor:pointer;color:var(--glow)}
+.icon-btn svg{width:16px;height:16px}
+@media(min-width:1000px){.side .close{display:none}}
+.who{padding:0 8px}
+.who b{display:block;font:400 32px/1.1 var(--serif);color:#fff}
+.who span{font:10.5px var(--mono);letter-spacing:1.8px;text-transform:uppercase;color:var(--mist)}
+.minimap{width:100%;text-align:left;cursor:pointer;border:1px solid rgba(239,213,157,.25);border-radius:18px;padding:12px 14px 14px;background:rgba(255,255,255,.06);display:flex;flex-direction:column;gap:8px;color:var(--mist)}
+.minimap .row{display:flex;justify-content:space-between;font:10.5px var(--mono);letter-spacing:1.5px;text-transform:uppercase}
+.minimap b{color:var(--glow);font-weight:500}
+.grp{font:10px var(--mono);letter-spacing:2.6px;text-transform:uppercase;color:var(--glow);opacity:.85;padding:12px 10px 6px}
+.mi{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;cursor:pointer;text-align:left;padding:7px 8px;border-radius:14px;color:var(--mist);transition:background .2s}
+.mi:hover{background:rgba(255,255,255,.07);color:#fff}
+.mi[aria-current]{background:rgba(255,255,255,.12);color:#fff;box-shadow:inset 0 0 0 1px rgba(239,213,157,.35)}
+.gl{flex:0 0 38px;height:38px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--lav);color:#efe6fa}
+.gl svg{width:18px;height:18px}
+.mi.hi .gl{border:0;background:radial-gradient(circle at 35% 30%,#f8e7c4,#c9a25e);color:var(--side2);box-shadow:0 0 18px rgba(239,213,157,.35)}
+.mt{display:flex;flex-direction:column;min-width:0;flex:1;line-height:1.3}
+.mt b{font-weight:400;font-size:15px;color:#fff}
+.mt small{font-size:12px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{font:9.5px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:var(--side2);background:var(--glow);border-radius:20px;padding:2px 8px;white-space:nowrap}
+.side-foot{margin-top:auto;padding:16px 10px 0;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px;line-height:1.55;color:var(--mist)}
+.scrim{position:fixed;inset:0;background:rgba(43,31,56,.45);z-index:25;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.col{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:calc(10px + env(safe-area-inset-top,0px)) 16px 10px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--rule)}
+@media(min-width:1000px){.top{display:none}}
+.menu-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--rule);background:var(--card);border-radius:30px;padding:8px 14px 8px 12px;cursor:pointer;font-size:14px}
+.menu-btn svg{width:17px;height:17px}
+.top .t{font:18px var(--serif);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .icon-btn{border-color:var(--rule);color:var(--plum2)}
+main{width:100%;max-width:900px;margin:0 auto;padding:32px 18px 80px}
+@media(min-width:1000px){main{padding:52px 56px 100px}}
+.view{display:flex;flex-direction:column;gap:36px;animation:fade .45s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+
+/* ===== Type + buttons ===== */
+.eyebrow{font:11px var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--plum2)}
+.h2{font-size:clamp(28px,4.6vw,42px);line-height:1.14;text-wrap:balance}
+.h2 em{color:var(--plum2)}
+.h3{font-size:22px;line-height:1.3}
+.head{display:flex;flex-direction:column;gap:12px}
+.lede{color:var(--soft);max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-block;font:11.5px var(--mono);letter-spacing:.8px;padding:5px 12px;border-radius:30px;background:var(--card);border:1px solid var(--rule);color:var(--soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:500;font-size:15px;color:#fff;background:var(--plum);border:0;border-radius:40px;padding:14px 24px;cursor:pointer;text-decoration:none;transition:transform .2s,filter .2s}
+.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+.btn svg{width:16px;height:16px}
+.btn.gold{background:linear-gradient(135deg,#d2ad68,#a07a37)}
+.btn.ghost{background:var(--card);color:var(--plum2);box-shadow:inset 0 0 0 1px var(--rule)}
+.btn.sm{padding:9px 16px;font-size:14px}
+.link{background:none;border:0;padding:0;cursor:pointer;color:var(--plum2);font-size:15px;text-decoration:underline;text-underline-offset:3px}
+.row-btns{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.until{font:11.5px var(--mono);letter-spacing:.8px;color:var(--dim)}
+.box{background:var(--card);border:1px solid var(--rule);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:12px}
+.box.key{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.box .k{font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--plum2)}
+.say{margin:4px 0;padding:4px 0 4px 16px;border-left:2px solid var(--lav);font:italic 19px/1.5 var(--serif);color:var(--plum2)}
+.say small{display:block;margin-top:4px;font:10.5px var(--mono);font-style:normal;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim)}
+.note{border-left:2px solid var(--lav);background:var(--lav2);padding:16px 20px;border-radius:0 14px 14px 0;font-size:15.5px;color:var(--soft)}
+.stack{display:flex;flex-direction:column;gap:14px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step .num{flex:0 0 30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#a8823e,#7c58a3);color:#fff;display:grid;place-items:center;font:500 13px var(--mono)}
+
+/* ===== Landing ===== */
+.hero{position:relative;overflow:hidden;border-radius:28px;color:var(--star);min-height:340px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#7a56a2,#55387a 55%,#432b62);box-shadow:0 40px 70px -40px rgba(70,48,95,.7)}
+.hero .bg{position:absolute;inset:0}
+.hero .bg svg{width:100%;height:100%}
+.hero .in{position:relative;padding:clamp(26px,5vw,46px);display:flex;flex-direction:column;gap:16px;max-width:580px}
+.hero .eyebrow{color:var(--glow)}
+.quote{font:italic 400 clamp(25px,4.4vw,38px)/1.26 var(--serif);color:#fff;text-wrap:balance;animation:rise 1s ease}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+.qfrom{font-size:14px;color:var(--mist)}
+.again{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(239,213,157,.45);background:rgba(255,255,255,.08);color:var(--glow);border-radius:30px;padding:8px 14px;cursor:pointer;font:11px var(--mono);letter-spacing:1.4px;text-transform:uppercase}
+.again svg{width:14px;height:14px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 24px;font:11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--mist)}
+.stats b{color:var(--glow);font-weight:500;font-size:13px}
+.letter{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:24px;padding:30px 30px 26px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--sh)}
+.letter::before{content:"";position:absolute;inset:0 0 auto;height:4px;border-radius:24px 24px 0 0;background:linear-gradient(90deg,var(--lav),var(--rose),var(--glow))}
+.letter p{font:italic 400 20px/1.6 var(--serif)}
+.letter .sig{font-size:24px;color:var(--plum2)}
+.next{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;padding:28px;border-radius:24px;background:linear-gradient(135deg,var(--lav2),#fbf3ea);border:1px solid var(--rule)}
+html[data-theme=dark] .next{background:linear-gradient(135deg,#2b2040,#2e2230)}
+@media(min-width:700px){.next{grid-template-columns:minmax(0,1fr) auto;align-items:center}}
+.next .door{font:italic 22px/1.45 var(--serif);margin-top:8px}
+.next .fine{font-size:15px;color:var(--soft);margin-top:10px}
+.next .act{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.skybox{border-radius:28px;padding:clamp(22px,4vw,34px);background:linear-gradient(160deg,#4f3570,#3a2655);color:var(--star);display:flex;flex-direction:column;gap:14px}
+.skybox .eyebrow{color:var(--glow)} .skybox .h2{color:#fff} .skybox .h2 em{color:var(--glow)} .skybox .lede{color:var(--mist)}
+.sky-wrap{overflow-x:auto;scrollbar-width:none}
+.sky-wrap svg{min-width:560px;width:100%;height:auto}
+.swipe{display:none;font:10.5px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--mist)}
+@media(max-width:600px){.swipe{display:block}}
+.cons .ln{stroke:var(--glow);opacity:.55}
+.cons .st{cursor:pointer}
+.cons .c{fill:var(--glow);stroke:var(--glow)}
+.cons .h{fill:var(--glow);animation:pulse 4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.1}50%{opacity:.28}}
+.cons .lb{font:10px var(--mono);letter-spacing:1px;text-transform:uppercase;fill:var(--glow)}
+.picture{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px}
+.pc{text-align:left;cursor:pointer;background:var(--card);border:1px solid var(--rule);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:10px;transition:transform .2s,box-shadow .2s}
+.pc:hover,.topic:hover{transform:translateY(-2px);box-shadow:var(--sh)}
+.ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--lav2);color:var(--plum2)}
+.ico svg{width:19px;height:19px}
+.pc .t{font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.pc .v{font:26px/1.1 var(--serif)}
+.pc .d{font-size:14.5px;color:var(--soft);line-height:1.5}
+.rung-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 14px;border-bottom:1px solid var(--rule);padding-bottom:10px}
+.rung-head b{font:400 22px var(--serif)}
+.rung-head span{font:11px var(--mono);letter-spacing:1.5px;text-transform:uppercase;color:var(--plum2)}
+.topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:14px}
+.topic{text-align:left;cursor:pointer;border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:6px;border:1px solid var(--rule);background:var(--card);transition:all .2s}
+.topic .k{display:flex;gap:8px;align-items:center;font:10.5px var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--plum2)}
+.topic .k svg{width:13px;height:13px}
+.topic .v{font:19px/1.3 var(--serif)}
+.topic .d{font-size:14.5px;color:var(--soft);line-height:1.5}
+.flash{box-shadow:0 0 0 2px var(--plum2)!important}
+
+/* ===== Sessions ===== */
+.sess-hero{position:relative;border-radius:24px;overflow:hidden;min-height:160px;display:flex;align-items:flex-end;background:linear-gradient(150deg,#6a4790,#432b62);color:#fff}
+.sess-hero .in{position:relative;padding:clamp(22px,4vw,34px);display:flex;flex-direction:column;gap:8px}
+.sess-hero .eyebrow{color:var(--glow)} .sess-hero .h2{color:#fff} .sess-hero p{color:var(--mist);max-width:56ch}
+.sess-hero .bg{position:absolute;inset:0;opacity:.9}
+.sess-hero .bg svg{width:100%;height:100%}
+.log{display:flex;flex-direction:column}
+.log button{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:14px;align-items:center;text-align:left;background:none;border:0;border-top:1px solid var(--rule);padding:14px 2px;cursor:pointer}
+.log button:first-child{border:0}
+.log .d{font:11.5px var(--mono);letter-spacing:1px;color:var(--plum2)}
+.log b{display:block;font:400 18px/1.3 var(--serif)}
+.log small{color:var(--soft);font-size:14px}
+.log svg{width:16px;height:16px;color:var(--dim)}
+.pager{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;padding-top:24px;border-top:1px solid var(--rule)}
+
+/* ===== Plan, practices, journal ===== */
+.check{display:flex;gap:12px;align-items:flex-start;cursor:pointer;line-height:1.55}
+.check input{accent-color:var(--gold);width:19px;height:19px;margin-top:4px;flex:0 0 auto}
+.check input:checked+span{color:var(--dim);text-decoration:line-through;text-decoration-color:var(--lav)}
+.goal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--rule)}
+.goal:first-of-type{border:0}
+@media(max-width:560px){.goal{grid-template-columns:minmax(0,1fr)}}
+label.q{font:italic 18px/1.4 var(--serif);color:var(--ink)}
+textarea,input[type=text]{width:100%;border-radius:14px;border:1px solid var(--rule);background:var(--well);color:var(--ink);font-size:16px;padding:12px 14px;line-height:1.6}
+textarea{min-height:110px;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--lav);background:var(--card)}
+.saved{font:10.5px var(--mono);letter-spacing:1.4px;text-transform:uppercase;color:var(--dim)}
+
+/* ===== Academy ===== */
+.mod ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.mod li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--rule)}
+.mod li:first-child{border:0}
+.ck{flex:0 0 22px;height:22px;border-radius:50%;border:1px solid var(--lav);display:grid;place-items:center;color:var(--dim);background:none;padding:0;cursor:pointer}
+.ck svg{width:11px;height:11px;opacity:0}
+.ck.done{background:var(--plum2);border-color:var(--plum2);color:#fff}
+.ck.done svg{opacity:1}
+.mod li b{display:block;font-weight:500;font-size:15.5px}
+.mod li span{font-size:14px;color:var(--soft);line-height:1.5}
+.reward{display:grid;gap:18px;padding:28px;border-radius:26px;color:var(--star);background:radial-gradient(ellipse at 90% 0%,rgba(239,213,157,.3),transparent 60%),linear-gradient(160deg,#5b3a7c,#3a2655)}
+@media(min-width:760px){.reward{grid-template-columns:100px minmax(0,1fr);align-items:center}}
+.seal{width:92px;height:92px;border-radius:50%;border:1.5px solid var(--glow);display:grid;place-items:center;color:var(--glow);box-shadow:0 0 40px rgba(239,213,157,.3)}
+.seal svg{width:36px;height:36px}
+.reward .eyebrow{color:var(--glow)} .reward .h3{color:#fff} .reward p,.reward ol{color:var(--mist)}
+
+/* ===== Questions ===== */
+.ask{display:flex;flex-direction:column;gap:12px;padding:28px;border-radius:24px;background:linear-gradient(135deg,var(--lav2),#fbf3ea);border:1px solid var(--rule)}
+html[data-theme=dark] .ask{background:linear-gradient(135deg,#2b2040,#2e2230)}
+.ask .h2{font-size:clamp(26px,4vw,34px)}
+.addrow{display:flex;flex-wrap:wrap;gap:10px}
+.addrow input{flex:1 1 260px}
+.held{display:flex;flex-direction:column;gap:10px}
+.held .q{font:italic 19px/1.4 var(--serif)}
+
+/* ===== Footer, toast, modal ===== */
+footer{border-top:1px solid var(--rule);text-align:center;padding:40px 20px 80px;color:var(--dim);font-size:14px;display:flex;flex-direction:column;gap:8px;align-items:center}
+footer b{font:400 26px var(--serif);color:var(--plum2)}
+footer small{max-width:60ch}
+footer nav{display:flex;gap:16px}
+footer a{color:var(--soft)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);opacity:0;background:var(--plum);color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;z-index:50;transition:all .3s;pointer-events:none;width:max-content;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.modal{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:18px;background:rgba(43,31,56,.55);backdrop-filter:blur(4px)}
+.modal .box{max-width:460px;width:100%;gap:14px;padding:30px;box-shadow:0 40px 80px -30px rgba(30,15,45,.6);animation:rise .5s ease}
+.modal .seal{width:64px;height:64px;color:var(--plum2);border-color:var(--lav);box-shadow:none}
+.modal .seal svg{width:26px;height:26px}
+.modal ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:15px;color:var(--soft)}
+@media print{body *{display:none!important}body::after{content:"This portal is private. Please open it online.";display:block;padding:60px;font:18px Georgia,serif}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side" aria-label="Portal menu"></aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="col">
+    <header class="top">
+      <button class="menu-btn" id="openMenu" type="button" aria-expanded="false" aria-controls="side"></button>
+      <span class="t" id="tbTitle"></span>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch light or dark mode"></button>
+    </header>
+    <main id="pages"></main>
+    <footer>
+      <b>Luana Spirits</b><span class="eyebrow">Coaching · Readings · Healing</span>
+      <small>This is your private space for our work together. Take what resonates and leave the rest. Your choices are always yours.</small>
+      <nav><a href="https://luanaspirits.com/privacy/">Privacy Policy</a><a href="https://luanaspirits.com/terms/">Terms of Service</a></nav>
+    </footer>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   1. CLIENT DATA: the only part that changes per client.
+   Edit text here. No em dashes in client-facing copy.
+   ===================================================================== */
+const CLIENT = {
+  name: 'Poonam',
+  key: 'poonam',                       // localStorage prefix, keep unique per client
+  since: 'Coaching with Luana since Jul 2026',
+  email: 'luana@luanaspirits.com',
+  note: 'Poonam, this is your private space for our coaching work. Every session, practice and plan we make together lives here, and it grows as you do. Come back whenever you need to re-center. Read slowly, take what resonates, and remember you are never walking this path alone.',
+  messages: [
+    ['To create art and to uplift humanity and become who I am truly meant to be.', 'your North Star, Jul 14'],
+    ['You are enough and loved just the way you are. Source put you on this earth to uplift humanity by being your own source.', 'your anchor sentence, Aug 27'],
+    ['Even if misunderstood, I love myself regardless.', 'our Oct 27 session'],
+    ['People who know something about life should be the ones making noise.', 'your own words, Oct 27'],
+    ['Can we do one thing half good, and let that progress motivate the next?', 'our Oct 27 session'],
+    ['People want to hear what you have to say.', 'our Oct 27 session']
+  ],
+  next: {
+    go: 's4',
+    door: 'Record Episode 1, “Unsettled,” between Thursday Oct 29 and Sunday Nov 1. Publish next week.',
+    fine: 'Your one focus from our Oct 27 session. Nothing new gets added until this is out in the world. Send me the link when it’s live.',
+    label: 'See the plan', until: 'Your 48-hour action · Oct 27'
+  },
+  academy: { url: 'https://www.skool.com/the-union-alignment-membership-3008' }
+};
+
+/* Sessions, newest first. replay: paste the verified Fathom/Meet recording link, or leave '' to hide the button. */
+const SESSIONS = [
+  { id: 's4', date: 'Tue, Oct 27, 2026', short: 'Oct 27', title: 'Making it smaller', sub: 'Energy, visibility and Episode 1', replay: '',
+    lede: 'Ninety minutes, and one clear answer: the podcast. Slow was the plan. We didn’t add anything new. We made things smaller.',
+    body: `
+<div class="box key"><span class="k">Your 48-hour action</span><h3 class="h3">Record Episode 1, “Unsettled”</h3>
+  <div class="stack">
+    <div class="step"><span class="num">1</span><div><b>Book a space and a new videographer.</b> Any day Thursday Oct 29 to Sunday Nov 1.</div></div>
+    <div class="step"><span class="num">2</span><div><b>Record.</b> If the videographer falls through, your iPhone mic and Descript’s Studio Sound are enough. Audio only is fine for a first episode.</div></div>
+    <div class="step"><span class="num">3</span><div><b>Edit it yourself,</b> or with the videographer if they edit.</div></div>
+    <div class="step"><span class="num">4</span><div><b>Publish next week,</b> then share it on Instagram and TikTok with posts, stories and behind the scenes.</div></div>
+    <div class="step"><span class="num">5</span><div><b>Send me the link</b> when it’s live. I want to hear it.</div></div>
+  </div>
+  <p class="note">Still deciding on the show name (777, or Triple 7) is not a reason to wait. Episode 1 can be called “Unsettled” either way.</p>
+</div>
+<div class="box"><span class="k">The avatar state question</span>
+  <p>You opened by asking whether anyone is ever 100% healed, every chakra flowing, nothing blocked. What we landed on: the people who feel truly aligned didn’t get there by meditating their way to perfect. They got there through integration, shadow work, and living the messy parts of life.</p>
+  <p>You said it yourself. The purpose is to sit with all of it, good and bad, and integrate it. So we take the pressure off. Surrender gets you there faster than force.</p>
+</div>
+<div class="box"><span class="k">Your energy as a 6/2 Manifestor</span>
+  <p>Consistent, sustained energy has always been the hardest part for you, and everything you’ve finished in your life came from obsession, not a schedule. So we’re building structure, not a strict timetable.</p>
+  <ul class="dots">
+    <li>Separate business days from art days. You suggested three and three.</li>
+    <li>One protected creative block a week, for example two hours on a Tuesday. You pick any one creative thing. No checklist.</li>
+    <li>Find the 20% that actually moves you toward your North Star and let the rest go for now.</li>
+  </ul>
+  <p>I’m going to look deeper at your chart before our next session.</p>
+</div>
+<div class="box"><span class="k">The family business</span>
+  <p>Art needs money, and your independence matters. Keep learning how the business runs, a little each week, so you could step in if you ever had to. At the same time, look at what you can hand off: accounting, billing, credit cards. Your energy is best spent on the creative and spiritual work.</p>
+</div>
+<div class="box"><span class="k">Silence, being chosen, and age</span>
+  <p class="say">“The need to be chosen is a wound.”<small>You, Oct 27</small></p>
+  <p>You named the old safety in staying quiet, and the belief that the older you get, the less your voice is allowed. We turned it around: more life means more wisdom to draw from. You’ve been on social media since it began, and you have things to say.</p>
+  <p>This is the energy of your first episode. It’s already coming through you.</p>
+</div>
+<div class="box"><span class="k">The setup is not the point</span>
+  <p class="say">“Dwelling too much on that is a way to avoid doing it.”<small>Luana, Oct 27</small></p>
+  <p>After everything with Netflix, your brain is trying to keep you safe. That makes sense. Recognize it, then think about the people on the other side who are waiting for permission you can give them. When you start speaking, the words will come. They always do once you begin.</p>
+</div>
+<div class="box"><span class="k">When the mind runs to romance</span>
+  <p>You noticed this one yourself: the pull toward romantic questions might be a place your mind goes to escape the fear of starting. Your answer was clear. Center your own life, your passions, your creations, and anyone who comes in is the cherry on top.</p>
+</div>
+<div class="box"><span class="k">Your daily practice</span>
+  <ul class="dots">
+    <li>Meditation, 15 to 30 minutes a day. You chose this.</li>
+    <li>If it helps: journal 10 to 15 minutes first, then a body or chakra scan.</li>
+    <li>Yoga, in whatever amount feels good.</li>
+    <li>If it feels fun, an in-person Level 1 Reiki class for the hands-on healing you’ve been dreaming about.</li>
+  </ul>
+</div>
+<div class="box"><span class="k">Coming from me</span>
+  <ul class="dots"><li>Your reading link for this month</li><li>A closer look at your Human Design chart</li><li>Our next check-in, next month</li></ul>
+</div>` },
+
+  { id: 's3', date: 'Tue, Sep 22, 2026', short: 'Sep 22', title: 'Coming back to center', sub: 'After the reel, your nervous system', replay: '',
+    lede: 'A heavy few weeks after the dance reel. We slowed everything down and brought your body back to safety first.',
+    body: `
+<div class="box"><span class="k">What we held</span>
+  <p>The reel about the film’s dance sequences brought a lot of attention at once, a meeting with the producer and choreographers, and feelings among the cast. Your nervous system took the hit. That reaction made sense.</p>
+</div>
+<div class="box"><span class="k">What we did</span>
+  <ul class="dots"><li>A chakra cleansing meditation with your ancestors beside you.</li><li>Room to feel it, without needing to have the lesson figured out yet.</li></ul>
+</div>
+<div class="box"><span class="k">What you decided</span>
+  <ul class="dots">
+    <li>Fewer readings, more of your own journaling and voice memos. Trusting your own intuition first.</li>
+    <li>Short comedic skits on social as acting practice, instead of formal classes for now.</li>
+  </ul>
+</div>` },
+
+  { id: 's2', date: 'Thu, Aug 27, 2026', short: 'Aug 27', title: 'Choosing yourself', sub: 'The not-chosen wound, and your podcast', replay: '',
+    lede: 'We met the part of you that feels unchosen, and gave her something steadier to hold onto.',
+    body: `
+<div class="box"><span class="k">Inner child work</span>
+  <p>We worked with the wound of not feeling chosen. Not being cast in the film was a misalignment, not a verdict on your value.</p>
+  <p class="say">“You are enough and loved just the way you are. Source put you on this earth to uplift humanity by being your own source.”<small>Your anchor sentence</small></p>
+</div>
+<div class="box"><span class="k">Your purpose, sharpened</span>
+  <p>Your North Star came into focus as art that liberates others and encourages them to be themselves. “Unsettled” became the main home for that message.</p>
+</div>
+<div class="box"><span class="k">Also from this session</span>
+  <ul class="dots">
+    <li>Reframing milestones so they motivate you instead of measuring you.</li>
+    <li>Getting unstuck on podcast decisions.</li>
+    <li>Meal prep and a protein goal to support your energy.</li>
+    <li>Earthbending in the family business: standing firm instead of avoiding the conflict.</li>
+    <li>Setting labels like “twin flame” aside to understand each connection’s own energy.</li>
+  </ul>
+</div>` },
+
+  { id: 's1', date: 'Tue, Jul 14, 2026', short: 'Jul 14', title: 'Your North Star', sub: 'Where all of this started', replay: '',
+    lede: 'Our first session. We named what everything else points back to.',
+    body: `
+<div class="box key"><span class="k">North Star</span>
+  <p class="say">“To create art and to uplift humanity and become who I’m truly meant to be.”</p>
+  <ul class="dots"><li>Give other people permission to be who they are.</li><li>Unconsciously liberate others to be who they want to be.</li></ul>
+</div>
+<div class="box"><span class="k">What you shared</span>
+  <p class="say">“I get so frustrated with timelines, because it feels so urgent, and the more time I delay it, the more time I’m not living in my purpose.”<small>You, Jul 14</small></p>
+  <p>What you value: a community of artistic people who really understand each other, uplifting and inspiring each other toward creative goals.</p>
+</div>
+<div class="box"><span class="k">Your first goals</span>
+  <ul class="dots">
+    <li>1 to 2 podcast episodes out, with clips on Instagram and TikTok</li>
+    <li>At least 2 dance pieces recorded and posted</li>
+    <li>1 cover just for you, no one else needs to see it</li>
+    <li>Finish the acting book</li>
+    <li>A talking head video on something you’re passionate about, shared to your story</li>
+  </ul>
+  <p class="note">You can see where these stand now on your plan page. No shame, just honest.</p>
+</div>` }
+];
+
+/* Constellation: 12 stars, each lit by a session. x/y place it on the 660x340 sky. */
+const TOPICS = [
+  { id: 'northstar', name: 'North Star', ans: 'Create art, uplift humanity, become who you are meant to be.', go: 's1', x: 70, y: 250 },
+  { id: 'chosen', name: 'Being chosen', ans: 'Not being cast was misalignment, not a verdict on your value.', go: 's2', x: 150, y: 150 },
+  { id: 'anchor', name: 'Your anchor', ans: 'You are enough and loved just the way you are.', go: 's2', x: 205, y: 240 },
+  { id: 'earth', name: 'Earthbending', ans: 'Standing firm in the family business instead of avoiding.', go: 's2', x: 262, y: 140 },
+  { id: 'reel', name: 'The reel', ans: 'Feeling it fully before needing the lesson.', go: 's3', x: 338, y: 74 },
+  { id: 'intuition', name: 'Own intuition', ans: 'Journaling and voice memos before reaching outward.', go: 's3', x: 392, y: 168 },
+  { id: 'integration', name: 'Integration', ans: 'Alignment comes from living and integrating, not perfection.', go: 's4', x: 452, y: 86 },
+  { id: 'manifestor', name: 'Manifestor', ans: 'Structure, not a strict schedule. Art days and business days.', go: 's4', x: 418, y: 258 },
+  { id: 'noise', name: 'Making noise', ans: 'Silence felt safe. Your voice is safer.', go: 's4', x: 512, y: 196 },
+  { id: 'age', name: 'Age is depth', ans: 'More life means more wisdom to share.', go: 's4', x: 560, y: 118 },
+  { id: 'setup', name: 'Just start', ans: 'An imperfect setup beats a perfect plan.', go: 's4', x: 612, y: 186 },
+  { id: 'episode', name: 'Episode 1', ans: '“Unsettled,” recorded this week, published next week.', go: 'plan', x: 578, y: 272 }
+];
+
+const COURSE = [
+  ['Understanding Soul Connections & Divine Union', [['Course Intro: Welcome', 'Healing yourself and calling in union through unconditional self-love.'], ['Why You Chose This Path: Soul Connections', 'Decode your soul connections and the lessons they brought you.'], ['Karmic Patterns', 'How to spot them, heal them and break the cycle.'], ['Releasing Attachments & Surrender', 'Letting go of control and choosing love in the now.']]],
+  ['Rebuilding the Relationship with Yourself', [['Why You Feel So Bad', 'Triggers, self-sabotage and the power of awareness.'], ['Fragmentation, Parts & the Inner Child', 'You are not broken. You are made of many sacred selves.'], ['Learn & Apply the Divine Reparenting Method', 'My soul-led process to soothe triggers and return to wholeness.'], ['Daily Inner Child Ritual', 'A five-minute check-in that rewires your nervous system for love.']]],
+  ['Clearing the Field for Divine Union', [['Separation vs. Unity Consciousness', 'Why oneness feels so much better.'], ['Mapping Your Love Wounds + Beliefs', 'A road map to uncover what has been blocking your union.'], ['Healing Family & Childhood Beliefs with EFT', 'Releasing fear, abandonment and unworthiness, one tap at a time.'], ['New to Tapping? Start Here First!', 'The basics of EFT before you begin.'], ['Clearing Statements', 'Dissolving past life, spiritual and societal programming.']]],
+  ['Call In Your Divine Counterpart', [['Collapse the Old Timelines', 'Release the past and choose your new path of love.'], ['Quantum Embodiment Visualization', 'Connect with the version of you already living this love.'], ['Send the Signal to the Universe', 'Declare your desire and build your relationship container.'], ['Open to Intimacy + Practice Communication', 'Vulnerability is the portal, communication is the pathway.'], ['Live as the Version of You Who Already Has It', 'The beginning of everything you have asked for.']]]
+];
+
+/* =====================================================================
+   2. ENGINE: same for every client. No need to edit below.
+   ===================================================================== */
+(function () {
+  const $ = s => document.querySelector(s);
+  const K = k => CLIENT.key + '-' + k;
+  const store = {
+    get: k => { try { return localStorage.getItem(K(k)) || ''; } catch (e) { return ''; } },
+    set: (k, v) => { try { localStorage.setItem(K(k), v); } catch (e) {} }
+  };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const mail = (subject, body) => `mailto:${CLIENT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  /* icons */
+  const P = {
+    spark: '<path d="M12 2.5l2 7.5 7.5 2-7.5 2-2 7.5-2-7.5-7.5-2 7.5-2z" fill="currentColor" stroke="none"/>',
+    moon: '<path d="M19.5 14.6A8 8 0 1 1 9.4 4.5a6.4 6.4 0 0 0 10.1 10.1z"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
+    map: '<circle cx="5" cy="17" r="1.6"/><circle cx="10" cy="8" r="1.6"/><circle cx="15" cy="14" r="1.6"/><circle cx="20" cy="5" r="1.6"/><path d="M6.2 15.6l3-6M11.3 9.1l2.5 3.7M16 12.6l3-6.2"/>',
+    heart: '<path d="M12 20s-7.5-4.6-9.2-9.3A4.8 4.8 0 0 1 12 7a4.8 4.8 0 0 1 9.2 3.7C19.5 15.4 12 20 12 20z"/>',
+    gem: '<path d="M6 4h12l3.5 5L12 20 2.5 9z"/><path d="M2.5 9h19M9 4l3 16 3-16"/>',
+    chat: '<path d="M4 5h16v11H10l-5 4v-4H4z"/>', pen: '<path d="M4 20l1-4L16 5l3 3L8 19z"/>',
+    play: '<circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/>',
+    book: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/>',
+    mail: '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M3.5 7l8.5 6 8.5-6"/>',
+    menu: '<path d="M4 7h16M4 12h16M4 17h10"/>', close: '<path d="M6 6l12 12M18 6L6 18"/>',
+    arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>', back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',
+    bookmark: '<path d="M6 3.5h12v17l-6-4.5-6 4.5z"/>', mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/>',
+    download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', wave: '<path d="M3 9.5c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/>'
+  };
+  const ic = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
+
+  /* background art */
+  const dots = (n, w, h, s) => { let o = ''; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    for (let i = 0; i < n; i++) o += `<circle cx="${(r() * w).toFixed(0)}" cy="${(r() * h).toFixed(0)}" r="${(r() * 1.2 + .4).toFixed(1)}" fill="#fff" opacity="${(r() * .6 + .25).toFixed(2)}"/>`; return o; };
+  const heroArt = `<svg viewBox="0 0 640 260" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">${dots(70, 640, 260, 4)}<g fill="none" stroke="#efd59d" stroke-width="1.2" opacity=".75"><circle cx="530" cy="110" r="52"/><circle cx="580" cy="110" r="52"/></g><path d="M555 65a52 52 0 0 1 0 90 52 52 0 0 1 0-90z" fill="#efd59d" opacity=".22"/><circle cx="555" cy="110" r="3" fill="#fff"/></svg>`;
+  const sessArt = seed => `<svg viewBox="0 0 640 200" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">${dots(45, 640, 200, seed)}<circle cx="560" cy="60" r="70" fill="#efd59d" opacity=".1"/></svg>`;
+
+  /* ---------- views ---------- */
+  const latest = SESSIONS[0], NX = CLIENT.next;
+  const day = Math.floor(Date.now() / 864e5);
+  let msgI = (day + (parseInt(store.get('msg-' + day)) || 0)) % CLIENT.messages.length;
+  const pc = (go, icon, t, v, d) => `<button class="pc" type="button" data-go="${go}"><span class="ico">${ic(icon)}</span><span class="t">${t}</span><span class="v">${v}</span><span class="d">${d}</span></button>`;
+
+  const session = (s, i) => {
+    const newer = SESSIONS[i - 1], older = SESSIONS[i + 1];
+    return `<section class="sess-hero"><div class="bg">${sessArt(i + 3)}</div><div class="in"><span class="eyebrow">Coaching session · ${s.date}</span><h2 class="h2">${s.title}</h2><p>${s.lede}</p></div></section>
+      ${s.replay ? `<div class="row-btns"><a class="btn" href="${s.replay}" target="_blank" rel="noopener">${ic('play')}Watch the replay</a></div>` : ''}
+      ${s.body}
+      <div class="pager"><button class="btn ghost" type="button" data-go="${older ? older.id : 'calls'}">${ic('back')}${older ? 'Earlier: ' + older.short : 'All sessions'}</button>${newer ? `<button class="btn ghost" type="button" data-go="${newer.id}">Next: ${newer.short}${ic('arrow')}</button>` : `<button class="btn ghost" type="button" data-go="map">Back to your map${ic('arrow')}</button>`}</div>`;
+  };
+
+  const goals = [['g1', '1 to 2 podcast episodes'], ['g2', '2 dance pieces recorded'], ['g3', '1 cover for myself'], ['g4', 'Finish the acting book'], ['g5', 'Talking head video'], ['g6', 'Acting skit']];
+  const cb = (k, t) => `<label class="check"><input type="checkbox" data-check="${k}"><span>${t}</span></label>`;
+
+  const V = {
+    map: () => `
+      <section class="hero"><div class="bg">${heroArt}</div><div class="in"><div class="eyebrow">Welcome back, ${CLIENT.name}</div>
+        <p class="quote" id="quote">${CLIENT.messages[msgI][0]}</p><p class="qfrom" id="qfrom">Today’s message for you · from ${CLIENT.messages[msgI][1]}</p>
+        <button class="again" type="button" id="again">${ic('refresh')}Another message for me</button>
+        <div class="stats"><span><b>${SESSIONS.length}</b> coaching sessions</span><span><b>${TOPICS.length}</b> stars lit</span><span>Latest <b>${latest.short}</b></span></div></div></section>
+      <section class="letter"><span class="eyebrow">A note from Luana</span><p>${CLIENT.note}</p><p class="sig">With love, Luana</p></section>
+      <div class="next"><div><span class="eyebrow">Your next step</span><p class="door">${NX.door}</p><p class="fine">${NX.fine}</p></div>
+        <div class="act"><button class="btn gold" type="button" data-go="${NX.go}">${NX.label}${ic('arrow')}</button><span class="until">${NX.until}</span></div></div>
+      <section class="skybox"><span class="eyebrow">Your constellation</span><h2 class="h2">The Connection Map <em>for ${CLIENT.name}</em></h2>
+        <p class="lede">Every session lights stars. Tap one to see what we found there.</p>
+        <div class="sky-wrap"><svg class="cons" id="sky" viewBox="0 0 660 340" role="img" aria-label="Your constellation of ${TOPICS.length} breakthroughs"></svg></div><span class="swipe">Swipe to see all your stars →</span></section>
+      <div class="head"><span class="eyebrow">The complete picture</span><h2 class="h2">Everything here <em>for you</em></h2></div>
+      <div class="picture">
+        ${pc(latest.id, 'spark', 'Latest session', latest.short, latest.sub)}
+        ${pc('calls', 'chat', 'All sessions', SESSIONS.length + ' sessions', 'Every call, newest first.')}
+        ${pc('plan', 'pen', 'Your plan', 'Episode 1', 'The one focus right now, and your rhythm.')}
+        ${pc('tools', 'heart', 'Practices', 'Daily', 'Anchors, meditation and tapping.')}
+      </div>
+      <div><div class="rung-head"><b>What we’ve uncovered</b><span>${TOPICS.length} breakthroughs</span></div>
+        <div class="topics">${TOPICS.map(t => `<button type="button" class="topic" id="topic-${t.id}" data-go="${t.go}"><span class="k">${ic('spark')}${SESSIONS.find(s => s.id === t.go)?.short || 'Your plan'}</span><span class="v">${t.name}</span><span class="d">${t.ans}</span></button>`).join('')}</div></div>`,
+
+    calls: () => `<div class="head"><span class="eyebrow">Coaching · All sessions</span><h2 class="h2">Every call, <em>kept here</em></h2>
+        <p class="lede">Your 1:1 sessions with me, newest first. Each one holds what we talked about and what you chose.</p></div>
+      <div class="box log">${SESSIONS.map(s => `<button type="button" data-go="${s.id}"><span class="d">${s.short}</span><span><b>${s.title}</b><small>${s.sub}</small></span>${ic('arrow')}</button>`).join('')}</div>
+      <p class="note">Our next check-in is next month. Book it through your usual link, or reply to my last email and I’ll send it.</p>`,
+
+    plan: () => `<div class="head"><span class="eyebrow">Your plan right now</span><h2 class="h2">Slow is <em>the plan</em></h2>
+        <p class="lede">We are not adding anything new. We are making things smaller. Tick things off as you go. Your progress saves on this device.</p></div>
+      <div class="box key"><span class="k">The one thing</span><h3 class="h3">Episode 1, “Unsettled”</h3><div class="stack">
+        ${cb('ep-book', 'Book a space and a new videographer')}
+        ${cb('ep-rec', 'Record Episode 1, between Thu Oct 29 and Sun Nov 1')}
+        ${cb('ep-edit', 'Edit it, myself or with the videographer')}
+        ${cb('ep-pub', 'Publish it next week')}
+        ${cb('ep-share', 'Share it on Instagram and TikTok, with stories and behind the scenes')}
+        ${cb('ep-send', 'Send Luana the link')}</div></div>
+      <div class="box"><span class="k">Your rhythm</span><div class="stack">
+        ${cb('r-days', 'Pick my business days and my art days')}
+        ${cb('r-block', 'Choose my weekly creative block (day and time)')}
+        ${cb('r-med', 'Meditate 15 to 30 minutes today')}
+        ${cb('r-20', 'Name the 20% that actually moves me toward my North Star')}
+        ${cb('r-out', 'List the business tasks I could hand off')}
+        ${cb('r-reiki', 'Look up an in-person Level 1 Reiki class (only if it feels fun)')}</div></div>
+      <div class="box"><span class="k">Off your plate for now</span><ul class="dots">
+        <li>A strict hour-by-hour daily schedule</li><li>The perfect podcast setup</li><li>Starting acting, singing, dance and the podcast all at once</li></ul></div>
+      <div class="box"><span class="k">Your July goals, honestly</span><p>Where is each one now, and what got in the way? No shame, just honest. Your notes save on this device.</p>
+        ${goals.map(([k, g]) => `<div class="goal"><b>${g}</b><input type="text" data-key="goal-${k}" maxlength="160" placeholder="Where it is, what got in the way"></div>`).join('')}</div>`,
+
+    tools: () => `<div class="head"><span class="eyebrow">Practices</span><h2 class="h2">Tools for <em>coming home</em></h2>
+        <p class="lede">Small things you can do on any day, especially the hard ones.</p></div>
+      <div class="box"><span class="k">Your anchors</span>
+        <p class="say">“You are enough and loved just the way you are. Source put you on this earth to uplift humanity by being your own source.”<small>Aug 27</small></p>
+        <p class="say">“Even if misunderstood, I love myself regardless.”<small>Oct 27 · for the part that fears being misunderstood</small></p></div>
+      <div class="box"><span class="k">A simple meditation rhythm</span><div class="stack">
+        <div class="step"><span class="num">1</span><div><b>Journal for 10 to 15 minutes.</b> Get the thoughts out of your head and onto paper.</div></div>
+        <div class="step"><span class="num">2</span><div><b>Scan your body and chakras.</b> Notice heaviness, coldness or frustration. Your throat and heart have been asking for attention.</div></div>
+        <div class="step"><span class="num">3</span><div><b>Visualize light moving through.</b> Wherever your attention goes, energy moves.</div></div>
+        <div class="step"><span class="num">4</span><div><b>Close with an intention</b> to clear your energy. On dysregulated days, put on a guided meditation instead.</div></div></div></div>
+      <div class="box"><span class="k">A short tapping round for your throat</span><p>For anxiety, tightness in the throat, or the fear of being misunderstood. Tap each point while you speak.</p><div class="stack">
+        <div class="step"><span class="num">1</span><div><b>Side of hand, three times:</b> <em>“Even though I feel this tightness and I’m afraid of being misunderstood, I love and accept myself.”</em></div></div>
+        <div class="step"><span class="num">2</span><div><b>Eyebrow and side of eye:</b> <em>“This old habit of going quiet to stay safe.”</em></div></div>
+        <div class="step"><span class="num">3</span><div><b>Under nose and chin:</b> <em>“I give my voice permission to make noise.”</em></div></div>
+        <div class="step"><span class="num">4</span><div><b>Collarbone and top of head:</b> <em>“Even if misunderstood, I love myself regardless.”</em></div></div></div></div>
+      <div class="box"><span class="k">Inner child check-in</span><p>When the little girl inside feels unchosen or anxious, sit with her for a few minutes and ask:</p>
+        <ul class="dots"><li>What are you afraid will happen?</li><li>Where do you feel it in our body?</li><li>What do you need from me right now?</li></ul>
+        <p>Then tell her what she needed to hear back then. You already know how. You did it before our last session, and you said it helped.</p></div>`,
+
+    journal: () => `<div class="head"><span class="eyebrow">Integration journal</span><h2 class="h2">Your <em>reflection space</em></h2>
+        <p class="lede">Your entries save on this device only. Download a copy any time to keep them safe.</p></div>
+      <div class="box">
+        <label class="q" for="j1">Where did I let myself speak my truth today, without needing approval?</label><textarea id="j1" data-key="j1"></textarea>
+        <label class="q" for="j2">Where did I catch myself rushing, and how did I slow down?</label><textarea id="j2" data-key="j2"></textarea>
+        <label class="q" for="j3">How did I care for the part of me that feels unchosen?</label><textarea id="j3" data-key="j3"></textarea>
+        <label class="q" for="j4">Anything else I want to remember</label><textarea id="j4" data-key="j4"></textarea>
+        <div class="row-btns"><button class="btn ghost sm" type="button" id="dl">${ic('download')}Download my journal</button><span class="saved" id="savedNote"></span></div></div>`,
+
+    academy: () => { const done = (store.get('course') || '').split(','); let n = 0;
+      return `<div class="head"><span class="eyebrow">Spiritual Love Healing Academy</span><h2 class="h2">Manifest Your Union, <em>lesson by lesson</em></h2>
+        <p class="lede">Move at your own pace. One lesson and one integration activity a week is plenty. Tick each lesson when you finish it and its workbook page.</p>
+        <div class="row-btns"><a class="btn" href="${CLIENT.academy.url}" target="_blank" rel="noopener">Open the Academy${ic('arrow')}</a></div></div>
+      <div class="stack">${COURSE.map(([m, ls], mi) => `<div class="box mod"><span class="k">Module ${mi + 1}</span><h3 class="h3">${m}</h3><ol>${ls.map(([t, d]) => { const k = 'L' + n++;
+        return `<li><button class="ck ${done.includes(k) ? 'done' : ''}" type="button" data-lesson="${k}" aria-pressed="${done.includes(k)}" aria-label="Mark ${esc(t)} complete">${ic('check')}</button><div><b>${t}</b><span>${d}</span></div></li>`; }).join('')}</ol></div>`).join('')}</div>
+      <div class="reward"><div class="seal">${ic('spark')}</div><div class="head"><span class="eyebrow">The course reward</span><h3 class="h3">Finish the work, receive a reading</h3>
+        <p>When you complete every lesson, email me your finished workbook pages and I’ll send you a complimentary reading as a thank you.</p>
+        <ol style="margin:0;padding-left:20px"><li>Complete all lessons and every workbook page</li><li>Email your pages to ${CLIENT.email} with the subject “Manifest Your Union complete”</li><li>I’ll review them and send your reading booking link</li></ol></div></div>`; },
+
+    questions: () => `<section class="ask"><span class="eyebrow">What are you still holding?</span><h2 class="h2">Write it down. <em>Bring it to me when you’re ready.</em></h2>
+        <p class="lede">Your questions stay here on this device until you send them.</p>
+        <div class="addrow"><input type="text" id="newq" maxlength="300" placeholder="A question for Luana…" aria-label="Your question"><button class="btn" type="button" id="addq">Hold this question</button></div></section>
+      <div class="held" id="held"></div>`
+  };
+  SESSIONS.forEach((s, i) => { V[s.id] = () => session(s, i); });
+
+  /* ---------- navigation ---------- */
+  const NAV = [
+    ['', [['map', 'Your map', 'map', 'Everything in one place']]],
+    ['Coaching', [
+      ...SESSIONS.map((s, i) => [s.id, `${s.short} · ${s.title}`, i ? 'chat' : 'spark', s.sub, i ? '' : 'Latest']),
+      ['calls', 'All sessions', 'play', SESSIONS.length + ' sessions'],
+      ['plan', 'Your plan', 'pen', 'Episode 1 and your rhythm'],
+      ['tools', 'Practices', 'heart', 'Anchors, meditation, tapping'],
+      ['journal', 'Journal', 'book', 'Your reflection space']]],
+    ['Academy', [['academy', 'Manifest Your Union', 'gem', 'Course and reward']]],
+    ['You', [['questions', 'Your questions', 'mail', 'Send them to Luana']]]
+  ];
+  const side = $('#side'), pages = $('#pages'), LABEL = {};
+  let nav = '';
+  NAV.forEach(([g, items]) => {
+    if (g) nav += `<div class="grp">${g}</div>`;
+    items.forEach(([id, label, icon, sub, tag]) => {
+      LABEL[id] = label;
+      nav += `<button type="button" class="mi${tag ? ' hi' : ''}" data-go="${id}"><span class="gl">${ic(icon)}</span><span class="mt"><b>${label}</b><small>${sub}</small></span>${tag ? `<span class="tag">${tag}</span>` : ''}</button>`;
+      pages.insertAdjacentHTML('beforeend', `<section class="view" id="v-${id}" hidden>${V[id]()}</section>`);
+    });
+  });
+  side.innerHTML = `<div class="brand"><span>${ic('spark')}Luana Spirits</span><span style="display:flex;gap:8px"><button class="icon-btn" type="button" data-theme-toggle aria-label="Switch light or dark mode"></button><button class="icon-btn close" id="closeMenu" type="button" aria-label="Close menu">${ic('close')}</button></span></div>
+    <div class="who"><b>${CLIENT.name}</b><span>${CLIENT.since}</span></div>
+    <button class="minimap" type="button" data-go="map" aria-label="Open your constellation"><svg class="cons" id="miniSky" viewBox="0 0 660 340" aria-hidden="true"></svg><div class="row"><span><b>${TOPICS.length}</b> stars lit</span><span>Your map</span></div></button>
+    <nav>${nav}</nav><div class="side-foot">Your private space with Luana. Everything we’ve worked on lives here, and it grows as you do.</div>`;
+  for (let i = 0; i < 40; i++) { const s = document.createElement('span'), z = Math.random() * 1.8 + .5; s.className = 'tw'; s.style.cssText = `width:${z}px;height:${z}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;animation-delay:${Math.random() * 5}s`; side.appendChild(s); }
+  $('#openMenu').innerHTML = ic('menu') + 'Menu';
+
+  /* ---------- constellation ---------- */
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (t, a, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt) e.textContent = txt; return e; };
+  function drawSky(svg, full) {
+    if (!svg) return; const s = full ? 1 : 0.75;
+    TOPICS.slice(1).forEach((b, i) => { const a = TOPICS[i]; svg.appendChild(el('line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, class: 'ln', 'stroke-width': s })); });
+    TOPICS.forEach((t, i) => {
+      const g = el('g', { class: 'st' }), { x, y } = t, d = 9 * s, e = 2.4 * s;
+      g.appendChild(el('circle', { cx: x, cy: y, r: 16 * s, class: 'h' }));
+      g.appendChild(el('path', { class: 'c', d: `M${x} ${y - d}L${x + e} ${y - e}L${x + d} ${y}L${x + e} ${y + e}L${x} ${y + d}L${x - e} ${y + e}L${x - d} ${y}L${x - e} ${y - e}Z` }));
+      if (full) {
+        g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button'); g.setAttribute('aria-label', t.name); g.dataset.star = t.id;
+        g.appendChild(el('text', { x, y: i % 2 ? y - 20 : y + 28, 'text-anchor': 'middle', class: 'lb' }, t.name));
+      }
+      svg.appendChild(g);
+    });
+  }
+  drawSky($('#sky'), true); drawSky($('#miniSky'), false);
+
+  /* ---------- saved fields ---------- */
+  document.querySelectorAll('[data-key]').forEach(t => { t.value = store.get(t.dataset.key);
+    t.addEventListener('input', () => { store.set(t.dataset.key, t.value); const n = $('#savedNote'); if (n && t.tagName === 'TEXTAREA') n.textContent = 'Saved on this device'; }); });
+  document.querySelectorAll('[data-check]').forEach(c => { c.checked = store.get('ck-' + c.dataset.check) === '1';
+    c.addEventListener('change', () => store.set('ck-' + c.dataset.check, c.checked ? '1' : '')); });
+  $('#dl').onclick = () => {
+    const txt = [...document.querySelectorAll('#v-journal label.q')].map(l => `${l.textContent}\n${store.get(l.htmlFor) || '(empty)'}\n`).join('\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([`My journal · ${new Date().toLocaleDateString()}\n\n${txt}`], { type: 'text/plain' }));
+    a.download = `${CLIENT.key}-journal.txt`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+
+  /* ---------- theme ---------- */
+  function setTheme(th) {
+    document.documentElement.dataset.theme = th; try { localStorage.setItem('cm-theme', th); } catch (e) {}
+    document.querySelectorAll('[data-theme-toggle]').forEach(b => { b.innerHTML = ic(th === 'dark' ? 'sun' : 'moon'); b.title = th === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'; });
+  }
+  setTheme(document.documentElement.dataset.theme || 'light');
+
+  /* ---------- daily message ---------- */
+  $('#again').onclick = () => {
+    const k = (parseInt(store.get('msg-' + day)) || 0) + 1; store.set('msg-' + day, k); msgI = (day + k) % CLIENT.messages.length;
+    const q = $('#quote'); q.style.animation = 'none'; void q.offsetHeight; q.style.animation = '';
+    q.textContent = CLIENT.messages[msgI][0]; $('#qfrom').textContent = 'Another message for you · from ' + CLIENT.messages[msgI][1];
+  };
+
+  /* ---------- questions ---------- */
+  const qList = () => { try { return JSON.parse(store.get('qs') || '[]'); } catch (e) { return []; } };
+  const askMail = q => mail(`A question from ${CLIENT.name}`, `Hi Luana,\n\nSomething I'm holding:\n\n"${q}"\n\n${CLIENT.name}`);
+  const renderHeld = () => { const qs = qList();
+    $('#held').innerHTML = qs.length ? qs.map((q, i) => `<div class="box"><p class="q">“${esc(q)}”</p><div class="row-btns"><a class="btn sm" href="${askMail(q)}">${ic('mail')}Send this to Luana</a><button class="link" type="button" data-delq="${i}">Remove</button></div></div>`).join('')
+      : '<p class="lede">Your questions will appear here.</p>'; };
+  const saveQs = qs => { store.set('qs', JSON.stringify(qs)); renderHeld(); };
+  $('#addq').onclick = () => { const v = $('#newq').value.trim(); if (!v) return; saveQs(qList().concat(v)); $('#newq').value = ''; };
+  $('#newq').onkeydown = e => { if (e.key === 'Enter') $('#addq').click(); };
+  renderHeld();
+
+  /* ---------- drawer + routing ---------- */
+  const scrim = $('#scrim');
+  const drawer = on => { side.classList.toggle('open', on); scrim.classList.toggle('on', on); $('#openMenu').setAttribute('aria-expanded', on); };
+  $('#openMenu').onclick = () => drawer(true); $('#closeMenu').onclick = scrim.onclick = () => drawer(false);
+  function show(id) {
+    if (!LABEL[id]) id = 'map';
+    document.querySelectorAll('.view').forEach(v => v.hidden = v.id !== 'v-' + id);
+    side.querySelectorAll('.mi').forEach(b => b.dataset.go === id ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+    $('#tbTitle').textContent = LABEL[id]; drawer(false);
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+    scrollTo(0, 0);
+  }
+  const flashTopic = id => { const c = $('#topic-' + id); if (!c) return; c.scrollIntoView({ behavior: 'smooth', block: 'center' }); c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1500); };
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-go],[data-star],[data-delq],[data-lesson],[data-theme-toggle]'); if (!t) return;
+    const d = t.dataset;
+    if ('themeToggle' in d) setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+    else if (d.star) flashTopic(d.star);
+    else if (d.delq) { const qs = qList(); qs.splice(+d.delq, 1); saveQs(qs); }
+    else if (d.lesson) { const done = new Set((store.get('course') || '').split(',').filter(Boolean));
+      done.has(d.lesson) ? done.delete(d.lesson) : done.add(d.lesson); t.classList.toggle('done'); t.setAttribute('aria-pressed', done.has(d.lesson)); store.set('course', [...done].join(',')); }
+    else show(d.go);
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') drawer(false);
+    const s = e.target.dataset && e.target.dataset.star; if (s && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); flashTopic(s); } });
+  show(location.hash.slice(1));
+
+  /* ---------- first visit: save this page ---------- */
+  if (!store.get('saved')) {
+    const m = document.createElement('div'); m.className = 'modal'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true'); m.setAttribute('aria-labelledby', 'saveTitle');
+    m.innerHTML = `<div class="box"><div class="seal">${ic('bookmark')}</div><span class="eyebrow">Before you begin</span><h2 class="h2" id="saveTitle">Save this page, ${CLIENT.name}</h2>
+      <p class="lede">This is your private portal. Every session, practice and next step lives here, so keep it somewhere you can always find it.</p>
+      <ul><li><b>iPhone:</b> tap Share, then Add to Home Screen</li><li><b>Android:</b> tap the ⋮ menu, then Add to Home screen</li><li><b>Computer:</b> press Ctrl+D (Cmd+D on Mac) to bookmark it</li></ul>
+      <button class="btn" type="button" id="savedBtn">I’ve saved it ✦</button></div>`;
+    document.body.appendChild(m); $('#savedBtn').focus(); $('#savedBtn').onclick = () => { store.set('saved', '1'); m.remove(); };
+  }
+
+  /* ---------- keep the work in the portal: blocks select, copy, right-click, print. Her own writing stays copyable. ---------- */
+  const toast = $('#toast'), MSG = 'Your sessions stay here in your portal, so they’re always waiting for you ✦'; let tt;
+  const say = (m = MSG) => { toast.textContent = m; toast.classList.add('on'); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove('on'), 2600); };
+  const mine = e => e.target.closest && e.target.closest('textarea,input');
+  ['copy', 'cut'].forEach(ev => document.addEventListener(ev, e => { if (mine(e)) return; e.preventDefault(); try { e.clipboardData.setData('text/plain', 'This lives in your private Connection Map from Luana Spirits.'); } catch (_) {} say(); }));
+  ['selectstart', 'dragstart'].forEach(ev => document.addEventListener(ev, e => { if (!mine(e)) e.preventDefault(); }));
+  document.addEventListener('contextmenu', e => { if (!mine(e)) { e.preventDefault(); say(); } });
+  document.addEventListener('keydown', e => { if ((e.metaKey || e.ctrlKey) && 'cxaspu'.includes(e.key.toLowerCase()) && !mine(e)) { e.preventDefault(); say(); } });
+})();
+</script>
+</body>
+</html>
